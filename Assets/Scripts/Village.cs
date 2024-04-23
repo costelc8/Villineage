@@ -11,10 +11,8 @@ public class Village : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            SpawnVillager();
-        }
+        // Spawn 5 villagers for testing selection
+        for (int i = 0; i < 5; i++) SpawnVillager();
     }
 
     // Update is called once per frame

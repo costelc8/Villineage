@@ -75,7 +75,7 @@ public class VillagerManager : MonoBehaviour
         return VillagerJob.Nitwit;
     }
 
-    // Editor-Only
+    // Editor-only method for displaying resource distribution
     private void OnValidate()
     {
         if (updateVillagerJobs)
@@ -97,6 +97,8 @@ public enum Resource
     Wood
 }
 
+// "Nitwit" is the placeholder name for "villager without a job"
+// Will likely go unused
 public enum VillagerJob
 {
     Nitwit,

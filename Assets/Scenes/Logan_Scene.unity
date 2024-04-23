@@ -493,7 +493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 600929218}
-  dragSelectionThreshold: 100
 --- !u!1 &1074822486
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,8 +952,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 920339072}
   - {fileID: 1074822488}
-  - {fileID: 1519554149}
   - {fileID: 626391543}
+  - {fileID: 1519554149}
+  - {fileID: 2019225474}
   - {fileID: 1486021271}
   - {fileID: 1251709332}
-  - {fileID: 2019225474}
