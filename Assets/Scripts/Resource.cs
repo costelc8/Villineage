@@ -14,12 +14,6 @@ public class Resource : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Decrement durability of the resource by the amount of progress made on it.
     // If the durability reaches 0, yield a resource, and reset the durability if
     // there is more resource to be harvested.

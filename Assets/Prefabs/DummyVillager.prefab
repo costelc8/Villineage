@@ -262,11 +262,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selected: 0
   randomMovement: 0
-  job: 0
+  job: 2
   workSpeed: 5
-  wood: 0
   capacity: 50
-  targets: []
   selectionRange: 15
   target: {x: 0, y: 0, z: 0}
   working: 0

@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceGeneration : MonoBehaviour
+public class ResourceGenerator : MonoBehaviour
 {
+    public static ResourceGenerator Resources;
+
     public GameObject treePrefab;
     private List<GameObject> trees = new List<GameObject>();
 
@@ -17,6 +19,12 @@ public class ResourceGeneration : MonoBehaviour
 
     public bool generateForest;
     public bool destroyTrees;
+
+    private void Awake()
+    {
+        if (Resources == null || Resources == this) Resources = this;
+        else Destroy(this);
+    }
 
     // Start is called before the first frame update
     void Start()

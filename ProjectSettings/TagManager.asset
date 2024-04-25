@@ -4,11 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Tree
-  - Manager
   - Villager
-  - InteractRange
-  - Ground
+  - Undefined
   layers:
   - Default
   - TransparentFX

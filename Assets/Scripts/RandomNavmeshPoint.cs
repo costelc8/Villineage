@@ -5,11 +5,10 @@ using UnityEngine.AI;
 
 public class RandomNavmeshPoint
 {
-    public bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    public static bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
         Vector3 randomPoint = center + Random.insideUnitSphere * range;
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
             result = hit.position;
             Debug.DrawRay(result, Vector3.up, Color.blue, 1.0f);

@@ -7,18 +7,12 @@ public class Village : MonoBehaviour
     private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     public GameObject villagerPrefab;
     public List<Villager> villagers;
-    private RandomNavmeshPoint randomPoint;
 
     // Start is called before the first frame update
     void Start()
     {
-        randomPoint = new RandomNavmeshPoint();
-
         // Spawn 5 villagers for testing selection
         for (int i = 0; i < 5; i++) SpawnVillager();
-
-        
-
     }
 
     // Update is called once per frame
@@ -27,8 +21,7 @@ public class Village : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) 
         {
             // test grabbing a point on the navmesh
-            Vector3 point;
-            if (randomPoint.RandomPoint(transform.position, 5, out point))
+            if (RandomNavmeshPoint.RandomPoint(transform.position, 5, out Vector3 point))
             {
                 // got a point
             }
