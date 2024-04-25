@@ -10,7 +10,7 @@ public class JobDisplay : MonoBehaviour
     public TextMeshProUGUI textMesh;
 
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
         // Check if the Villager script is assigned
         // if (villager == null)
