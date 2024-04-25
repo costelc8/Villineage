@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VillagerManager : MonoBehaviour
 {
-    private Dictionary<Resource, int> resourceWeights = new Dictionary<Resource, int>();
+    private Dictionary<ResourceType, int> resourceWeights = new Dictionary<ResourceType, int>();
     private Dictionary<VillagerJob, int> villagerJobs = new Dictionary<VillagerJob, int>();
     public int totalVilagers;
     public int foodWeight;
@@ -30,7 +30,7 @@ public class VillagerManager : MonoBehaviour
 
         for (int i = totalVilagers; i > 0; i--)
         {
-            Resource mostNeeded = MostNeededResource();
+            ResourceType mostNeeded = MostNeededResource();
             resourceWeights[mostNeeded] -= villagerWeight;
             VillagerJob job = GetJobForResource(mostNeeded);
             if (villagerJobs.ContainsKey(job)) villagerJobs[job] += 1;
@@ -42,16 +42,16 @@ public class VillagerManager : MonoBehaviour
     public void CalculateResourceWeights()
     {
         resourceWeights.Clear();
-        resourceWeights.Add(Resource.Food, foodWeight);
-        resourceWeights.Add(Resource.Wood, woodWeight);
+        resourceWeights.Add(ResourceType.Food, foodWeight);
+        resourceWeights.Add(ResourceType.Wood, woodWeight);
     }
 
-    // This method returns whichever Resource in the resourceWeights dictionary currently has the largest weight
-    private Resource MostNeededResource()
+    // This method returns whichever ResourceType in the resourceWeights dictionary currently has the largest weight
+    private ResourceType MostNeededResource()
     {
-        Resource resource = Resource.None;
+        ResourceType resource = ResourceType.None;
         float maxWeight = float.MinValue;
-        foreach (Resource r in resourceWeights.Keys)
+        foreach (ResourceType r in resourceWeights.Keys)
         {
             if (resourceWeights[r] > maxWeight)
             {
@@ -65,12 +65,12 @@ public class VillagerManager : MonoBehaviour
     // This method exists for the future, where there will be multiple methods of gathering a resource
     // Eg. Hunting, Gathering, Farming are all jobs that can gather food, and this method
     // will allow us to decide how to choose between those different food roles
-    private VillagerJob GetJobForResource(Resource resource)
+    private VillagerJob GetJobForResource(ResourceType resource)
     {
         switch (resource)
         {
-            case Resource.Food: return VillagerJob.Gatherer;
-            case Resource.Wood: return VillagerJob.Lumberjack;
+            case ResourceType.Food: return VillagerJob.Gatherer;
+            case ResourceType.Wood: return VillagerJob.Lumberjack;
         }
         return VillagerJob.Nitwit;
     }
@@ -90,9 +90,10 @@ public class VillagerManager : MonoBehaviour
     }
 }
 
-public enum Resource
+public enum ResourceType
 {
     None,
+    Some,
     Food,
     Wood
 }
@@ -103,5 +104,6 @@ public enum VillagerJob
 {
     Nitwit,
     Gatherer,
-    Lumberjack
+    Lumberjack,
+    Builder
 }
