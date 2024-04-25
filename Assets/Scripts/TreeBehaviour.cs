@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeBehaviour : MonoBehaviour
+public class TreeBehaviour : Resource
 {
     public Villager villager;
 
@@ -13,5 +13,14 @@ public class TreeBehaviour : MonoBehaviour
             villager.working = false;
             Destroy(gameObject);
         }
+    }
+
+    public override ResourceType Harvest(float progressValue)
+    {
+        if (Progress(progressValue))
+        {
+            return ResourceType.Wood;
+        }
+        else return ResourceType.None;
     }
 }

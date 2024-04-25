@@ -70,4 +70,9 @@ public class ResourceGeneration : MonoBehaviour
             }
         }
     }
+
+    public List<GameObject> GetAllTrees()
+    {
+        return trees;
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Village : MonoBehaviour
 {
-    private Dictionary<Resource, int> resources = new Dictionary<Resource, int>();
+    private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     public GameObject villagerPrefab;
     public List<Villager> villagers;
     private RandomNavmeshPoint randomPoint;
