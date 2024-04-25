@@ -276,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.1
+      value: 25.54
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -309,10 +309,6 @@ PrefabInstance:
     - target: {fileID: 4354938297057851226, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_Name
       value: DummyVillager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5769434758101700292, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
-      propertyPath: m_Radius
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
@@ -491,7 +487,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.2
+      value: -23.2
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -533,10 +529,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DummyVillager (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 5769434758101700292, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
-      propertyPath: m_Radius
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
       value: 15
@@ -559,7 +551,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.09
+      value: 21.2
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -567,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13
+      value: -19.7
       objectReference: {fileID: 0}
     - target: {fileID: 439152317926562216, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -600,10 +592,6 @@ PrefabInstance:
     - target: {fileID: 4354938297057851226, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: m_Name
       value: DummyVillager (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5769434758101700292, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
-      propertyPath: m_Radius
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
@@ -696,6 +684,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1610333458}
   - component: {fileID: 1610333457}
+  - component: {fileID: 1610333459}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Manager
@@ -730,6 +719,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1610333459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610333456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dca79d66c83e71a4a9b66d75c1d79daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalVilagers: 0
+  foodWeight: 0
+  woodWeight: 0
+  updateVillagerJobs: 0
 --- !u!1 &1906215724
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,9 +748,10 @@ GameObject:
   - component: {fileID: 1906215726}
   - component: {fileID: 1906215725}
   - component: {fileID: 1906215729}
+  - component: {fileID: 1906215730}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -868,6 +874,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0f6decf5d2a2c8e4d8779bb41d9a726d, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1906215730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906215724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfec87d58df77842b59acf5866f4a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
+  forestPosition: {fileID: 0}
+  forestSize: 3
+  forestSpacing: 2
+  forestDensity: 1
+  forestVariation: 1
+  generateForest: 1
+  destroyTrees: 0
 --- !u!1 &1936658758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4354938297057851226, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
