@@ -5,10 +5,12 @@ using UnityEngine.AI;
 
 public class Villager : MonoBehaviour, ISelectable
 {
+    public bool selected;
+
     public float workSpeed = 5.0f;  // Speed of resource extraction
     public float wood = 0.0f;  // Amount of wood being carried
     public float capacity = 50.0f;  // Maximum amount of wood it can carry
-     public float selectionRange = 10.0f;  // Selection range for random movement
+    public float selectionRange = 10.0f;  // Selection range for random movement
     public Vector3 target;  // Current navigation target
     public bool working = false;  // Are they currently working on something?
     public bool wandering = false;  // Are they wandering around?
@@ -41,17 +43,20 @@ public class Villager : MonoBehaviour, ISelectable
     {
         Debug.Log(name + " Selected");
         foreach(Transform t in transform) t.gameObject.SetActive(true);
+        selected = true;
     }
 
     public void OnDeselect()
     {
         Debug.Log(name + " Deselected");
         foreach (Transform t in transform) t.gameObject.SetActive(false);
+        selected = false;
     }
 
     public void OnTriggerStay(Collider other) {
         // If a tree enters your trigger, the villager is now working
         // They will move to the tree to cut it down
+        Debug.Log("OnTriggerStay");
         if (other.gameObject.CompareTag("Tree") && !working) {
             print("Tree Spotted");
             target = other.gameObject.transform.position;
