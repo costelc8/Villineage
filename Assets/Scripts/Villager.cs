@@ -27,13 +27,15 @@ public class Villager : MonoBehaviour, ISelectable
     public bool full = false;  // Is wood >= capacity?
     private NavMeshAgent agent; 
     private RandomNavmeshPoint manager;  // Random point selectr
+    private ResourceGeneration generator;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
         manager = GameObject.FindWithTag("Manager").GetComponent<RandomNavmeshPoint>();
-        //targets = GetAllTrees()
+        generator = GameObject.FindWithTag("Ground").GetComponent<ResourceGeneration>();
+        targets = generator.GetAllTrees();
     }
 
     // Update is called once per frame
@@ -94,6 +96,8 @@ public class Villager : MonoBehaviour, ISelectable
                 }
             }
             agent.destination = target;
+            wandering = true;
+            working = true;
         }
 
     }
