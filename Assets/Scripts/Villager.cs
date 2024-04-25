@@ -6,12 +6,22 @@ using UnityEngine.AI;
 public class Villager : MonoBehaviour, ISelectable
 {
     public bool selected;
+    public bool randomMovement = true;
 
+    [Header("Jobs")]
+    public VillagerJob job;
     public float workSpeed = 5.0f;  // Speed of resource extraction
     public float wood = 0.0f;  // Amount of wood being carried
     public float capacity = 50.0f;  // Maximum amount of wood it can carry
+    public List <GameObject> targets = new List<GameObject>();
+
+    [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
+    private float lowestDistance;
+    private float distance;
     public Vector3 target;  // Current navigation target
+
+    [Header("States")]
     public bool working = false;  // Are they currently working on something?
     public bool wandering = false;  // Are they wandering around?
     public bool full = false;  // Is wood >= capacity?
@@ -23,6 +33,7 @@ public class Villager : MonoBehaviour, ISelectable
     {
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
         manager = GameObject.FindWithTag("Manager").GetComponent<RandomNavmeshPoint>();
+        //targets = GetAllTrees()
     }
 
     // Update is called once per frame
@@ -67,9 +78,23 @@ public class Villager : MonoBehaviour, ISelectable
 
     public void FindNewDestination() {
         // Use the Random Point fn to find a new target position
-        if (manager.RandomPoint(Vector3.zero, selectionRange, out target)) {
+        lowestDistance = float.MaxValue;
+        if (randomMovement) {
+            if (manager.RandomPoint(Vector3.zero, selectionRange, out target)) {
+                agent.destination = target;
+                wandering = true;
+            }
+        //Otherwise, look to the list of resources to gather
+        } else {
+            foreach (GameObject canidate in targets) {
+                distance = Vector3.Distance(this.transform.position, canidate.transform.position);
+                if (distance < lowestDistance) {
+                    lowestDistance = distance;
+                    target = canidate.transform.position;
+                }
+            }
             agent.destination = target;
-            wandering = true;
         }
+
     }
 }
