@@ -33,7 +33,7 @@ public class Villager : MonoBehaviour, ISelectable
     void Start()
     {
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        manager = GameObject.FindWithTag("Manager").GetComponent<RandomNavmeshPoint>();
+        //manager = GameObject.FindWithTag("Manager").GetComponent<RandomNavmeshPoint>();
         generator = GameObject.FindWithTag("Ground").GetComponent<ResourceGeneration>();
         targets = generator.GetAllTrees();
     }
@@ -66,17 +66,17 @@ public class Villager : MonoBehaviour, ISelectable
         selected = false;
     }
 
-    public void OnTriggerStay(Collider other) {
-        // If a tree enters your trigger, the villager is now working
-        // They will move to the tree to cut it down
-        Debug.Log("OnTriggerStay");
-        if (other.gameObject.CompareTag("Tree") && !working) {
-            print("Tree Spotted");
-            target = other.gameObject.transform.position;
-            agent.destination = target;
-            working = true;
-        }
-    }
+    //public void OnTriggerStay(Collider other) {
+    //    // If a tree enters your trigger, the villager is now working
+    //    // They will move to the tree to cut it down
+    //    Debug.Log("OnTriggerStay");
+    //    if (other.gameObject.CompareTag("Tree") && !working) {
+    //        print("Tree Spotted");
+    //        target = other.gameObject.transform.position;
+    //        agent.destination = target;
+    //        working = true;
+    //    }
+    //}
 
     public void FindNewDestination() {
         // Use the Random Point fn to find a new target position

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RandomNavmeshPoint : MonoBehaviour
+public class RandomNavmeshPoint
 {
     public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
