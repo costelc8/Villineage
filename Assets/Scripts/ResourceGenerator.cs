@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class ResourceGenerator : MonoBehaviour
 {
-    public static ResourceGenerator Resources;
-
     public GameObject treePrefab;
-    private List<GameObject> trees = new List<GameObject>();
+    public static List<GameObject> Trees = new List<GameObject>();
 
     public Transform forestPosition;
     public int forestSize;
@@ -19,12 +17,6 @@ public class ResourceGenerator : MonoBehaviour
 
     public bool generateForest;
     public bool destroyTrees;
-
-    private void Awake()
-    {
-        if (Resources == null || Resources == this) Resources = this;
-        else Destroy(this);
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -43,8 +35,8 @@ public class ResourceGenerator : MonoBehaviour
         if (destroyTrees)
         {
             destroyTrees = false;
-            foreach (GameObject tree in trees) Destroy(tree);
-            trees.Clear();
+            foreach (GameObject tree in Trees) Destroy(tree);
+            Trees.Clear();
         }
     }
 
@@ -73,14 +65,9 @@ public class ResourceGenerator : MonoBehaviour
                     Vector3 treePos = position + new Vector3(x + offset.x, 0, y + offset.y);
                     // Generate new tree
                     GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
-                    trees.Add(tree);
+                    Trees.Add(tree);
                 }
             }
         }
-    }
-
-    public List<GameObject> GetAllTrees()
-    {
-        return trees;
     }
 }

@@ -61,16 +61,14 @@ public class Villager : MonoBehaviour, ISelectable
 
     public void OnSelect()
     {
-        Debug.Log(name + " Selected");
-        foreach(Transform t in transform) t.gameObject.SetActive(true);
         selected = true;
+        UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.dummyHUD, 1f);
     }
 
     public void OnDeselect()
     {
-        Debug.Log(name + " Deselected");
-        foreach (Transform t in transform) t.gameObject.SetActive(false);
         selected = false;
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
     public void FindNewDestination() {
@@ -83,7 +81,7 @@ public class Villager : MonoBehaviour, ISelectable
         //Otherwise, look to the list of resources to gather
         } else {
             if (job == VillagerJob.Lumberjack) {
-                List<GameObject> targets = ResourceGenerator.Resources.GetAllTrees();
+                List<GameObject> targets = ResourceGenerator.Trees;
                 float lowestDistance = float.MaxValue;
                 foreach (GameObject canidate in targets)
                 {
