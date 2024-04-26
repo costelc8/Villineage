@@ -6,6 +6,7 @@ public class Village : MonoBehaviour
 {
     private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     public GameObject villagerPrefab;
+    public GameObject housePrefab;
     public List<Villager> villagers;
 
     // Start is called before the first frame update
@@ -24,6 +25,7 @@ public class Village : MonoBehaviour
             if (RandomNavmeshPoint.RandomPoint(transform.position, 5, out Vector3 point))
             {
                 // got a point
+                GameObject house = Instantiate(housePrefab, new Vector3(point.x, point.y + 2.5f, point.z), Quaternion.identity);
             }
             else
             {
