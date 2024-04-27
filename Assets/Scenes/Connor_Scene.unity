@@ -255,7 +255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d979ffef635d6104fa102c0e4e421f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
   selectionRange: 10
   result: {x: 0, y: 0, z: 0}
 --- !u!1001 &170390187
@@ -311,8 +310,28 @@ PrefabInstance:
       value: DummyVillager
       objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: job
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: working
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: capacity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: workSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: randomMovement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -469,8 +488,20 @@ PrefabInstance:
       value: DummyVillager (2)
       objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: job
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: capacity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: workSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -533,8 +564,20 @@ PrefabInstance:
       value: DummyVillager (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: job
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: capacity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+      propertyPath: workSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377218363059633773, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
       propertyPath: selectionRange
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -553,8 +596,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1610333458}
-  - component: {fileID: 1610333457}
   - component: {fileID: 1610333459}
+  - component: {fileID: 1610333460}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Manager
@@ -562,18 +605,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1610333457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610333456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f56f298f5ac184444a8bc7a34ccc0c63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1610333458
 Transform:
   m_ObjectHideFlags: 0
@@ -583,7 +614,7 @@ Transform:
   m_GameObject: {fileID: 1610333456}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4402776, y: 12.84, z: 11.709972}
+  m_LocalPosition: {x: 0, y: 12.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -605,6 +636,26 @@ MonoBehaviour:
   foodWeight: 0
   woodWeight: 0
   updateVillagerJobs: 0
+--- !u!114 &1610333460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610333456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfec87d58df77842b59acf5866f4a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
+  forestPosition: {fileID: 0}
+  forestSize: 15
+  forestSpacing: 10
+  forestDensity: 0.549
+  forestVariation: 1
+  generateForest: 1
+  destroyTrees: 0
 --- !u!1 &1906215724
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +669,6 @@ GameObject:
   - component: {fileID: 1906215726}
   - component: {fileID: 1906215725}
   - component: {fileID: 1906215729}
-  - component: {fileID: 1906215730}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Ground
@@ -744,26 +794,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0f6decf5d2a2c8e4d8779bb41d9a726d, type: 2}
   m_BuildHeightMesh: 0
---- !u!114 &1906215730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1906215724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dfec87d58df77842b59acf5866f4a1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-  forestPosition: {fileID: 0}
-  forestSize: 15
-  forestSpacing: 5
-  forestDensity: 0.619
-  forestVariation: 0.867
-  generateForest: 1
-  destroyTrees: 0
 --- !u!1 &1936658758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4354938297057851226, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}

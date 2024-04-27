@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Villager : MonoBehaviour, ISelectable
 {
     public bool selected;
-    public bool randomMovement = true;
+    public bool randomMovement = false;
 
     [Header("Jobs")]
     public VillagerJob job;
@@ -32,6 +32,7 @@ public class Villager : MonoBehaviour, ISelectable
     public float selectionRange = 10.0f;  // Selection range for random movement
     private float distance;
     public Vector3 target;  // Current navigation target
+    public List<GameObject> targets;
 
     [Header("States")]
     public bool working = false;  // Are they currently working on something?
@@ -81,10 +82,11 @@ public class Villager : MonoBehaviour, ISelectable
         //Otherwise, look to the list of resources to gather
         } else {
             if (job == VillagerJob.Lumberjack) {
-                List<GameObject> targets = ResourceGenerator.Trees;
+                targets = ResourceGenerator.Trees;
                 float lowestDistance = float.MaxValue;
                 foreach (GameObject canidate in targets)
                 {
+                    print("Analysing");
                     distance = Vector3.Distance(transform.position, canidate.transform.position);
                     if (distance < lowestDistance)
                     {
@@ -92,6 +94,7 @@ public class Villager : MonoBehaviour, ISelectable
                         target = canidate.transform.position;
                     }
                 }
+                print("Analysis complete");
                 agent.destination = target;
                 wandering = true;
                 working = true;
