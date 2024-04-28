@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4354938297057851226
+--- !u!1 &2020194912628289861
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 439152317926562216}
-  - component: {fileID: 1921434255078154286}
-  - component: {fileID: 2168914446773850688}
-  - component: {fileID: 7222544538215878468}
-  - component: {fileID: 8377218363059633773}
-  - component: {fileID: -5412704440776540683}
+  - component: {fileID: 2029268403641180401}
+  - component: {fileID: 5029460691367588543}
+  - component: {fileID: 6303234028161799301}
+  - component: {fileID: 4903278303035795223}
+  - component: {fileID: 6096172965408856617}
+  - component: {fileID: 5122210100640433560}
   m_Layer: 0
   m_Name: DummyVillager
   m_TagString: Villager
@@ -21,36 +21,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &439152317926562216
+--- !u!4 &2029268403641180401
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: -0.96, y: 0.98094106, z: 25.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1921434255078154286
+--- !u!33 &5029460691367588543
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2168914446773850688
+--- !u!23 &6303234028161799301
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -86,13 +86,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7222544538215878468
+--- !u!136 &4903278303035795223
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -109,13 +109,13 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8377218363059633773
+--- !u!114 &6096172965408856617
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6096b3e791e284f43a82bdc54a455029, type: 3}
@@ -124,20 +124,23 @@ MonoBehaviour:
   selected: 0
   randomMovement: 0
   job: 2
-  workSpeed: 5
-  capacity: 50
-  selectionRange: 15
-  target: {x: 0, y: 0, z: 0}
+  workSpeed: 1
+  totalResources: 0
+  capacity: 3
+  target: {fileID: 0}
+  selectionRange: 10
+  targetPosition: {x: 0, y: 0, z: 0}
+  targets: []
   working: 0
   wandering: 0
   full: 0
---- !u!195 &-5412704440776540683
+--- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354938297057851226}
+  m_GameObject: {fileID: 2020194912628289861}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -145,7 +148,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

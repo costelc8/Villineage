@@ -6,7 +6,6 @@ public class ResourceGenerator : MonoBehaviour
 {
     public GameObject treePrefab;
     public static List<GameObject> Trees = new List<GameObject>();
-
     public Transform forestPosition;
     public int forestSize;
     public int forestSpacing;
@@ -21,7 +20,11 @@ public class ResourceGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (generateForest)
+        {
+            generateForest = false;
+            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, forestSize, forestSpacing, forestDensity, forestVariation);
+        }
     }
 
     // Update is called once per frame
@@ -69,5 +72,9 @@ public class ResourceGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    public static void UpdateList(GameObject tree) {
+        Trees.Remove(tree);
     }
 }

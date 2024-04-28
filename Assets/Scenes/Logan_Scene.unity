@@ -908,7 +908,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146f5f823e9bc30468b02f20f30177f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerPrefab: {fileID: 4354938297057851226, guid: c84a7fdbd7f53304ea6c429f80516d0f, type: 3}
+  villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
+  housePrefab: {fileID: 0}
   villagers: []
 --- !u!114 &1519554151
 MonoBehaviour:
