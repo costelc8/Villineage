@@ -20,18 +20,6 @@ public class Villager : MonoBehaviour, ISelectable
     public TreeBehaviour target;
     private TreeBehaviour current;
 
-    /// <summary>
-    /// You can check capacity by iterating through ResourceTypes, eg.
-    /// int totalResources = 0;
-    /// foreach(ResourceType resource in resources.Keys) {
-    ///     totalResources += resources[resource];
-    /// }
-    /// if (totalResources >= capacity) {
-    ///     full = true;
-    /// }
-    /// Or something of the sort
-    /// </summary>
-
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
     private float distance;
@@ -61,9 +49,9 @@ public class Villager : MonoBehaviour, ISelectable
         }
 
         // If close to current target and not working, you're no longer wandering
-        if (agent.remainingDistance <= 0.2f && !working) {
-            wandering = false;
-        }
+        //if (agent.remainingDistance <= 0.2f && !working) {
+        //    wandering = false;
+        //}
 
         //If you are close to the target but are working, begin to harvest
         if (agent.remainingDistance <= 0.01f && working) {
@@ -110,7 +98,8 @@ public class Villager : MonoBehaviour, ISelectable
         //Otherwise, look to the list of resources to gather
         } else {
             if (full) {
-                agent.destination = Vector3.zero;
+                targetPosition = Vector3.zero;
+                agent.destination = targetPosition;
                 wandering = true;
             } else if (job == VillagerJob.Lumberjack) {
                 targets = ResourceGenerator.Trees;
