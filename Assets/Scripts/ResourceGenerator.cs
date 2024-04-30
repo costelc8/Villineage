@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ResourceGenerator : MonoBehaviour
 {
+    public TerrainGenerator terrainGenerator;
     public GameObject treePrefab;
     public static List<GameObject> Trees = new List<GameObject>();
     public Transform forestPosition;
@@ -20,6 +21,7 @@ public class ResourceGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        terrainGenerator = GetComponent<TerrainGenerator>();
         if (generateForest)
         {
             generateForest = false;
@@ -57,9 +59,9 @@ public class ResourceGenerator : MonoBehaviour
         size = (size / spacing) * spacing;
 
         // Just generate trees in a square for now
-        for (int x = -size; x <= size; x += spacing)
+        for (int x = 1; x < size; x += spacing)
         {
-            for (int y = -size; y <= size; y += spacing)
+            for (int y = 1; y < size; y += spacing)
             {
                 if (density > Random.value)
                 {
@@ -68,6 +70,7 @@ public class ResourceGenerator : MonoBehaviour
                     Vector3 treePos = position + new Vector3(x + offset.x, 0, y + offset.y);
                     // Generate new tree
                     GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
+                    tree.transform.position = new Vector3(treePos.x, terrainGenerator.GetTerrainHeight(treePos), treePos.z);
                     Trees.Add(tree);
                 }
             }

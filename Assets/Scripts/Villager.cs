@@ -55,7 +55,6 @@ public class Villager : MonoBehaviour, ISelectable
 
         //If you are close to the target but are working, begin to harvest
         if (agent.remainingDistance <= 0.01f && working) {
-            Debug.Log("Cutting down tree");
             wandering = false;
             result = target.Harvest(workSpeed * Time.deltaTime);
             if (result != ResourceType.None) {

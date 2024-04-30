@@ -9,10 +9,12 @@ public class TerrainGenerator : MonoBehaviour
 {
     private Terrain terrain;
     public int depth = 8;
-    private int size;
     public int seed;
+
+    private int size;
     private float randomX;
     private float randomY;
+
     public float scale = 10f;
     public float[,] perlin;
 
@@ -27,7 +29,7 @@ public class TerrainGenerator : MonoBehaviour
     void GenerateTerrain(TerrainData data)
     {
         size = data.heightmapResolution;
-        data.size = new Vector3(size, depth, size);
+        data.size = new Vector3(size - 1, depth, size - 1);
         GenerateRandomOffsets();
         perlin = GeneratePerlin();
         data.SetHeights(0, 0, perlin);
@@ -64,9 +66,8 @@ public class TerrainGenerator : MonoBehaviour
         Random.state = state; // Restore Random's state
     }
 
-    private void OnValidate()
+    public float GetTerrainHeight(Vector3 position)
     {
-        size = GetComponent<Terrain>().terrainData.heightmapResolution;
-        transform.position = new Vector3(size / -2f, depth / -2f, size / -2f);
+        return terrain.terrainData.GetHeight(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
     }
 }
