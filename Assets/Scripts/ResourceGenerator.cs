@@ -8,12 +8,14 @@ public class ResourceGenerator : MonoBehaviour
     public GameObject treePrefab;
     public static List<GameObject> Trees = new List<GameObject>();
     public Transform forestPosition;
-    public int forestSize;
     public int forestSpacing;
     [Range(0f, 1f)]
     public float forestDensity;
     [Range(0f, 1f)]
     public float forestVariation;
+
+    public int seed;
+    public float scale;
 
     public bool generateForest;
     public bool destroyTrees;
@@ -25,7 +27,7 @@ public class ResourceGenerator : MonoBehaviour
         if (generateForest)
         {
             generateForest = false;
-            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, forestSize, forestSpacing, forestDensity, forestVariation);
+            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, terrainGenerator.size, forestSpacing, forestDensity, forestVariation);
         }
     }
 
@@ -35,7 +37,9 @@ public class ResourceGenerator : MonoBehaviour
         if (generateForest)
         {
             generateForest = false;
-            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, forestSize, forestSpacing, forestDensity, forestVariation);
+            foreach (GameObject tree in Trees) Destroy(tree);
+            Trees.Clear();
+            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, terrainGenerator.size, forestSpacing, forestDensity, forestVariation);
         }
         if (destroyTrees)
         {
@@ -58,23 +62,29 @@ public class ResourceGenerator : MonoBehaviour
         variation = Mathf.Clamp01(variation) * (spacing/2f - 1f);
         size = (size / spacing) * spacing;
 
+        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
+
         // Just generate trees in a square for now
-        for (int x = 1; x < size; x += spacing)
+        for (int x = spacing; x < size; x += spacing)
         {
-            for (int y = 1; y < size; y += spacing)
+            for (int y = spacing; y < size; y += spacing)
             {
                 if (density > Random.value)
                 {
                     // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
                     Vector2 offset = new Vector2(Random.Range(-1f, 1f) * variation, Random.Range(-1f, 1f) * variation);
                     Vector3 treePos = position + new Vector3(x + offset.x, 0, y + offset.y);
-                    // Generate new tree
-                    GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
-                    tree.transform.position = new Vector3(treePos.x, terrainGenerator.GetTerrainHeight(treePos), treePos.z);
-                    Trees.Add(tree);
+                    if (Mathf.Pow(perlin[x, y], 2) < Random.Range(0.1f, 0.2f))
+                    {
+                        // Generate new tree
+                        treePos.y = terrainGenerator.GetTerrainHeight(treePos);
+                        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
+                        Trees.Add(tree);
+                    }
                 }
             }
         }
+        Debug.Log(Trees.Count + " Trees Generated");
     }
 
     public static void UpdateList(GameObject tree) {

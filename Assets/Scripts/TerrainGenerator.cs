@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Runtime.CompilerServices;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class TerrainGenerator : MonoBehaviour
     public int depth = 8;
     public int seed;
 
-    private int size;
+    public int size;
     private float randomX;
     private float randomY;
 
@@ -30,44 +31,17 @@ public class TerrainGenerator : MonoBehaviour
     {
         size = data.heightmapResolution;
         data.size = new Vector3(size - 1, depth, size - 1);
-        GenerateRandomOffsets();
-        perlin = GeneratePerlin();
+        perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
         data.SetHeights(0, 0, perlin);
-    }
-
-    float[,] GeneratePerlin()
-    {
-        float[,] perlin = new float[size, size];
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                perlin[x, y] = CalculatePerlin(x, y);
-            }
-        }
-        return perlin;
-    }
-
-    float CalculatePerlin(int x, int y)
-    {
-        float xCoord = x / (size * scale / 10) + randomX;
-        float yCoord = y / (size * scale / 10) + randomY;
-
-        return Mathf.PerlinNoise(xCoord, yCoord);
-    }
-
-    void GenerateRandomOffsets()
-    {
-        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.State state = Random.state; // Save Random's state
-        Random.InitState(seed); // Seed Random's state
-        randomX = Random.Range(-10000 * scale, 10000 * scale);
-        randomY = Random.Range(-10000 * scale, 10000 * scale);
-        Random.state = state; // Restore Random's state
     }
 
     public float GetTerrainHeight(Vector3 position)
     {
         return terrain.terrainData.GetHeight(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
+    }
+
+    public float GetTerrainSteepness(Vector3 position)
+    {
+        return terrain.terrainData.GetSteepness(position.x / size, position.z / size);
     }
 }

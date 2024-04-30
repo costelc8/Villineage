@@ -516,6 +516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depth: 10
   seed: 0
+  size: 0
   scale: 1
 --- !u!114 &1194879061
 MonoBehaviour:
@@ -637,10 +638,11 @@ MonoBehaviour:
   terrainGenerator: {fileID: 0}
   treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   forestPosition: {fileID: 0}
-  forestSize: 513
-  forestSpacing: 10
+  forestSpacing: 4
   forestDensity: 1
   forestVariation: 1
+  seed: 0
+  scale: 2
   generateForest: 1
   destroyTrees: 0
 --- !u!1 &1251709329
@@ -927,7 +929,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519554144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 146f5f823e9bc30468b02f20f30177f4, type: 3}
   m_Name: 
