@@ -1080,9 +1080,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   depth: 10
-  width: 200
-  length: 200
-  scale: 20
+  width: 256
+  length: 256
+  scale: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

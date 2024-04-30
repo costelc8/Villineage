@@ -7,7 +7,7 @@ public class TerrainGenerator : MonoBehaviour
     public int depth = 20;
     public int width = 256;
     public int length = 256;
-    public float scale = 20f;
+    public float scale = 10f;
 
     private void Start()
     {
@@ -18,7 +18,7 @@ public class TerrainGenerator : MonoBehaviour
 
     TerrainData GenerateTerrain(TerrainData data)
     {
-        //data.heightmapResolution = width + 1;
+        data.heightmapResolution = width + 1;
         data.size = new Vector3(width, depth, length);
         data.SetHeights(0, 0, GeneratePerlin());
         return data;
