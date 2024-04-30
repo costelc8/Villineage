@@ -6,8 +6,8 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     public int depth = 8;
-    public int width = 256;
-    public int length = 256;
+    private int width;
+    private int length;
     public float scale = 10f;
 
     private void Start()
@@ -20,7 +20,8 @@ public class TerrainGenerator : MonoBehaviour
 
     TerrainData GenerateTerrain(TerrainData data)
     {
-        data.heightmapResolution = width + 1;
+        width = data.heightmapResolution - 1;
+        length = width;
         data.size = new Vector3(width, depth, length);
         data.SetHeights(0, 0, GeneratePerlin());
         return data;
