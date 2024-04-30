@@ -5,20 +5,20 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     public int depth = 20;
-    public int width = 200;
-    public int length = 200;
+    public int width = 256;
+    public int length = 256;
     public float scale = 20f;
 
     private void Start()
     {
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        transform.position = new Vector3(-width/2, 0, -length/2);
+        //transform.position = new Vector3(-width/2, 0, -length/2);
     }
 
     TerrainData GenerateTerrain(TerrainData data)
     {
-        data.heightmapResolution = width + 1;
+        //data.heightmapResolution = width + 1;
         data.size = new Vector3(width, depth, length);
         data.SetHeights(0, 0, GeneratePerlin());
         return data;
