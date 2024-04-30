@@ -14,6 +14,7 @@ public class TerrainGenerator : MonoBehaviour
     private float randomX;
     private float randomY;
     public float scale = 10f;
+    public float[,] perlin;
 
     private void Start()
     {
@@ -28,7 +29,8 @@ public class TerrainGenerator : MonoBehaviour
         size = data.heightmapResolution;
         data.size = new Vector3(size, depth, size);
         GenerateRandomOffsets();
-        data.SetHeights(0, 0, GeneratePerlin());
+        perlin = GeneratePerlin();
+        data.SetHeights(0, 0, perlin);
     }
 
     float[,] GeneratePerlin()
