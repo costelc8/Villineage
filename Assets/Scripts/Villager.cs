@@ -40,7 +40,7 @@ public class Villager : MonoBehaviour, ISelectable
         // If not walking or working, find a new destination
         if (!walking && !working && !returning)
         {
-            Debug.Log("Finding New Destination");
+            //Debug.Log("Finding New Destination"); // i removed this for my sanity -abby
             FindNewDestination();
         }
         else if (!agent.pathPending && agent.remainingDistance <= 0.5f)
@@ -55,7 +55,7 @@ public class Villager : MonoBehaviour, ISelectable
                     if (resources.ContainsKey(result)) resources[result] += 1;
                     else resources.Add(result, 1);
                     totalResources += 1;
-                    Debug.Log("Resource Harvested");
+                    //Debug.Log("Resource Harvested");
                     if (totalResources >= capacity)
                     {
                         returning = true;

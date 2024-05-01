@@ -36,7 +36,7 @@ public class TownCenter : MonoBehaviour
 
     public void SpawnVillager()
     {
-        if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 0.5f, 2f, out Vector3 position, 4f, 1f, 100f))
+        if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity).GetComponent<Villager>();
             villagers.Add(villager);

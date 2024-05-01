@@ -201,9 +201,9 @@ MonoBehaviour:
   movementSpeed: 10
   rotationSpeed: 5
   zoomSpeed: 1
-  zoomDistance: 30
+  zoomDistance: 150
   minZoomDistance: 10
-  maxZoomDistance: 50
+  maxZoomDistance: 200
 --- !u!4 &279494571
 Transform:
   m_ObjectHideFlags: 0
@@ -635,10 +635,11 @@ GameObject:
   - component: {fileID: 1530607279}
   - component: {fileID: 1530607278}
   - component: {fileID: 1530607277}
+  - component: {fileID: 1530607283}
   - component: {fileID: 1530607281}
   - component: {fileID: 1530607282}
   m_Layer: 0
-  m_Name: Town Hall
+  m_Name: Town Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -737,14 +738,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1530607276}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 146f5f823e9bc30468b02f20f30177f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
-  villagers: []
 --- !u!208 &1530607282
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -761,6 +760,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1530607283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530607276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dca79d66c83e71a4a9b66d75c1d79daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
+  startingVillagers: 1000
+  villagers: []
+  totalVilagers: 0
+  foodWeight: 0
+  woodWeight: 0
+  updateVillagerJobs: 0
+  resourceQuery: 0
+  resourceQuantity: 0
 --- !u!1 &1721218113
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +870,7 @@ GameObject:
   - component: {fileID: 1933731101}
   - component: {fileID: 1933731102}
   - component: {fileID: 1933731103}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
