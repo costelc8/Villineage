@@ -4,75 +4,120 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Villager : MonoBehaviour, ISelectable
 {
+    private NavMeshAgent agent;
+    public TownCenter townCenter;
     public bool selected;
-    public bool randomMovement = false;
 
     [Header("Jobs")]
     public VillagerJob job;
     public float workSpeed = 1.0f;  // Speed of resource extraction
-    // public int wood = 0;  // Amount of wood being carried (Replaced by `resources` below)
-    public Dictionary<ResourceType, int> resources; // Amount of resources being carried, instead of having a separate variable for each resource
+    public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>(); // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
-    private ResourceType result;
-    public TreeBehaviour target;
-    private TreeBehaviour current;
+    public Resource targetResource;
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
     private float distance;
-    public Vector3 targetPosition;  // Current navigation target
-    public List<GameObject> targets;
 
     [Header("States")]
     public bool working = false;  // Are they currently working on something?
-    public bool wandering = false;  // Are they wandering around?
-    public bool full = false;  // Is the villager at their resource carrying limit?
-    private NavMeshAgent agent;
+    public bool walking = false;  // Are they wandering around?
+    public bool returning = false;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        resources = new Dictionary<ResourceType, int>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // If not wandering or working, find a new destination
-        if (!wandering && !working) {
+        // If not walking or working, find a new destination
+        if (!walking && !working && !returning)
+        {
             Debug.Log("Finding New Destination");
             FindNewDestination();
         }
-
-        // If close to current target and not working, you're no longer wandering
-        //if (agent.remainingDistance <= 0.2f && !working) {
-        //    wandering = false;
-        //}
-
-        //If you are close to the target but are working, begin to harvest
-        if (agent.remainingDistance <= 0.01f && working) {
-            wandering = false;
-            result = target.Harvest(workSpeed * Time.deltaTime);
-            if (result != ResourceType.None) {
-                if (resources.ContainsKey(result)) {
-                    resources[result] += 1;
+        else if (!agent.pathPending && agent.remainingDistance <= 0.5f)
+        {
+            // If close to current target, you're no longer walking
+            walking = false;
+            if (working)
+            {
+                ResourceType result = targetResource.Harvest(workSpeed * Time.deltaTime);
+                if (result != ResourceType.None)
+                {
+                    if (resources.ContainsKey(result)) resources[result] += 1;
+                    else resources.Add(result, 1);
                     totalResources += 1;
-                } else {
-                    resources.Add(result, 1);
-                    totalResources += 1;
+                    Debug.Log("Resource Harvested");
+                    if (totalResources >= capacity)
+                    {
+                        returning = true;
+                        SetDestination(townCenter.transform.position);
+                    }
+                    working = false;
+                    targetResource = null;
                 }
-                Debug.Log("Tree Cut Down");
-                if (totalResources >= capacity) {
-                    full = true;
-                }
-                working = false;
-                target = null;
+            }
+            else if (returning)
+            {
+                townCenter.DepositResources(resources);
+                resources.Clear();
+                totalResources = 0;
+                returning = false;
             }
         }
+    }
+
+    public void FindNewDestination()
+    {
+        if (job == VillagerJob.Nitwit)
+        {
+            if (RandomNavmeshPoint.RandomPoint(transform.position, selectionRange, out Vector3 targetPosition))
+            {
+                SetDestination(targetPosition);
+            }
+        }
+        else if (job == VillagerJob.Lumberjack)
+        {
+            List<Resource> trees = ResourceGenerator.GetTrees();
+            float lowestDistance = float.MaxValue;
+            foreach (Resource tree in trees)
+            {
+                if (tree != null)
+                {
+                    distance = Vector3.Distance(transform.position, tree.transform.position);
+                    if (distance < lowestDistance && tree.selected < tree.selectionLimit)
+                    {
+                        lowestDistance = distance;
+                        targetResource = tree;
+                    }
+                }
+            }
+            if (targetResource != null)
+            {
+                targetResource.selected += 1;
+                SetDestination(targetResource.transform.position);
+                working = true;
+            }
+            else
+            {
+                returning = true;
+                SetDestination(townCenter.transform.position);
+            }
+        }
+        walking = true;
+    }
+
+    private void SetDestination(Vector3 position)
+    {
+        agent.SetDestination(position + (transform.position - position).normalized * 0.1f);
     }
 
     public void OnSelect()
@@ -85,43 +130,5 @@ public class Villager : MonoBehaviour, ISelectable
     {
         selected = false;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
-    }
-
-    public void FindNewDestination() {
-        // Use the Random Point fn to find a new target position
-        if (randomMovement) {
-            if (RandomNavmeshPoint.RandomPoint(Vector3.zero, selectionRange, out targetPosition)) {
-                agent.destination = targetPosition;
-                wandering = true;
-            }
-        //Otherwise, look to the list of resources to gather
-        } else {
-            if (full) {
-                targetPosition = Vector3.zero;
-                agent.destination = targetPosition;
-                wandering = true;
-            } else if (job == VillagerJob.Lumberjack) {
-                targets = ResourceGenerator.Trees;
-                float lowestDistance = float.MaxValue;
-                foreach (GameObject canidate in targets)
-                {
-                    if (canidate != null) {
-                        current = canidate.GetComponent<TreeBehaviour>();
-                        distance = Vector3.Distance(transform.position, canidate.transform.position);
-                        if (distance < lowestDistance && current.selected < current.selectionLimit)
-                        {
-                            lowestDistance = distance;
-                            targetPosition = canidate.transform.position;
-                            target = current;
-                        }
-                    }
-                }
-                target.selected += 1;
-                agent.destination = targetPosition;
-                wandering = true;
-                working = true;
-            }
-        }
-
     }
 }

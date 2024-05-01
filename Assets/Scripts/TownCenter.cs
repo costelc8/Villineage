@@ -2,16 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VillagerManager : MonoBehaviour
+public class TownCenter : MonoBehaviour
 {
+    public GameObject villagerPrefab;
+    public int startingVillagers = 5;
+    public List<Villager> villagers;
+
+    private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
     private Dictionary<ResourceType, int> resourceWeights = new Dictionary<ResourceType, int>();
     private Dictionary<VillagerJob, int> villagerJobs = new Dictionary<VillagerJob, int>();
+
     public int totalVilagers;
     public int foodWeight;
     public int woodWeight;
 
     [Header("Editor Tools")]
     public bool updateVillagerJobs;
+    public ResourceType resourceQuery = ResourceType.None;
+    public int resourceQuantity = 0;
+
+    private void Start()
+    {
+        for (int i = 0; i < startingVillagers; i++) SpawnVillager();
+    }
+
+    private void Update()
+    {
+        if (resourceQuery != ResourceType.None)
+        {
+            if (!resources.TryGetValue(resourceQuery, out resourceQuantity)) resourceQuantity = 0;
+        }
+    }
+
+    public void SpawnVillager()
+    {
+        if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 0.5f, 2f, out Vector3 position, 4f, 1f, 100f))
+        {
+            Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity).GetComponent<Villager>();
+            villagers.Add(villager);
+            villager.townCenter = this;
+            Selection.Selector.AddSelectable(villager);
+        }
+        Physics.SyncTransforms();
+    }
+
+    public void DepositResources(Dictionary<ResourceType, int> deposit)
+    {
+        foreach(ResourceType resource in deposit.Keys)
+        {
+            if (resources.ContainsKey(resource)) resources[resource] += deposit[resource];
+            else resources.Add(resource, deposit[resource]);
+        }
+    }
 
     // Re-distributes villager jobs
     public void UpdateVillagerJobs()
@@ -93,7 +135,6 @@ public class VillagerManager : MonoBehaviour
 public enum ResourceType
 {
     None,
-    Some,
     Food,
     Wood
 }

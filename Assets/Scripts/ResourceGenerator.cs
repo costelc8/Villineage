@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ResourceGenerator : MonoBehaviour
 {
     public TerrainGenerator terrainGenerator;
     public GameObject treePrefab;
-    public static List<GameObject> Trees = new List<GameObject>();
+    private static List<Resource> trees = new List<Resource>();
     public Transform forestPosition;
     public int forestSpacing;
     [Range(0f, 1f)]
@@ -37,15 +39,15 @@ public class ResourceGenerator : MonoBehaviour
         if (generateForest)
         {
             generateForest = false;
-            foreach (GameObject tree in Trees) Destroy(tree);
-            Trees.Clear();
+            foreach (Resource tree in trees) Destroy(tree.gameObject);
+            trees.Clear();
             GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, terrainGenerator.size, forestSpacing, forestDensity, forestVariation);
         }
         if (destroyTrees)
         {
             destroyTrees = false;
-            foreach (GameObject tree in Trees) Destroy(tree);
-            Trees.Clear();
+            foreach (Resource tree in trees) Destroy(tree.gameObject);
+            trees.Clear();
         }
     }
 
@@ -61,6 +63,7 @@ public class ResourceGenerator : MonoBehaviour
         density = Mathf.Clamp01(density);
         variation = Mathf.Clamp01(variation) * (spacing/2f - 1f);
         size = (size / spacing) * spacing;
+        Vector2 center = new Vector2(size / 2f, size / 2f);
 
         float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
 
@@ -69,7 +72,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int y = spacing; y < size; y += spacing)
             {
-                if (density > Random.value)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 10f)
                 {
                     // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
                     Vector2 offset = new Vector2(Random.Range(-1f, 1f) * variation, Random.Range(-1f, 1f) * variation);
@@ -79,15 +82,21 @@ public class ResourceGenerator : MonoBehaviour
                         // Generate new tree
                         treePos.y = terrainGenerator.GetTerrainHeight(treePos);
                         GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
-                        Trees.Add(tree);
+                        trees.Add(tree.GetComponent<Resource>());
                     }
                 }
             }
         }
-        Debug.Log(Trees.Count + " Trees Generated");
+        Debug.Log(trees.Count + " Trees Generated");
     }
 
-    public static void UpdateList(GameObject tree) {
-        Trees.Remove(tree);
+    public static List<Resource> GetTrees()
+    {
+        return trees;
+    }
+
+    public static void RemoveResource(Resource resource)
+    {
+        //trees.Remove(tree);
     }
 }

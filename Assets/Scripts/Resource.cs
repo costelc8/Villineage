@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Resource : MonoBehaviour
 {
-    public int quantity;
-    public float durability;
-    public float maxDurability;
+    public int quantity = 1;
+    public float durability = 5;
+    public float maxDurability = 5;
+    public int selectionLimit = 1;
+    public int selected = 0;
+    public ResourceType resourceType;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +27,11 @@ public class Resource : MonoBehaviour
         {
             quantity--;
             durability = maxDurability;
-            if (quantity <= 0) Destroy(gameObject);
+            if (quantity <= 0)
+            {
+                ResourceGenerator.RemoveResource(this);
+                Destroy(gameObject);
+            }
             return true;
         }
         return false;
@@ -32,6 +39,7 @@ public class Resource : MonoBehaviour
 
     public virtual ResourceType Harvest(float progressValue)
     {
+        if (Progress(progressValue)) return resourceType;
         return ResourceType.None;
     }
 }

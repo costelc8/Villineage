@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 1194879061}
   - component: {fileID: 1194879060}
   - component: {fileID: 1194879065}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -514,10 +514,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 587d2668872261d4788ab9076c087b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  depth: 10
+  depth: 1
   seed: 0
   size: 0
-  scale: 1
+  scale: 4
 --- !u!114 &1194879061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,10 +542,10 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideTileSize: 1
+  m_TileSize: 32
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.25
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
@@ -829,8 +829,9 @@ GameObject:
   - component: {fileID: 1519554146}
   - component: {fileID: 1519554150}
   - component: {fileID: 1519554151}
+  - component: {fileID: 1519554152}
   m_Layer: 0
-  m_Name: Village
+  m_Name: TownCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -916,7 +917,7 @@ Transform:
   m_GameObject: {fileID: 1519554144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256, y: 7, z: 256}
+  m_LocalPosition: {x: 64, y: 2, z: 64}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -929,14 +930,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519554144}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 146f5f823e9bc30468b02f20f30177f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   housePrefab: {fileID: 0}
-  villagers: []
 --- !u!114 &1519554151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,10 +948,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca79d66c83e71a4a9b66d75c1d79daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
+  startingVillagers: 10
+  villagers: []
   totalVilagers: 0
   foodWeight: 0
   woodWeight: 0
   updateVillagerJobs: 0
+  resourceQuery: 0
+  resourceQuantity: 0
+--- !u!208 &1519554152
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519554144}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2089036348
 GameObject:
   m_ObjectHideFlags: 0
