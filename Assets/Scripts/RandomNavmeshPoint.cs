@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,11 +27,14 @@ public class RandomNavmeshPoint
         {
             if (RandomPointFromCenter(center, distance, out Vector3 point))
             {
+                Debug.DrawRay(point, Vector3.up, Color.blue, 10f);
                 if (!Physics.CheckBox(point + (Vector3.up * halfExtents.y), halfExtents, Quaternion.identity, ~LayerMask.GetMask("Ground")))
                 {
                     result = point;
-                    Debug.DrawRay(point, Vector3.up, Color.blue);
                     return true;
+                } else
+                {
+                    Debug.Log("FAILURE");
                 }
             }
         }
