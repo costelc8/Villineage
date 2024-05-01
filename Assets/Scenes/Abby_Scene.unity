@@ -744,6 +744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
+  terrainGen: {fileID: 1933731101}
 --- !u!208 &1530607282
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -773,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
-  startingVillagers: 1000
+  startingVillagers: 10
   villagers: []
   totalVilagers: 0
   foodWeight: 0
@@ -868,8 +869,8 @@ GameObject:
   - component: {fileID: 1933731099}
   - component: {fileID: 1933731098}
   - component: {fileID: 1933731101}
-  - component: {fileID: 1933731102}
   - component: {fileID: 1933731103}
+  - component: {fileID: 1933731102}
   m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
@@ -966,7 +967,7 @@ MonoBehaviour:
   depth: 10
   seed: 1
   size: 0
-  scale: 1
+  scale: 0.905
 --- !u!114 &1933731102
 MonoBehaviour:
   m_ObjectHideFlags: 0

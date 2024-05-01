@@ -9,14 +9,17 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     private Terrain terrain;
+    [Tooltip("Terrain hill height")]
     public int depth = 8;
+    [Tooltip("Terrain seed, entering 0 will generate one")]
     public int seed;
 
+    [HideInInspector]
     public int size;
-    private float randomX;
-    private float randomY;
 
-    public float scale = 10f;
+    [Tooltip("Perlin image scale size, entering 0 will be flat")]
+    [Range(0.5f, 1.5f)]
+    public float scale = 1f;
     public float[,] perlin;
 
     private void Start()

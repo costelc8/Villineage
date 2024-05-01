@@ -29,6 +29,7 @@ public class RandomNavmeshPoint
                 if (!Physics.CheckBox(point + (Vector3.up * halfExtents.y), halfExtents, Quaternion.identity, ~LayerMask.GetMask("Ground")))
                 {
                     result = point;
+                    Debug.DrawRay(point, Vector3.up, Color.blue);
                     return true;
                 }
             }
