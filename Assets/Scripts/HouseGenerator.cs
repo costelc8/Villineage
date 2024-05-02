@@ -5,17 +5,18 @@ using UnityEngine;
 public class HouseGenerator : MonoBehaviour
 {
     public GameObject housePrefab;
-    public TerrainGenerator terrainGen;
-    Vector3 center;
-    Vector3 houseSize;
+
+    private Vector3 center;
+    private Vector3 spacingSize;
+    private int spacing = 2;
 
     // Start is called before the first frame update
     void Start()
     {
         Camera.main.transform.parent.parent.position = transform.position;
-        center = new Vector3(terrainGen.size/2, 10, terrainGen.size/2);
-        houseSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(2, 2, 2);
-        print(houseSize);
+        print(transform.position);
+        center = transform.position;
+        spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
     }
 
     // Update is called once per frame
@@ -24,16 +25,16 @@ public class HouseGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             // test grabbing a point on the navmesh
-            if (RandomNavmeshPoint.RandomPointFromCenterBox(center, houseSize, out Vector3 point, 6f, 6f, 1000f))
+            if (RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSize, out Vector3 point, 6f, 6f, 1000f))
             {
                 // got a point
-                print("house");
+
                 GameObject house = Instantiate(housePrefab, point, Quaternion.identity);
             }
             else
             {
                 // failed
-                print("house failure");
+
             }
         }
             
