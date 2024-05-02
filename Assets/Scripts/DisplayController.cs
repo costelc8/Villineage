@@ -5,7 +5,6 @@ public class DisplayController : MonoBehaviour
 {
     // Reference to the Villager script
     public Villager villager; // This needs an object with the villager script attached to it
-    public VillagerJob job;
     // References to the TextMeshPro components
     public TextMeshProUGUI jobTextMesh;
     public TextMeshProUGUI inventoryTextMesh;
@@ -41,7 +40,7 @@ public class DisplayController : MonoBehaviour
         }
 
         // Check the job of the villager and display it
-        switch (job)
+        switch (villager.job)
         {
             case VillagerJob.Nitwit:
                 jobTextMesh.text = "Job: Nitwit";
@@ -71,7 +70,7 @@ public class DisplayController : MonoBehaviour
         }
 
         // Display the resources of the villager
-        string resourcesText = "Resources:\n";
+        string resourcesText = "Resources: ";
         foreach (var resource in villager.resources)
         {
             resourcesText += resource.Key.ToString() + ": " + resource.Value + "\n";

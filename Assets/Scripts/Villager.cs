@@ -174,7 +174,8 @@ public class Villager : MonoBehaviour, ISelectable
     public void OnSelect()
     {
         selected = true;
-        UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.dummyHUD, 1f);
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.dummyHUD, 1f);
+        HUD.GetComponent<DisplayController>().villager = this;
     }
 
     public void OnDeselect()

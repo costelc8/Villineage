@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TownCenter : MonoBehaviour
 {
@@ -24,6 +26,11 @@ public class TownCenter : MonoBehaviour
 
     private void Start()
     {
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
+        {
+            transform.position = hitInfo.point;
+            Camera.main.transform.parent.parent.position = transform.position;
+        }
         buildingGenerator = GetComponent<BuildingGenerator>();
         for (int i = 0; i < startingVillagers; i++) SpawnVillager();
         CalculateNeededJobs();

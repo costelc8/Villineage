@@ -16,7 +16,6 @@ public class BuildingGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Camera.main.transform.parent.parent.position = transform.position;
         center = transform.position;
         spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
         buildingParent = new GameObject("Buildings");
@@ -38,7 +37,7 @@ public class BuildingGenerator : MonoBehaviour
         {
             // Make a house
             
-            Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(1, 3), 0);
+            Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
             Building house = Instantiate(housePrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
             pendingBuildings.Add(house);
         }

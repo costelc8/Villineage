@@ -81,7 +81,7 @@ public class ResourceGenerator : MonoBehaviour
                     {
                         // Generate new tree
                         treePos.y = terrainGenerator.GetTerrainHeight(treePos);
-                        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.identity, forest.transform);
+                        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), forest.transform);
                         trees.Add(tree.GetComponent<Resource>());
                     }
                 }

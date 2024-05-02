@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Resource : MonoBehaviour
 {
+    private GameObject stage0;
+    private GameObject stage1;
     public int quantity = 50;
     public float maxDurability = 1;
     private float durability;
@@ -13,6 +15,8 @@ public class Resource : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        stage0 = transform.GetChild(0).gameObject;
+        stage1 = transform.GetChild(1).gameObject;
         durability = maxDurability;
     }
 
@@ -26,6 +30,8 @@ public class Resource : MonoBehaviour
         {
             quantity--;
             durability = maxDurability;
+            stage0.SetActive(false);
+            stage1.SetActive(true);
             if (quantity <= 0)
             {
                 ResourceGenerator.RemoveResource(this);

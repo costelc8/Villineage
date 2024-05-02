@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 587d2668872261d4788ab9076c087b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  depth: 1
+  depth: 10
   seed: 0
   size: 0
   scale: 1.5
@@ -531,7 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
@@ -757,7 +757,7 @@ GameObject:
   - component: {fileID: 1486021269}
   - component: {fileID: 1486021268}
   m_Layer: 5
-  m_Name: UI
+  m_Name: UI Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -821,7 +821,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -896,7 +896,7 @@ Transform:
   m_GameObject: {fileID: 1519554144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64, y: 0.5, z: 64}
+  m_LocalPosition: {x: 256, y: 10, z: 256}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -929,7 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
-  startingVillagers: 5
+  startingVillagers: 10
   villagers: []
   foodWeight: 0
   woodWeight: 5
@@ -1040,7 +1040,7 @@ GameObject:
   - component: {fileID: 2089036349}
   - component: {fileID: 2089036353}
   m_Layer: 5
-  m_Name: UnitHUDs
+  m_Name: Unit HUD Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1140,7 +1140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 836c262a07608944787fd71f1a77bfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dummyHUD: {fileID: 1080929268537917141, guid: 72862ff80835a8347aacecf6c7cd056d, type: 3}
+  dummyHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1149,7 +1149,7 @@ SceneRoots:
   - {fileID: 1074822488}
   - {fileID: 1519554149}
   - {fileID: 1486021271}
-  - {fileID: 1251709332}
   - {fileID: 2089036352}
+  - {fileID: 1251709332}
   - {fileID: 1194879064}
   - {fileID: 1273351246}
