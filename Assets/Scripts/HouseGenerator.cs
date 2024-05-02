@@ -10,6 +10,7 @@ public class HouseGenerator : MonoBehaviour
     private Vector3 spacingSize;
     private int spacing = 2;
     private List<House> houses;
+    GameObject buildings;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,7 @@ public class HouseGenerator : MonoBehaviour
         center = transform.position;
         spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
         houses = new List<House>();
+        buildings = new GameObject("Buildings");
     }
 
     // Update is called once per frame
@@ -31,7 +33,7 @@ public class HouseGenerator : MonoBehaviour
             {
                 // got a point
 
-                House house = Instantiate(housePrefab, point, Quaternion.identity).GetComponent<House>();
+                House house = Instantiate(housePrefab, point, Quaternion.identity, buildings.transform).GetComponent<House>();
                 houses.Add(house);
             }
             else
