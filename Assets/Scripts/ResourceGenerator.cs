@@ -97,6 +97,6 @@ public class ResourceGenerator : MonoBehaviour
 
     public static void RemoveResource(Resource resource)
     {
-        //trees.Remove(tree);
+        trees.Remove(resource);
     }
 }

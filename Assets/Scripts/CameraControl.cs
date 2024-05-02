@@ -32,15 +32,15 @@ public class CameraControl : MonoBehaviour
         if (Input.GetMouseButtonDown(1)) Cursor.lockState = CursorLockMode.Locked;
         if (Input.GetMouseButton(1))
         {
-            float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -1f, 1f);
+            float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -10f, 10f);
             transform.Rotate(Vector3.up, mouseX * rotationSpeed);
         }
         if (Input.GetMouseButtonUp(1)) Cursor.lockState = CursorLockMode.None;
 
         if (Input.GetMouseButton(2))
         {
-            float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -1f, 1f);
-            float mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y"), -1f, 1f);
+            float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -10f, 10f);
+            float mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y"), -10f, 10f);
             transform.Translate(new Vector3(mouseX, 0f, mouseY) * movementSpeed / -10f);
         }
 

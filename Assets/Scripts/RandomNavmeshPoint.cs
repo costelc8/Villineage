@@ -76,6 +76,7 @@ public class RandomNavmeshPoint
 
     public static bool RandomPointFromCenter(Vector3 center, float distance, out Vector3 point)
     {
+        center.y = 100f;
         Vector2 offset = Random.insideUnitCircle.normalized * distance;
         Vector3 randomPoint = center + new Vector3(offset.x, 0, offset.y);
         if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))

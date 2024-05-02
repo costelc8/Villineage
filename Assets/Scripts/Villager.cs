@@ -18,6 +18,7 @@ public class Villager : MonoBehaviour, ISelectable
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
     public Resource targetResource;
+    public Building targetBuilding;
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
@@ -49,25 +50,47 @@ public class Villager : MonoBehaviour, ISelectable
             walking = false;
             if (working)
             {
-                ResourceType result = targetResource.Harvest(workSpeed * Time.deltaTime);
-                if (result != ResourceType.None)
+                if (job == VillagerJob.Builder)
                 {
-                    if (resources.ContainsKey(result)) resources[result] += 1;
-                    else resources.Add(result, 1);
-                    totalResources += 1;
-                    //Debug.Log("Resource Harvested");
-                    if (totalResources >= capacity)
+                    if (targetBuilding == null) working = false;
+                    else
                     {
-                        returning = true;
-                        SetDestination(townCenter.transform.position);
+                        if (targetBuilding.Progress(workSpeed * Time.deltaTime))
+                        {
+                            returning = true;
+                            working = false;
+                            targetBuilding.assignedVillager = null;
+                            targetBuilding = null;
+                            SetDestination(townCenter.transform.position);
+                        }
                     }
-                    working = false;
-                    targetResource = null;
+                }
+                else
+                {
+                    if (targetResource == null) working = false;
+                    else
+                    {
+                        ResourceType result = targetResource.Harvest(workSpeed * Time.deltaTime);
+                        if (result != ResourceType.None)
+                        {
+                            if (resources.ContainsKey(result)) resources[result] += 1;
+                            else resources.Add(result, 1);
+                            totalResources += 1;
+                            if (totalResources >= capacity)
+                            {
+                                returning = true;
+                                working = false;
+                                targetResource.assignedVillager = null;
+                                targetResource = null;
+                                SetDestination(townCenter.transform.position);
+                            }
+                        }
+                    }
                 }
             }
             else if (returning)
             {
-                townCenter.DepositResources(resources);
+                townCenter.DepositResources(this, resources);
                 resources.Clear();
                 totalResources = 0;
                 returning = false;
@@ -84,6 +107,34 @@ public class Villager : MonoBehaviour, ISelectable
                 SetDestination(targetPosition);
             }
         }
+        else if (job == VillagerJob.Builder)
+        {
+            List<Building> buildings = BuildingGenerator.GetPendingBuildings();
+            float lowestDistance = float.MaxValue;
+            foreach (Building building in buildings)
+            {
+                if (buildings != null)
+                {
+                    distance = Vector3.Distance(transform.position, building.transform.position);
+                    if (distance < lowestDistance && building.assignedVillager == null)
+                    {
+                        lowestDistance = distance;
+                        targetBuilding = building;
+                    }
+                }
+            }
+            if (targetBuilding != null)
+            {
+                targetBuilding.assignedVillager = this;
+                SetDestination(targetBuilding.transform.position);
+                working = true;
+            }
+            else
+            {
+                returning = true;
+                SetDestination(townCenter.transform.position);
+            }
+        }
         else if (job == VillagerJob.Lumberjack)
         {
             List<Resource> trees = ResourceGenerator.GetTrees();
@@ -93,7 +144,7 @@ public class Villager : MonoBehaviour, ISelectable
                 if (tree != null)
                 {
                     distance = Vector3.Distance(transform.position, tree.transform.position);
-                    if (distance < lowestDistance && tree.selected < tree.selectionLimit)
+                    if (distance < lowestDistance && tree.assignedVillager == null)
                     {
                         lowestDistance = distance;
                         targetResource = tree;
@@ -102,7 +153,7 @@ public class Villager : MonoBehaviour, ISelectable
             }
             if (targetResource != null)
             {
-                targetResource.selected += 1;
+                targetResource.assignedVillager = this;
                 SetDestination(targetResource.transform.position);
                 working = true;
             }
