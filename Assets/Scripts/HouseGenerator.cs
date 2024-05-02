@@ -9,7 +9,7 @@ public class HouseGenerator : MonoBehaviour
     private Vector3 center;
     private Vector3 spacingSize;
     private int spacing = 2;
-    private List<GameObject> constructionZones;
+    private static List<House> houses;
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +30,8 @@ public class HouseGenerator : MonoBehaviour
             {
                 // got a point
 
-                GameObject constructionZone = Instantiate(housePrefab, point, Quaternion.identity);
-                constructionZones.Add(constructionZone);
+                House house = Instantiate(housePrefab, point, Quaternion.identity).GetComponent<House>();
+                houses.Add(house);
             }
             else
             {
@@ -42,8 +42,8 @@ public class HouseGenerator : MonoBehaviour
         
     }
 
-    public List<GameObject> getConstructionZones()
+    public List<House> getHouses()
     {
-        return constructionZones;
+        return houses;
     }
 }

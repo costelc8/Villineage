@@ -635,8 +635,8 @@ GameObject:
   - component: {fileID: 1530607279}
   - component: {fileID: 1530607278}
   - component: {fileID: 1530607277}
-  - component: {fileID: 1530607283}
   - component: {fileID: 1530607281}
+  - component: {fileID: 1530607283}
   - component: {fileID: 1530607282}
   m_Layer: 0
   m_Name: Town Center
@@ -744,7 +744,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
-  terrainGen: {fileID: 1933731101}
 --- !u!208 &1530607282
 NavMeshObstacle:
   m_ObjectHideFlags: 0
