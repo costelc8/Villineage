@@ -37,7 +37,9 @@ public class BuildingGenerator : MonoBehaviour
         if (RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSize, out Vector3 point, 8f, 3f, 1000f))
         {
             // Make a house
-            Building house = Instantiate(housePrefab, point, Quaternion.identity, buildingParent.transform).GetComponent<Building>();
+            
+            Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(1, 3), 0);
+            Building house = Instantiate(housePrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
             pendingBuildings.Add(house);
         }
     }
