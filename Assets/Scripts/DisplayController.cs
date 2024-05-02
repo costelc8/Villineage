@@ -71,10 +71,14 @@ public class DisplayController : MonoBehaviour
 
         // Display the resources of the villager
         string resourcesText = "Resources: ";
-        foreach (var resource in villager.resources)
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            resourcesText += resource.Key.ToString() + ": " + resource.Value + "\n";
+            if (villager.resources[i] > 0) resourcesText += (ResourceType)i + ": " + villager.resources[i];
         }
+        //foreach (var resource in villager.resources)
+        //{
+        //    resourcesText += resource.Key.ToString() + ": " + resource.Value + "\n";
+        //}
         inventoryTextMesh.text = resourcesText;
     }
 

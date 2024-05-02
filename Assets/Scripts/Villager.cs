@@ -1,8 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Villager : MonoBehaviour, ISelectable
@@ -14,7 +13,7 @@ public class Villager : MonoBehaviour, ISelectable
     [Header("Jobs")]
     public VillagerJob job;
     public float workSpeed = 1.0f;  // Speed of resource extraction
-    public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>(); // Amount of resources being carried
+    public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
     public Resource targetResource;
@@ -73,8 +72,7 @@ public class Villager : MonoBehaviour, ISelectable
                         ResourceType result = targetResource.Harvest(workSpeed * Time.deltaTime);
                         if (result != ResourceType.None)
                         {
-                            if (resources.ContainsKey(result)) resources[result] += 1;
-                            else resources.Add(result, 1);
+                            resources[(int)result]++;
                             totalResources += 1;
                             if (totalResources >= capacity)
                             {
@@ -91,7 +89,7 @@ public class Villager : MonoBehaviour, ISelectable
             else if (returning)
             {
                 townCenter.DepositResources(this, resources);
-                resources.Clear();
+                Array.Clear(resources, 0, resources.Length);
                 totalResources = 0;
                 returning = false;
             }

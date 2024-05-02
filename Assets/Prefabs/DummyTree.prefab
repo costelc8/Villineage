@@ -51,7 +51,7 @@ MonoBehaviour:
   quantity: 50
   maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 3
+  resourceType: 2
 --- !u!136 &9206137994431540352
 CapsuleCollider:
   m_ObjectHideFlags: 0
