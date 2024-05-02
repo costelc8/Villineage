@@ -9,7 +9,7 @@ public class HouseGenerator : MonoBehaviour
     private Vector3 center;
     private Vector3 spacingSize;
     private int spacing = 2;
-    private static List<House> houses;
+    private List<House> houses;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +18,7 @@ public class HouseGenerator : MonoBehaviour
         print(transform.position);
         center = transform.position;
         spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
+        houses = new List<House>();
     }
 
     // Update is called once per frame
