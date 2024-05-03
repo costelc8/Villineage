@@ -3852,13 +3852,16 @@ MonoBehaviour:
   selected: 0
   job: 0
   workSpeed: 1
+  resources: 000000000000000000000000
   totalResources: 0
   capacity: 5
   targetResource: {fileID: 0}
+  targetBuilding: {fileID: 0}
   selectionRange: 10
   working: 0
   walking: 0
   returning: 0
+  anim: {fileID: 5065850229573436871}
 --- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -18526,7 +18529,7 @@ Animator:
   m_GameObject: {fileID: 8763288030407505983}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02ded044b8e0963439276550f50be6f9, type: 3}
-  m_Controller: {fileID: 9100000, guid: f5a5df21e2ce72749aab436d5667e57b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 39164aad5a45b6e4fb8eec7201d8f0ad, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

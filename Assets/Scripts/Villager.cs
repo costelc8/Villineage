@@ -28,6 +28,9 @@ public class Villager : MonoBehaviour, ISelectable
     public bool walking = false;  // Are they wandering around?
     public bool returning = false;
 
+    [Header("Animation")]
+    public Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,8 @@ public class Villager : MonoBehaviour, ISelectable
         {
             // If close to current target, you're no longer walking
             walking = false;
+            anim.SetFloat("Walking",0);
+            anim.SetBool("Working",working);
             if (working)
             {
                 if (job == VillagerJob.Builder)
@@ -57,7 +62,9 @@ public class Villager : MonoBehaviour, ISelectable
                         if (targetBuilding.Progress(workSpeed * Time.deltaTime))
                         {
                             returning = true;
+                            anim.SetFloat("Walking",1);
                             working = false;
+                            anim.SetBool("Working",working);
                             targetBuilding.assignedVillager = null;
                             targetBuilding = null;
                             SetDestination(townCenter.transform.position);
