@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class Villager : MonoBehaviour, ISelectable
 {
     private NavMeshAgent agent;
+    private Animator anim;
     public TownCenter townCenter;
     public bool selected;
 
@@ -32,6 +33,7 @@ public class Villager : MonoBehaviour, ISelectable
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -42,7 +44,7 @@ public class Villager : MonoBehaviour, ISelectable
             FindNewDestination();
             if (target == null) // Edge case handling
             {
-                state = VillagerState.Pending;
+                ChangeState(VillagerState.Pending);
                 SetNewTarget(townCenter);
             }
         }
@@ -50,17 +52,17 @@ public class Villager : MonoBehaviour, ISelectable
         {
             if (state == VillagerState.Walking)
             {
-                state = VillagerState.Working;
+                ChangeState(VillagerState.Working);
             }
             else if (state == VillagerState.Working)
             {
-                if (target == null) state = VillagerState.Pending;
+                if (target == null) ChangeState(VillagerState.Pending);
                 else
                 {
                     bool progress = target.Progress(this, workSpeed * Time.deltaTime);
                     if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
                     {
-                        state = VillagerState.Returning;
+                        ChangeState(VillagerState.Returning);
                         SetNewTarget(townCenter);
                     }
                 }
@@ -70,7 +72,7 @@ public class Villager : MonoBehaviour, ISelectable
                 townCenter.DepositResources(this, resources);
                 Array.Clear(resources, 0, resources.Length);
                 totalResources = 0;
-                state = VillagerState.Pending;
+                ChangeState(VillagerState.Pending);
             }
         }
     }
@@ -106,7 +108,13 @@ public class Villager : MonoBehaviour, ISelectable
             }
             SetNewTarget(bestCandidate);
         }
-        state = VillagerState.Walking;
+        ChangeState(VillagerState.Walking);
+    }
+
+    private void ChangeState(VillagerState newState)
+    {
+        state = newState;
+        // Can update the Animator here
     }
 
     private void SetNewTarget(Targetable newTarget)
