@@ -8,7 +8,9 @@ public class ResourceGenerator : MonoBehaviour
 {
     public TerrainGenerator terrainGenerator;
     public GameObject treePrefab;
-    private static List<Resource> trees = new List<Resource>();
+    public GameObject berryPrefab;
+    private static List<Targetable> trees = new List<Targetable>();
+    private static List<Targetable> berries = new List<Targetable>();
     public Transform forestPosition;
     public int forestSpacing;
     [Range(0f, 1f)]
@@ -72,7 +74,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int y = spacing; y < size; y += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 10f)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 16f)
                 {
                     // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
                     Vector2 offset = new Vector2(Random.Range(-1f, 1f) * variation, Random.Range(-1f, 1f) * variation);
@@ -90,9 +92,14 @@ public class ResourceGenerator : MonoBehaviour
         Debug.Log(trees.Count + " Trees Generated");
     }
 
-    public static List<Resource> GetTrees()
+    public static List<Targetable> GetTrees()
     {
         return trees;
+    }
+
+    public static List<Targetable> GetBerries()
+    {
+        return berries;
     }
 
     public static void RemoveResource(Resource resource)

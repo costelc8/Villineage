@@ -24,9 +24,9 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         // Camera Movement
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        transform.Translate(new Vector3(horizontal, 0f, vertical) * (Time.deltaTime * movementSpeed));
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        transform.Translate(new Vector3(horizontal, 0f, vertical).normalized * (Time.deltaTime * movementSpeed * zoomDistance));
 
         // Camera Rotation
         if (Input.GetMouseButtonDown(1)) Cursor.lockState = CursorLockMode.Locked;
@@ -41,7 +41,7 @@ public class CameraControl : MonoBehaviour
         {
             float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -10f, 10f);
             float mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y"), -10f, 10f);
-            transform.Translate(new Vector3(mouseX, 0f, mouseY) * movementSpeed / -10f);
+            transform.Translate(new Vector3(mouseX, 0f, mouseY) * (movementSpeed * zoomDistance / -10f));
         }
 
         // Camera Zoom

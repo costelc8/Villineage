@@ -6,29 +6,21 @@ using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TownCenter : MonoBehaviour
+public class TownCenter : Targetable
 {
     public GameObject villagerPrefab;
     public int startingVillagers = 5;
     public List<Villager> villagers;
     private BuildingGenerator buildingGenerator;
 
-    //private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
-    //private Dictionary<ResourceType, float> resourceWeights = new Dictionary<ResourceType, float>();
-    //private Dictionary<VillagerJob, int> villagerJobs = new Dictionary<VillagerJob, int>();
-    //private Dictionary<VillagerJob, int> neededJobs = new Dictionary<VillagerJob, int>();
-    private int[] resources = new int[(int)ResourceType.MAX_VALUE];
-    private float[] jobWeights = new float[(int)VillagerJob.MAX_VALUE];
-    private int[] neededJobs = new int[(int)VillagerJob.MAX_VALUE];
-    private int[] currentJobs = new int[(int)VillagerJob.MAX_VALUE];
+    public int[] resources = new int[(int)ResourceType.MAX_VALUE];
+    public float[] jobWeights = new float[(int)VillagerJob.MAX_VALUE];
+    public int[] neededJobs = new int[(int)VillagerJob.MAX_VALUE];
+    public int[] currentJobs = new int[(int)VillagerJob.MAX_VALUE];
 
-    public int foodWeight;
-    public int woodWeight;
-
-    [Header("Editor Tools")]
-    public bool updateVillagerJobs;
-    public ResourceType resourceQuery = ResourceType.None;
-    public int resourceQuantity = 0;
+    public int lumberjackWeight;
+    public int gathererWeight;
+    public int houseCost = 60;
 
     private void Start()
     {
@@ -40,11 +32,6 @@ public class TownCenter : MonoBehaviour
         buildingGenerator = GetComponent<BuildingGenerator>();
         for (int i = 0; i < startingVillagers; i++) SpawnVillager();
         AssignAllVillagerJobs();
-    }
-
-    private void Update()
-    {
-        resourceQuantity = resources[(int)resourceQuery];
     }
 
     public void SpawnVillager()
@@ -65,10 +52,10 @@ public class TownCenter : MonoBehaviour
         {
             resources[i] += deposit[i];
         }
-        if (resources[(int)ResourceType.Wood] >= 50)
+        if (resources[(int)ResourceType.Wood] >= houseCost)
         {
             buildingGenerator.PlaceHouse();
-            resources[(int)ResourceType.Wood] -= 50;
+            resources[(int)ResourceType.Wood] -= houseCost;
         }
         AssignVillagerJob(villager);
     }
@@ -81,7 +68,9 @@ public class TownCenter : MonoBehaviour
         {
             villager.job = GetMostNeededJob();
             currentJobs[(int)villager.job]++;
+            CalculateNeededJobs();
         }
+        CalculateJobWeights();
     }
 
     private void AssignVillagerJob(Villager villager)
@@ -94,6 +83,7 @@ public class TownCenter : MonoBehaviour
             villager.job = job;
             currentJobs[(int)villager.job]++;
         }
+        CalculateJobWeights();
     }
 
     private VillagerJob GetMostNeededJob()
@@ -141,8 +131,8 @@ public class TownCenter : MonoBehaviour
     // Placeholder until we have more complex formulas to determine how much of each resource is desired
     private void CalculateJobWeights()
     {
-        jobWeights[(int)VillagerJob.Gatherer] = foodWeight;
-        jobWeights[(int)VillagerJob.Lumberjack] = woodWeight;
+        jobWeights[(int)VillagerJob.Lumberjack] = lumberjackWeight;
+        jobWeights[(int)VillagerJob.Gatherer] = gathererWeight;
         jobWeights[(int)VillagerJob.Builder] = BuildingGenerator.GetPendingBuildings().Count;
     }
 
@@ -160,86 +150,13 @@ public class TownCenter : MonoBehaviour
         }
         return job;
     }
-
-    //// This method returns whichever ResourceType in the resourceWeights dictionary currently has the largest weight
-    //private ResourceType MostNeededResource()
-    //{
-    //    ResourceType resource = ResourceType.None;
-    //    float maxWeight = 0;
-    //    foreach (ResourceType r in resourceWeights.Keys)
-    //    {
-    //        if (resourceWeights[r] > maxWeight)
-    //        {
-    //            resource = r;
-    //            maxWeight = resourceWeights[r];
-    //        }
-    //    }
-    //    return resource;
-    //}
-
-    
-
-    //private void AssignAllVillagerJobs()
-    //{
-    //    villagerJobs.Clear();
-    //    foreach(Villager v in villagers)
-    //    {
-    //        v.job = MostNeededJob();
-    //        if (villagerJobs.ContainsKey(v.job)) villagerJobs[v.job]++;
-    //        else villagerJobs.Add(v.job, 1);
-    //    }
-    //}
-
-    //private VillagerJob MostNeededJob()
-    //{
-    //    VillagerJob job = VillagerJob.Nitwit;
-    //    int maxNeed = 0;
-    //    foreach (VillagerJob j in neededJobs.Keys)
-    //    {
-    //        int needed = villagerJobs.ContainsKey(j) ? neededJobs[j] - villagerJobs[j] : neededJobs[j];
-    //        if (needed > maxNeed)
-    //        {
-    //            maxNeed = needed;
-    //            job = j;
-    //        }
-    //    }
-    //    return job;
-    //}
-
-    //// This method exists for the future, where there will be multiple methods of gathering a resource
-    //// Eg. Hunting, Gathering, Farming are all jobs that can gather food, and this method
-    //// will allow us to decide how to choose between those different food roles
-    //private VillagerJob GetJobForResource(ResourceType resource)
-    //{
-    //    switch (resource)
-    //    {
-    //        case ResourceType.Building: return VillagerJob.Builder;
-    //        case ResourceType.Food: return VillagerJob.Gatherer;
-    //        case ResourceType.Wood: return VillagerJob.Lumberjack;
-    //    }
-    //    return VillagerJob.Nitwit;
-    //}
-
-    //// Editor-only method for displaying resource distribution
-    //private void OnValidate()
-    //{
-    //    if (updateVillagerJobs)
-    //    {
-    //        updateVillagerJobs = false;
-    //        CalculateNeededJobs();
-    //        foreach (VillagerJob job in neededJobs.Keys)
-    //        {
-    //            Debug.Log(job.ToString() + ": " + neededJobs[job]);
-    //        }
-    //    }
-    //}
 }
 
 public enum ResourceType
 {
     None,
-    Food,
     Wood,
+    Food,
     MAX_VALUE,
 }
 
@@ -248,8 +165,8 @@ public enum ResourceType
 public enum VillagerJob
 {
     Nitwit,
-    Gatherer,
-    Lumberjack,
     Builder,
+    Lumberjack,
+    Gatherer,
     MAX_VALUE,
 }

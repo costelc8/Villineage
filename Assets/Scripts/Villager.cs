@@ -16,17 +16,17 @@ public class Villager : MonoBehaviour, ISelectable
     public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
-    public Resource targetResource;
-    public Building targetBuilding;
+    public Targetable target;
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
     private float distance;
 
     [Header("States")]
-    public bool working = false;  // Are they currently working on something?
-    public bool walking = false;  // Are they wandering around?
-    public bool returning = false;
+    //public bool working = false;  // Are they currently working on something?
+    //public bool walking = false;  // Are they wandering around?
+    //public bool returning = false;
+    public VillagerState state;
 
     // Start is called before the first frame update
     void Start()
@@ -37,61 +37,40 @@ public class Villager : MonoBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
-        // If not walking or working, find a new destination
-        if (!walking && !working && !returning)
+        if (state == VillagerState.Pending)
         {
-            //Debug.Log("Finding New Destination"); // i removed this for my sanity -abby
             FindNewDestination();
-        }
-        else if (!agent.pathPending && agent.remainingDistance <= 0.5f)
-        {
-            // If close to current target, you're no longer walking
-            walking = false;
-            if (working)
+            if (target == null) // Edge case handling
             {
-                if (job == VillagerJob.Builder)
-                {
-                    if (targetBuilding == null) working = false;
-                    else
-                    {
-                        if (targetBuilding.Progress(workSpeed * Time.deltaTime))
-                        {
-                            returning = true;
-                            working = false;
-                            targetBuilding.assignedVillager = null;
-                            targetBuilding = null;
-                            SetDestination(townCenter.transform.position);
-                        }
-                    }
-                }
+                state = VillagerState.Pending;
+                SetNewTarget(townCenter);
+            }
+        }
+        else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (state == VillagerState.Walking)
+            {
+                state = VillagerState.Working;
+            }
+            else if (state == VillagerState.Working)
+            {
+                if (target == null) state = VillagerState.Pending;
                 else
                 {
-                    if (targetResource == null) working = false;
-                    else
+                    bool progress = target.Progress(this, workSpeed * Time.deltaTime);
+                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
                     {
-                        ResourceType result = targetResource.Harvest(workSpeed * Time.deltaTime);
-                        if (result != ResourceType.None)
-                        {
-                            resources[(int)result]++;
-                            totalResources += 1;
-                            if (totalResources >= capacity)
-                            {
-                                returning = true;
-                                working = false;
-                                targetResource.assignedVillager = null;
-                                targetResource = null;
-                                SetDestination(townCenter.transform.position);
-                            }
-                        }
+                        state = VillagerState.Returning;
+                        SetNewTarget(townCenter);
                     }
                 }
             }
-            else if (returning)
+            else if (state == VillagerState.Returning)
             {
                 townCenter.DepositResources(this, resources);
                 Array.Clear(resources, 0, resources.Length);
                 totalResources = 0;
-                returning = false;
+                state = VillagerState.Pending;
             }
         }
     }
@@ -102,71 +81,39 @@ public class Villager : MonoBehaviour, ISelectable
         {
             if (RandomNavmeshPoint.RandomPoint(transform.position, selectionRange, out Vector3 targetPosition))
             {
-                SetDestination(targetPosition);
+                agent.SetDestination(targetPosition);
             }
         }
-        else if (job == VillagerJob.Builder)
+        else
         {
-            List<Building> buildings = BuildingGenerator.GetPendingBuildings();
+            List<Targetable> candidates = new List<Targetable>();
+            if (job == VillagerJob.Builder) candidates = BuildingGenerator.GetPendingBuildings();
+            else if (job == VillagerJob.Lumberjack) candidates = ResourceGenerator.GetTrees();
+            else if (job == VillagerJob.Gatherer) candidates = ResourceGenerator.GetBerries();
+            Targetable bestCandidate = null;
             float lowestDistance = float.MaxValue;
-            foreach (Building building in buildings)
+            foreach (Targetable candidate in candidates)
             {
-                if (buildings != null)
+                if (candidate != null)
                 {
-                    distance = Vector3.Distance(transform.position, building.transform.position);
-                    if (distance < lowestDistance && building.assignedVillager == null)
+                    distance = Vector3.Distance(transform.position, candidate.transform.position);
+                    if (distance < lowestDistance && candidate.HasValidPositions())
                     {
                         lowestDistance = distance;
-                        targetBuilding = building;
+                        bestCandidate = candidate;
                     }
                 }
             }
-            if (targetBuilding != null)
-            {
-                targetBuilding.assignedVillager = this;
-                SetDestination(targetBuilding.transform.position);
-                working = true;
-            }
-            else
-            {
-                returning = true;
-                SetDestination(townCenter.transform.position);
-            }
+            SetNewTarget(bestCandidate);
         }
-        else if (job == VillagerJob.Lumberjack)
-        {
-            List<Resource> trees = ResourceGenerator.GetTrees();
-            float lowestDistance = float.MaxValue;
-            foreach (Resource tree in trees)
-            {
-                if (tree != null)
-                {
-                    distance = Vector3.Distance(transform.position, tree.transform.position);
-                    if (distance < lowestDistance && tree.assignedVillager == null)
-                    {
-                        lowestDistance = distance;
-                        targetResource = tree;
-                    }
-                }
-            }
-            if (targetResource != null)
-            {
-                targetResource.assignedVillager = this;
-                SetDestination(targetResource.transform.position);
-                working = true;
-            }
-            else
-            {
-                returning = true;
-                SetDestination(townCenter.transform.position);
-            }
-        }
-        walking = true;
+        state = VillagerState.Walking;
     }
 
-    private void SetDestination(Vector3 position)
+    private void SetNewTarget(Targetable newTarget)
     {
-        agent.SetDestination(position + (transform.position - position).normalized * 0.1f);
+        if (target != null) target.ReturnTargetPosition(this);
+        target = newTarget;
+        if (target != null) agent.SetDestination(target.GetTargetPosition(this));
     }
 
     public void OnSelect()
@@ -180,5 +127,13 @@ public class Villager : MonoBehaviour, ISelectable
     {
         selected = false;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
+    public enum VillagerState
+    {
+        Pending,
+        Walking,
+        Working,
+        Returning,
     }
 }

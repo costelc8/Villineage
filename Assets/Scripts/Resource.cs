@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public class Resource : Targetable
 {
     private GameObject stage0;
     private GameObject stage1;
@@ -23,12 +23,14 @@ public class Resource : MonoBehaviour
     // Decrement durability of the resource by the amount of progress made on it.
     // If the durability reaches 0, yield a resource, and reset the durability if
     // there is more resource to be harvested.
-    public bool Progress(float progressValue)
+    public override bool Progress(Villager villager, float progressValue)
     {
         durability -= progressValue;
         if (durability <= 0)
         {
             quantity--;
+            villager.totalResources++;
+            villager.resources[(int)resourceType]++;
             durability = maxDurability;
             stage0.SetActive(false);
             stage1.SetActive(true);
@@ -40,11 +42,5 @@ public class Resource : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    public virtual ResourceType Harvest(float progressValue)
-    {
-        if (Progress(progressValue)) return resourceType;
-        return ResourceType.None;
     }
 }

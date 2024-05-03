@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4004122076398770796}
   m_Layer: 0
   m_Name: DummyHouse
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,8 +56,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5, y: 5, z: 5}
-  m_Center: {x: 0, y: 2.5, z: 0}
+  m_Size: {x: 4, y: 4, z: 4}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!208 &3908302082700643040
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -68,11 +68,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2.5, y: 2.5, z: 2.5}
+  m_Extents: {x: 2, y: 2, z: 2}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 2.5, z: 0}
+  m_Center: {x: 0, y: 2, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &4004122076398770796
 MonoBehaviour:
@@ -86,7 +86,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56ad1800107a6408664b8dd5812062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxbuildTime: 10
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  assignedVillager: {fileID: 0}
+  maxBuildTime: 30
   stage: 0
 --- !u!1001 &430455909299506176
 PrefabInstance:
@@ -234,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 05035b78d90b21f43854dfe010ccd289, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 05035b78d90b21f43854dfe010ccd289, type: 3}
       propertyPath: m_LocalPosition.x

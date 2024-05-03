@@ -9,7 +9,7 @@ public class BuildingGenerator : MonoBehaviour
     private Vector3 center;
     private Vector3 spacingSize;
     private int spacing = 2;
-    private static List<Building> pendingBuildings = new List<Building>();
+    private static List<Targetable> pendingBuildings = new List<Targetable>();
     private static List<Building> buildings = new List<Building>();
     private GameObject buildingParent;
 
@@ -43,7 +43,7 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
 
-    public static List<Building> GetPendingBuildings()
+    public static List<Targetable> GetPendingBuildings()
     {
         return pendingBuildings;
     }

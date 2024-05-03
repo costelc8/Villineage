@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : Targetable
 {
     private GameObject stage0;
     private GameObject stage1;
     private GameObject stage2;
     public Villager assignedVillager;
-    public float maxbuildTime = 10f;
+    public float maxBuildTime = 10f;
     private float buildTime;
     public int stage;
 
@@ -26,16 +26,16 @@ public class Building : MonoBehaviour
         //Progress(Time.deltaTime);
     }
 
-    public bool Progress(float progressValue)
+    public override bool Progress(Villager villager, float progressValue)
     {
         buildTime += progressValue;
-        stage = Mathf.Clamp((int)(buildTime * 2 / maxbuildTime), 0, 2);
+        stage = Mathf.Clamp((int)(buildTime * 2 / maxBuildTime), 0, 2);
         stage0.SetActive(stage == 0);
         stage1.SetActive(stage == 1);
         stage2.SetActive(stage == 2);
-        if (buildTime >= maxbuildTime)
+        if (buildTime >= maxBuildTime)
         {
-            buildTime = maxbuildTime;
+            buildTime = maxBuildTime;
             BuildingGenerator.AddBuilding(this);
             return true;
         }

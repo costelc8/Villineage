@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5208080955967202947}
   m_Layer: 0
   m_Name: DummyTree
-  m_TagString: Tree
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,10 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50cbf538d57abe740b1a369a3ae38617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quantity: 50
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  quantity: 60
   maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 2
+  resourceType: 1
 --- !u!136 &9206137994431540352
 CapsuleCollider:
   m_ObjectHideFlags: 0
