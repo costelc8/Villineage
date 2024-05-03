@@ -3855,13 +3855,9 @@ MonoBehaviour:
   resources: 000000000000000000000000
   totalResources: 0
   capacity: 5
-  targetResource: {fileID: 0}
-  targetBuilding: {fileID: 0}
+  target: {fileID: 0}
   selectionRange: 10
-  working: 0
-  walking: 0
-  returning: 0
-  anim: {fileID: 5065850229573436871}
+  state: 0
 --- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3876,7 +3872,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
