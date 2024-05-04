@@ -115,6 +115,16 @@ public class Villager : MonoBehaviour, ISelectable
     {
         state = newState;
         // Can update the Animator here
+        if (newState == VillagerState.Pending) {
+            anim.SetBool("Working",false);
+            anim.SetFloat("Walking",0);
+        } else if (newState == VillagerState.Walking || newState == VillagerState.Returning) {
+            anim.SetBool("Working",false);
+            anim.SetFloat("Walking",1);
+        } else if (newState == VillagerState.Working) {
+            anim.SetBool("Working",true);
+            anim.SetFloat("Walking",0);
+        }
     }
 
     private void SetNewTarget(Targetable newTarget)
