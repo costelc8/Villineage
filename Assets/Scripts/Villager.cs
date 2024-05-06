@@ -11,9 +11,15 @@ public class Villager : MonoBehaviour, ISelectable
     public TownCenter townCenter;
     public bool selected;
 
+    [Header("Stats")]
+    public bool alive;
+    public float workSpeed = 1.0f;  // Speed of resource extraction
+    public float hunger;
+    public float hungerRate = 10.0f;
+    public float maxHunger = 100.0f;
+
     [Header("Jobs")]
     private VillagerJob job;
-    public float workSpeed = 1.0f;  // Speed of resource extraction
     public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
@@ -38,11 +44,15 @@ public class Villager : MonoBehaviour, ISelectable
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        hunger = maxHunger;
+        alive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!alive) { return; }
+
         if (state == VillagerState.Pending)
         {
             FindNewDestination();
@@ -76,6 +86,22 @@ public class Villager : MonoBehaviour, ISelectable
                 ChangeState(VillagerState.Pending);
             }
         }
+
+        // Decrease hunger:
+        hunger -= hungerRate * Time.deltaTime;
+
+        // If starved to death
+        if (hunger <= 0) 
+        {
+            hunger = 0;
+            Death();
+        }
+    }
+
+    private void Death()
+    {
+        alive = false;
+        agent.isStopped = true;
     }
 
     public void FindNewDestination()

@@ -3850,11 +3850,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   townCenter: {fileID: 0}
   selected: 0
-  job: 0
+  alive: 0
   workSpeed: 1
+  hunger: 0
+  hungerRate: 25
+  maxHunger: 100
   resources: 000000000000000000000000
   totalResources: 0
-  capacity: 5
+  capacity: 3
   target: {fileID: 0}
   selectionRange: 10
   state: 0
