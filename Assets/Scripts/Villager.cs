@@ -1,10 +1,11 @@
+using Mirror;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Villager : MonoBehaviour, ISelectable
+public class Villager : NetworkBehaviour, ISelectable
 {
     private NavMeshAgent agent;
     private Animator anim;
@@ -33,8 +34,7 @@ public class Villager : MonoBehaviour, ISelectable
     public GameObject axe;
     public GameObject hammer;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
@@ -43,6 +43,7 @@ public class Villager : MonoBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
+        if (!isServer) return;
         if (state == VillagerState.Pending)
         {
             FindNewDestination();

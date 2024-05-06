@@ -13,7 +13,7 @@ public class Resource : Targetable
     public ResourceType resourceType;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         stage0 = transform.GetChild(0).gameObject;
         stage1 = transform.GetChild(1).gameObject;

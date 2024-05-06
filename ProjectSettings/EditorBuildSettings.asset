@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Logan_Scene.unity
+    guid: 9c4788c530f4a4a4da2a27831013d6cc
   m_configObjects: {}

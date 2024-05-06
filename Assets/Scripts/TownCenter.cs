@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,14 +23,22 @@ public class TownCenter : Targetable
     public int gathererWeight;
     public int houseCost = 60;
 
-    private void Start()
+    private void Awake()
+    {
+        buildingGenerator = GetComponent<BuildingGenerator>();
+    }
+
+    public void PlaceOnGround()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
             transform.position = hitInfo.point;
             Camera.main.transform.parent.parent.position = transform.position;
         }
-        buildingGenerator = GetComponent<BuildingGenerator>();
+    }
+
+    public void SpawnVillagers(int villagerCount)
+    {
         for (int i = 0; i < startingVillagers; i++) SpawnVillager();
         AssignAllVillagerJobs();
     }
@@ -39,6 +48,7 @@ public class TownCenter : Targetable
         if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity).GetComponent<Villager>();
+            NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
             villager.townCenter = this;
             Selection.Selector.AddSelectable(villager);

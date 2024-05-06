@@ -3789,6 +3789,8 @@ GameObject:
   - component: {fileID: 4903278303035795223}
   - component: {fileID: 6096172965408856617}
   - component: {fileID: 5122210100640433560}
+  - component: {fileID: -5571549955263603796}
+  - component: {fileID: 7036556193153107542}
   m_Layer: 0
   m_Name: DummyVillager
   m_TagString: Villager
@@ -3850,7 +3852,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   townCenter: {fileID: 0}
   selected: 0
-  job: 0
   workSpeed: 1
   resources: 000000000000000000000000
   totalResources: 0
@@ -3882,6 +3883,58 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-5571549955263603796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020194912628289861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 3506646367
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
+--- !u!114 &7036556193153107542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020194912628289861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2029268403641180401}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  changedDetection: 1
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
 --- !u!1 &2045088464112562668
 GameObject:
   m_ObjectHideFlags: 0

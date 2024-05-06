@@ -9,6 +9,9 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     private Terrain terrain;
+    private TerrainData terrainData;
+    private NavMeshSurface navMesh;
+    public bool generateTerrainOnStart;
     [Tooltip("Terrain hill height")]
     public int depth = 8;
     [Tooltip("Terrain seed, entering 0 will generate one")]
@@ -22,20 +25,28 @@ public class TerrainGenerator : MonoBehaviour
     public float scale = 1f;
     public float[,] perlin;
 
-    private void Start()
+    private void Awake()
     {
         terrain = GetComponent<Terrain>();
-        GenerateTerrain(terrain.terrainData);
-        NavMeshSurface surface = GetComponent<NavMeshSurface>();
-        surface.BuildNavMesh();
+        terrainData = terrain.terrainData;
+        navMesh = GetComponent<NavMeshSurface>();
     }
 
-    void GenerateTerrain(TerrainData data)
+    private void Start()
     {
-        size = data.heightmapResolution;
-        data.size = new Vector3(size - 1, depth, size - 1);
+        if (generateTerrainOnStart)
+        {
+            GenerateTerrain();
+        }
+    }
+
+    public void GenerateTerrain()
+    {
+        size = terrainData.heightmapResolution;
+        terrainData.size = new Vector3(size - 1, depth, size - 1);
         perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
-        data.SetHeights(0, 0, perlin);
+        terrainData.SetHeights(0, 0, perlin);
+        navMesh.BuildNavMesh();
     }
 
     public float GetTerrainHeight(Vector3 position)

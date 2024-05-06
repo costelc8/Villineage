@@ -13,7 +13,7 @@ public class CameraControl : MonoBehaviour
     public float maxZoomDistance;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         // Ensure camera is within zoom bounds on start
         zoomDistance = Mathf.Clamp(-Camera.main.transform.localPosition.z, minZoomDistance, maxZoomDistance);

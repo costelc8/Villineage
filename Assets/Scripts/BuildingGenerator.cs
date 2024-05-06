@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class BuildingGenerator : MonoBehaviour
     private GameObject buildingParent;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         center = transform.position;
         spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
@@ -39,6 +40,7 @@ public class BuildingGenerator : MonoBehaviour
             
             Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
             Building house = Instantiate(housePrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            NetworkServer.Spawn(house.gameObject);
             pendingBuildings.Add(house);
         }
     }

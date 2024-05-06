@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
@@ -24,10 +25,14 @@ public class ResourceGenerator : MonoBehaviour
     public bool generateForest;
     public bool destroyTrees;
 
+    private void Awake()
+    {
+        terrainGenerator = GetComponent<TerrainGenerator>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        terrainGenerator = GetComponent<TerrainGenerator>();
         if (generateForest)
         {
             generateForest = false;
@@ -51,6 +56,11 @@ public class ResourceGenerator : MonoBehaviour
             foreach (Resource tree in trees) Destroy(tree.gameObject);
             trees.Clear();
         }
+    }
+
+    public void GenerateDefaultForest()
+    {
+        GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, terrainGenerator.size, forestSpacing, forestDensity, forestVariation);
     }
 
     // This method generates a forest with the given parameters
@@ -84,6 +94,7 @@ public class ResourceGenerator : MonoBehaviour
                         // Generate new tree
                         treePos.y = terrainGenerator.GetTerrainHeight(treePos);
                         GameObject tree = Instantiate(treePrefab, treePos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), forest.transform);
+                        NetworkServer.Spawn(tree);
                         trees.Add(tree.GetComponent<Resource>());
                     }
                 }

@@ -14,7 +14,7 @@ public class Building : Targetable
     public int stage;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         stage0 = transform.GetChild(0).gameObject;
         stage1 = transform.GetChild(1).gameObject;
