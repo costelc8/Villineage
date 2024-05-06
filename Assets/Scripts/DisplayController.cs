@@ -40,7 +40,7 @@ public class DisplayController : MonoBehaviour
         }
 
         // Check the job of the villager and display it
-        switch (villager.job)
+        switch (villager.Job())
         {
             case VillagerJob.Nitwit:
                 jobTextMesh.text = "Job: Nitwit";

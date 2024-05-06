@@ -12,7 +12,7 @@ public class Villager : MonoBehaviour, ISelectable
     public bool selected;
 
     [Header("Jobs")]
-    public VillagerJob job;
+    private VillagerJob job;
     public float workSpeed = 1.0f;  // Speed of resource extraction
     public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
@@ -28,6 +28,10 @@ public class Villager : MonoBehaviour, ISelectable
     //public bool walking = false;  // Are they wandering around?
     //public bool returning = false;
     public VillagerState state;
+
+    [Header("Tools")]
+    public GameObject axe;
+    public GameObject hammer;
 
     // Start is called before the first frame update
     void Start()
@@ -50,21 +54,18 @@ public class Villager : MonoBehaviour, ISelectable
         }
         else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (state == VillagerState.Walking)
+            if (target == null) ChangeState(VillagerState.Pending);
+            else if (state == VillagerState.Walking)
             {
                 ChangeState(VillagerState.Working);
             }
             else if (state == VillagerState.Working)
             {
-                if (target == null) ChangeState(VillagerState.Pending);
-                else
+                bool progress = target.Progress(this, workSpeed * Time.deltaTime);
+                if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
                 {
-                    bool progress = target.Progress(this, workSpeed * Time.deltaTime);
-                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
-                    {
-                        ChangeState(VillagerState.Returning);
-                        SetNewTarget(townCenter);
-                    }
+                    ChangeState(VillagerState.Returning);
+                    SetNewTarget(townCenter);
                 }
             }
             else if (state == VillagerState.Returning)
@@ -115,15 +116,23 @@ public class Villager : MonoBehaviour, ISelectable
     {
         state = newState;
         // Can update the Animator here
-        if (newState == VillagerState.Pending) {
+        if (newState == VillagerState.Pending)
+        {
+            agent.updateRotation = true;
             anim.SetBool("Working",false);
             anim.SetFloat("Walking",0);
-        } else if (newState == VillagerState.Walking || newState == VillagerState.Returning) {
+        } else if (newState == VillagerState.Walking || newState == VillagerState.Returning)
+        {
+            agent.updateRotation = true;
             anim.SetBool("Working",false);
             anim.SetFloat("Walking",1);
-        } else if (newState == VillagerState.Working) {
+        }
+        else if (newState == VillagerState.Working)
+        {
+            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
             anim.SetBool("Working",true);
             anim.SetFloat("Walking",0);
+            agent.updateRotation = false;
         }
     }
 
@@ -132,6 +141,18 @@ public class Villager : MonoBehaviour, ISelectable
         if (target != null) target.ReturnTargetPosition(this);
         target = newTarget;
         if (target != null) agent.SetDestination(target.GetTargetPosition(this));
+    }
+
+    public void ChangeJob(VillagerJob job)
+    {
+        this.job = job;
+        axe.SetActive(job == VillagerJob.Lumberjack);
+        hammer.SetActive(job == VillagerJob.Builder);
+    }
+
+    public VillagerJob Job()
+    {
+        return job;
     }
 
     public void OnSelect()

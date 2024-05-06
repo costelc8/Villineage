@@ -694,7 +694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1891997388708253499
 Transform:
   m_ObjectHideFlags: 0
@@ -3858,6 +3858,8 @@ MonoBehaviour:
   target: {fileID: 0}
   selectionRange: 10
   state: 0
+  axe: {fileID: 226699128288745174}
+  hammer: {fileID: 5551859811417421694}
 --- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -11308,7 +11310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6332949887608877614
 Transform:
   m_ObjectHideFlags: 0

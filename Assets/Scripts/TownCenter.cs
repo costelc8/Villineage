@@ -66,8 +66,8 @@ public class TownCenter : Targetable
         Array.Clear(currentJobs, 0, currentJobs.Length);
         foreach (Villager villager in villagers)
         {
-            villager.job = GetMostNeededJob();
-            currentJobs[(int)villager.job]++;
+            villager.ChangeJob(GetMostNeededJob());
+            currentJobs[(int)villager.Job()]++;
             CalculateNeededJobs();
         }
         CalculateJobWeights();
@@ -79,9 +79,9 @@ public class TownCenter : Targetable
         VillagerJob job = GetMostNeededJob();
         if (job != VillagerJob.Nitwit)
         {
-            currentJobs[(int)villager.job]--;
-            villager.job = job;
-            currentJobs[(int)villager.job]++;
+            currentJobs[(int)villager.Job()]--;
+            villager.ChangeJob(job);
+            currentJobs[(int)villager.Job()]++;
         }
         CalculateJobWeights();
     }
@@ -124,7 +124,7 @@ public class TownCenter : Targetable
             VillagerJob highestWeight = HighestWeightJob();
             jobWeights[(int)highestWeight] -= villagerWeight;
             neededJobs[(int)highestWeight]++;
-            neededJobs[(int)villager.job]--;
+            neededJobs[(int)villager.Job()]--;
         }
     }
 
