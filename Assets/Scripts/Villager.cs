@@ -15,7 +15,7 @@ public class Villager : MonoBehaviour, ISelectable
     public bool alive;
     public float workSpeed = 1.0f;  // Speed of resource extraction
     public float hunger;
-    public float hungerRate = 10.0f;
+    public float hungerRate = 0.0f;
     public float maxHunger = 100.0f;
 
     [Header("Jobs")]
