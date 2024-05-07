@@ -66,6 +66,7 @@ public class ResourceGenerator : MonoBehaviour
     // This method generates a forest with the given parameters
     public void GenerateForest(Vector3 position, int size, int spacing, float density, float variation)
     {
+        Debug.Log("Generating Forest");
         // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
         GameObject forest = new GameObject("Forest");
         forest.transform.position = position;
@@ -77,6 +78,7 @@ public class ResourceGenerator : MonoBehaviour
         size = (size / spacing) * spacing;
         Vector2 center = new Vector2(size / 2f, size / 2f);
 
+        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
         float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
 
         // Just generate trees in a square for now

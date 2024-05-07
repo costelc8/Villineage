@@ -73,7 +73,7 @@ public class DisplayController : MonoBehaviour
         string resourcesText = "Resources: ";
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            if (villager.resources[i] > 0) resourcesText += (ResourceType)i + ": " + villager.resources[i];
+            if (villager.inventory[i] > 0) resourcesText += (ResourceType)i + ": " + villager.inventory[i];
         }
         //foreach (var resource in villager.resources)
         //{

@@ -1,6 +1,7 @@
 using Mirror;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,9 +14,12 @@ public class Villager : NetworkBehaviour, ISelectable
     public bool selected;
 
     [Header("Jobs")]
-    private VillagerJob job;
+    [SyncVar(hook = nameof(JobHook))]
+    public VillagerJob job;
     public float workSpeed = 1.0f;  // Speed of resource extraction
-    public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
+    public readonly SyncList<int> inventory = new SyncList<int>();
+    //[SyncVar]
+    //public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
     public Targetable target;
@@ -28,6 +32,7 @@ public class Villager : NetworkBehaviour, ISelectable
     //public bool working = false;  // Are they currently working on something?
     //public bool walking = false;  // Are they wandering around?
     //public bool returning = false;
+    [SyncVar(hook = nameof(StateHook))]
     public VillagerState state;
 
     [Header("Tools")]
@@ -38,6 +43,16 @@ public class Villager : NetworkBehaviour, ISelectable
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+    }
+
+    public void Start()
+    {
+        Selection.Selector.AddSelectable(this);
+        if (isServer)
+        {
+            agent.enabled = true;
+            for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
+        }
     }
 
     // Update is called once per frame
@@ -71,8 +86,8 @@ public class Villager : NetworkBehaviour, ISelectable
             }
             else if (state == VillagerState.Returning)
             {
-                townCenter.DepositResources(this, resources);
-                Array.Clear(resources, 0, resources.Length);
+                townCenter.DepositResources(this, inventory.ToArray());
+                for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                 totalResources = 0;
                 ChangeState(VillagerState.Pending);
             }
@@ -113,6 +128,11 @@ public class Villager : NetworkBehaviour, ISelectable
         ChangeState(VillagerState.Walking);
     }
 
+    private void StateHook(VillagerState oldState, VillagerState newState)
+    {
+        ChangeState(newState);
+    }
+
     private void ChangeState(VillagerState newState)
     {
         state = newState;
@@ -122,7 +142,8 @@ public class Villager : NetworkBehaviour, ISelectable
             agent.updateRotation = true;
             anim.SetBool("Working",false);
             anim.SetFloat("Walking",0);
-        } else if (newState == VillagerState.Walking || newState == VillagerState.Returning)
+        }
+        else if (newState == VillagerState.Walking || newState == VillagerState.Returning)
         {
             agent.updateRotation = true;
             anim.SetBool("Working",false);
@@ -130,10 +151,10 @@ public class Villager : NetworkBehaviour, ISelectable
         }
         else if (newState == VillagerState.Working)
         {
-            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            agent.updateRotation = false;
+            if (target != null && target != townCenter) transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
             anim.SetBool("Working",true);
             anim.SetFloat("Walking",0);
-            agent.updateRotation = false;
         }
     }
 
@@ -142,6 +163,11 @@ public class Villager : NetworkBehaviour, ISelectable
         if (target != null) target.ReturnTargetPosition(this);
         target = newTarget;
         if (target != null) agent.SetDestination(target.GetTargetPosition(this));
+    }
+
+    private void JobHook(VillagerJob oldJob, VillagerJob newJob)
+    {
+        ChangeJob(newJob);
     }
 
     public void ChangeJob(VillagerJob job)
@@ -169,11 +195,15 @@ public class Villager : NetworkBehaviour, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-    public enum VillagerState
+    private void OnDestroy()
     {
-        Pending,
-        Walking,
-        Working,
-        Returning,
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
+}
+public enum VillagerState
+{
+    Pending,
+    Walking,
+    Working,
+    Returning,
 }

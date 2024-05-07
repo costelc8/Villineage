@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,34 +6,17 @@ using UnityEngine;
 
 public class Building : Targetable
 {
-    private GameObject stage0;
-    private GameObject stage1;
-    private GameObject stage2;
     public Villager assignedVillager;
     public float maxBuildTime = 10f;
-    private float buildTime;
     public int stage;
 
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        stage0 = transform.GetChild(0).gameObject;
-        stage1 = transform.GetChild(1).gameObject;
-        stage2 = transform.GetChild(2).gameObject;
-    }
-
-    private void Update()
-    {
-        //Progress(Time.deltaTime);
-    }
+    [SyncVar(hook = nameof(ProgressHook))]
+    public float buildTime;
 
     public override bool Progress(Villager villager, float progressValue)
     {
         buildTime += progressValue;
-        stage = Mathf.Clamp((int)(buildTime * 2 / maxBuildTime), 0, 2);
-        stage0.SetActive(stage == 0);
-        stage1.SetActive(stage == 1);
-        stage2.SetActive(stage == 2);
+        UpdateStage();
         if (buildTime >= maxBuildTime)
         {
             buildTime = maxBuildTime;
@@ -40,5 +24,23 @@ public class Building : Targetable
             return true;
         }
         return false;
+    }
+
+    private void ProgressHook(float oldProgress, float newProgress)
+    {
+        UpdateStage();
+    }
+
+    private void UpdateStage()
+    {
+        int newStage = Mathf.Clamp((int)(buildTime * (transform.childCount - 1) / maxBuildTime), 0, transform.childCount - 1);
+        if (newStage != stage)
+        {
+            stage = newStage;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(i == stage);
+            }
+        }
     }
 }

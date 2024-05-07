@@ -8,7 +8,6 @@ public static class PerlinGenerator
 {
     public static float[,] GeneratePerlin(int width, int height, float scale, int seed)
     {
-        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
         Random.State state = Random.state; // Save Random's state
         Random.InitState(seed); // Seed Random's state
         float randomX = Random.Range(-10000 * scale, 10000 * scale);
@@ -19,8 +18,8 @@ public static class PerlinGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                float xCoord = x / (width * scale / 10) + randomX;
-                float yCoord = y / (height * scale / 10) + randomY;
+                float xCoord = x / (scale * 50) + randomX;
+                float yCoord = y / (scale * 50) + randomY;
                 perlin[x, y] = Mathf.PerlinNoise(xCoord, yCoord);
             }
         }

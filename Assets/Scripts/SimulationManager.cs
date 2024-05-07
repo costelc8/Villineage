@@ -4,18 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimulationManager : MonoBehaviour
+public class SimulationManager : NetworkManager
 {
-    private NetworkManager networkManager;
+    [Header("Simulation Managers")]
     public bool runSimulation;
     public TerrainGenerator terrainGenerator;
     public ResourceGenerator resourceGenerator;
     public TownCenter townCenter;
-
-    private void Awake()
-    {
-        networkManager = GetComponent<NetworkManager>();
-    }
 
     public void StartSimulation()
     {
@@ -23,5 +18,11 @@ public class SimulationManager : MonoBehaviour
         resourceGenerator.GenerateDefaultForest();
         townCenter.PlaceOnGround();
         townCenter.SpawnVillagers(5);
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        StartSimulation();
     }
 }

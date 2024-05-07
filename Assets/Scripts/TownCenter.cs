@@ -12,6 +12,7 @@ public class TownCenter : Targetable
     public GameObject villagerPrefab;
     public int startingVillagers = 5;
     public List<Villager> villagers;
+    public TerrainGenerator terrainGenerator;
     private BuildingGenerator buildingGenerator;
 
     public int[] resources = new int[(int)ResourceType.MAX_VALUE];
@@ -30,6 +31,9 @@ public class TownCenter : Targetable
 
     public void PlaceOnGround()
     {
+        Debug.Log("Placing Town Center");
+        transform.position = new Vector3(terrainGenerator.size / 2, terrainGenerator.depth, terrainGenerator.size / 2);
+        Physics.SyncTransforms();
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
             transform.position = hitInfo.point;
@@ -39,6 +43,7 @@ public class TownCenter : Targetable
 
     public void SpawnVillagers(int villagerCount)
     {
+        Debug.Log("Spawning Villagers");
         for (int i = 0; i < startingVillagers; i++) SpawnVillager();
         AssignAllVillagerJobs();
     }
@@ -51,7 +56,6 @@ public class TownCenter : Targetable
             NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
             villager.townCenter = this;
-            Selection.Selector.AddSelectable(villager);
         }
         Physics.SyncTransforms();
     }

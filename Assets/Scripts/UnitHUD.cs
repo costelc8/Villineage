@@ -58,8 +58,11 @@ public class UnitHUD : MonoBehaviour
 
     public void RemoveUnitHUD(GameObject unit)
     {
-        Destroy(unitHUDs[unit]);
-        unitHUDs.Remove(unit);
-        hudOffsets.Remove(unit);
+        if (unitHUDs.ContainsKey(unit))
+        {
+            Destroy(unitHUDs[unit]);
+            unitHUDs.Remove(unit);
+            hudOffsets.Remove(unit);
+        }
     }
 }

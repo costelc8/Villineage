@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class Resource : Targetable
 {
     private GameObject stage0;
     private GameObject stage1;
+    [SyncVar(hook = nameof(QuantityHook))]
     public int quantity = 50;
     public float maxDurability = 1;
     private float durability;
@@ -26,12 +28,12 @@ public class Resource : Targetable
     public override bool Progress(Villager villager, float progressValue)
     {
         durability -= progressValue;
-        if (durability <= 0)
+        while (durability <= 0)
         {
             quantity--;
             villager.totalResources++;
-            villager.resources[(int)resourceType]++;
-            durability = maxDurability;
+            villager.inventory[(int)resourceType]++;
+            durability += maxDurability;
             stage0.SetActive(false);
             stage1.SetActive(true);
             if (quantity <= 0)
@@ -42,5 +44,11 @@ public class Resource : Targetable
             return true;
         }
         return false;
+    }
+
+    private void QuantityHook(int oldQuantity, int newQuantity)
+    {
+        stage0.SetActive(false);
+        stage1.SetActive(true);
     }
 }

@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -6,7 +7,7 @@ using Unity.AI.Navigation;
 using UnityEngine;
 
 [RequireComponent(typeof(NavMeshSurface))]
-public class TerrainGenerator : MonoBehaviour
+public class TerrainGenerator : NetworkBehaviour
 {
     private Terrain terrain;
     private TerrainData terrainData;
@@ -15,7 +16,9 @@ public class TerrainGenerator : MonoBehaviour
     [Tooltip("Terrain hill height")]
     public int depth = 8;
     [Tooltip("Terrain seed, entering 0 will generate one")]
+    [SyncVar(hook = nameof(SeedHook))]
     public int seed;
+    private bool generated = false;
 
     [HideInInspector]
     public int size;
@@ -40,13 +43,26 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+    private void SeedHook(int oldSeed, int newSeed)
+    {
+        Debug.Log("Seed Changed");
+        if (!generated)
+        {
+            GenerateTerrain();
+        }
+    }
+
     public void GenerateTerrain()
     {
+        Debug.Log("Generating Terrain");
         size = terrainData.heightmapResolution;
         terrainData.size = new Vector3(size - 1, depth, size - 1);
+        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
         perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
         terrainData.SetHeights(0, 0, perlin);
+        gameObject.SetActive(true);
         navMesh.BuildNavMesh();
+        generated = true;
     }
 
     public float GetTerrainHeight(Vector3 position)
