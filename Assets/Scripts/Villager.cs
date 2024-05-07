@@ -18,8 +18,6 @@ public class Villager : NetworkBehaviour, ISelectable
     public VillagerJob job;
     public float workSpeed = 1.0f;  // Speed of resource extraction
     public readonly SyncList<int> inventory = new SyncList<int>();
-    //[SyncVar]
-    //public int[] resources = new int[(int)ResourceType.MAX_VALUE]; // Amount of resources being carried
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
     public Targetable target;
@@ -197,6 +195,8 @@ public class Villager : NetworkBehaviour, ISelectable
 
     private void OnDestroy()
     {
+        Selection.Selector.RemoveSelectable(this);
+        townCenter.RemoveVillager(this);
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 }

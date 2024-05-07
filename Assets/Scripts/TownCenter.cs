@@ -90,6 +90,7 @@ public class TownCenter : Targetable
     private void AssignVillagerJob(Villager villager)
     {
         CalculateNeededJobs();
+        if (neededJobs[(int)villager.job] >= 0) return;
         VillagerJob job = GetMostNeededJob();
         if (job != VillagerJob.Nitwit)
         {
@@ -163,6 +164,11 @@ public class TownCenter : Targetable
             }
         }
         return job;
+    }
+
+    public void RemoveVillager(Villager villager)
+    {
+        villagers.Remove(villager);
     }
 }
 
