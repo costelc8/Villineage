@@ -102,6 +102,10 @@ public class Villager : MonoBehaviour, ISelectable
     {
         alive = false;
         agent.isStopped = true;
+        anim.SetBool("Working",false);
+        anim.SetFloat("Walking",0);
+        anim.SetBool("Dead",true);
+        anim.SetFloat("Death anim",-1);
     }
 
     public void FindNewDestination()
@@ -126,6 +130,7 @@ public class Villager : MonoBehaviour, ISelectable
                 if (candidate != null)
                 {
                     distance = Vector3.Distance(transform.position, candidate.transform.position);
+                    distance = distance / candidate.priority;
                     if (distance < lowestDistance && candidate.HasValidPositions())
                     {
                         lowestDistance = distance;

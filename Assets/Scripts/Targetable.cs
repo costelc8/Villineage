@@ -10,6 +10,7 @@ public class Targetable : MonoBehaviour
     public bool enforceMaxVillagers;
     public int maxAssignedVillagers;
     public int assignedVillagers;
+    public float priority = 1;
     private NavMeshObstacle obstacle;
 
     public virtual bool Progress(Villager villager, float progressValue)
