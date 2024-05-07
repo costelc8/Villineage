@@ -13,10 +13,16 @@ public class Villager : NetworkBehaviour, ISelectable
     public TownCenter townCenter;
     public bool selected;
 
+    [Header("Stats")]
+    public bool alive;
+    public float workSpeed = 1.0f;  // Speed of resource extraction
+    public float hunger;
+    public float hungerRate = 0.0f;
+    public float maxHunger = 100.0f;
+
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
     public VillagerJob job;
-    public float workSpeed = 1.0f;  // Speed of resource extraction
     public readonly SyncList<int> inventory = new SyncList<int>();
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
@@ -27,9 +33,6 @@ public class Villager : NetworkBehaviour, ISelectable
     private float distance;
 
     [Header("States")]
-    //public bool working = false;  // Are they currently working on something?
-    //public bool walking = false;  // Are they wandering around?
-    //public bool returning = false;
     [SyncVar(hook = nameof(StateHook))]
     public VillagerState state;
 
@@ -41,6 +44,8 @@ public class Villager : NetworkBehaviour, ISelectable
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        hunger = maxHunger;
+        alive = true;
     }
 
     public void Start()
@@ -56,7 +61,7 @@ public class Villager : NetworkBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
-        if (!isServer) return;
+        if (!isServer || !alive) return;
         if (state == VillagerState.Pending)
         {
             FindNewDestination();
@@ -90,6 +95,26 @@ public class Villager : NetworkBehaviour, ISelectable
                 ChangeState(VillagerState.Pending);
             }
         }
+
+        // Decrease hunger:
+        hunger -= hungerRate * Time.deltaTime;
+
+        // If starved to death
+        if (hunger <= 0) 
+        {
+            hunger = 0;
+            Death();
+        }
+    }
+
+    private void Death()
+    {
+        alive = false;
+        agent.isStopped = true;
+        anim.SetBool("Working",false);
+        anim.SetFloat("Walking",0);
+        anim.SetBool("Dead",true);
+        anim.SetFloat("Death anim",-1);
     }
 
     public void FindNewDestination()
@@ -114,6 +139,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (candidate != null)
                 {
                     distance = Vector3.Distance(transform.position, candidate.transform.position);
+                    distance = distance / candidate.priority;
                     if (distance < lowestDistance && candidate.HasValidPositions())
                     {
                         lowestDistance = distance;

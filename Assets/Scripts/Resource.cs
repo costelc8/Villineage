@@ -14,7 +14,6 @@ public class Resource : Targetable
     public Villager assignedVillager;
     public ResourceType resourceType;
 
-    // Start is called before the first frame update
     void Awake()
     {
         stage0 = transform.GetChild(0).gameObject;

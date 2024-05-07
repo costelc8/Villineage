@@ -3855,11 +3855,14 @@ MonoBehaviour:
   syncInterval: 0
   townCenter: {fileID: 0}
   selected: 0
-  job: 0
+  alive: 0
   workSpeed: 1
-  resources: 000000000000000000000000
+  hunger: 0
+  hungerRate: 0
+  maxHunger: 100
+  job: 0
   totalResources: 0
-  capacity: 5
+  capacity: 3
   target: {fileID: 0}
   selectionRange: 10
   state: 0
