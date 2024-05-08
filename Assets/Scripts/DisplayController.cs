@@ -27,7 +27,7 @@ public class DisplayController : MonoBehaviour
         DisplayInventory();
 
         // Display hunger
-        // DisplayHunger();
+        DisplayHunger();
     }
 
     void DisplayJob()
@@ -84,14 +84,14 @@ public class DisplayController : MonoBehaviour
 
     void DisplayHunger()
     {
-        // // Check if the TextMeshPro component is assigned
-        // if (hungerTextMesh == null)
-        // {
-        //     Debug.LogWarning("Hunger TextMeshPro reference is not assigned.");
-        //     return;
-        // }
+        // Check if the TextMeshPro component is assigned
+        if (hungerTextMesh == null)
+        {
+            Debug.LogWarning("Hunger TextMeshPro reference is not assigned.");
+            return;
+        }
 
-        // // Display the hunger of the villager
-        // hungerTextMesh.text = "Hunger: " + villager.hunger.ToString();
+        // Display the hunger of the villager
+        hungerTextMesh.text = "Hunger: " + villager.hunger.ToString();
     }
 }
