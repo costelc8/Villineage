@@ -38,7 +38,8 @@ public class Resource : Targetable
             if (quantity <= 0)
             {
                 ResourceGenerator.RemoveResource(this);
-                Destroy(gameObject);
+
+                StartCoroutine(DestroyResource());
             }
             return true;
         }
@@ -49,5 +50,22 @@ public class Resource : Targetable
     {
         stage0.SetActive(false);
         stage1.SetActive(true);
+    }
+
+	IEnumerator DestroyResource()
+    {
+        float elapsedTime = 0f;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = new Vector3(transform.position.x, transform.position.y - 2.5f, transform.position.z);
+        float duration = 2f;
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 }
