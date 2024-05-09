@@ -15,10 +15,10 @@ public class TownCenter : Targetable
     public TerrainGenerator terrainGenerator;
     private BuildingGenerator buildingGenerator;
 
-    public int[] resources = new int[(int)ResourceType.MAX_VALUE];
-    public float[] jobWeights = new float[(int)VillagerJob.MAX_VALUE];
-    public int[] neededJobs = new int[(int)VillagerJob.MAX_VALUE];
-    public int[] currentJobs = new int[(int)VillagerJob.MAX_VALUE];
+    public int[] resources;
+    public float[] jobWeights;
+    public int[] neededJobs;
+    public int[] currentJobs;
 
     public int lumberjackWeight;
     public int gathererWeight;
@@ -27,6 +27,10 @@ public class TownCenter : Targetable
     private void Awake()
     {
         buildingGenerator = GetComponent<BuildingGenerator>();
+        resources = new int[(int)ResourceType.MAX_VALUE];
+        jobWeights = new float[(int)VillagerJob.MAX_VALUE];
+        neededJobs = new int[(int)VillagerJob.MAX_VALUE];
+        currentJobs = new int[(int)VillagerJob.MAX_VALUE];
     }
 
     public void PlaceOnGround()
