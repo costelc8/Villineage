@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class ResourceGenerator : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class ResourceGenerator : MonoBehaviour
 
     public bool generateForest;
     public bool destroyTrees;
+    public bool generateBerries;
+    public bool destroyBerries;
 
     private void Awake()
     {
@@ -55,6 +58,19 @@ public class ResourceGenerator : MonoBehaviour
             destroyTrees = false;
             foreach (Resource tree in trees) Destroy(tree.gameObject);
             trees.Clear();
+        }
+        if (generateBerries)
+        {
+            generateBerries = false;
+            foreach (Resource berry in berries) Destroy(berry.gameObject);
+            berries.Clear();
+            GenerateBerries();
+        }
+        if (destroyBerries)
+        {
+            destroyBerries = false;
+            foreach (Resource berry in berries) Destroy(berry.gameObject);
+            berries.Clear();
         }
     }
 
@@ -103,6 +119,28 @@ public class ResourceGenerator : MonoBehaviour
             }
         }
         Debug.Log(trees.Count + " Trees Generated");
+    }
+
+    public void GenerateBerries()
+    {
+        // Temporary Berry bush generation
+        Debug.Log("Generating Berry Bushes");
+        GameObject bushes = new GameObject("bushes");
+        bushes.transform.position = Vector3.zero;
+        Vector3 position = bushes.transform.position;
+
+        for (int x = Random.Range(20, 60); x < terrainGenerator.size; x += Random.Range(30, 100))
+        {
+            for (int z = Random.Range(20, 60); z < terrainGenerator.size; z += Random.Range(30, 100))
+            {
+                position.x = x;
+                position.z = z;
+                position.y = terrainGenerator.GetTerrainHeight(position);
+                GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), bushes.transform);
+                NetworkServer.Spawn(bush);
+                berries.Add(bush.GetComponent<Resource>());
+            }
+        }
     }
 
     public static List<Targetable> GetTrees()

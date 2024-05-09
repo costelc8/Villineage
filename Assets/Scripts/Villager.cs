@@ -17,7 +17,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public bool alive;
     public float workSpeed = 1.0f;  // Speed of resource extraction
     public float hunger;
-    public float hungerRate = 0.0f;
+    public float hungerRate = 1.0f;
     public float maxHunger = 100.0f;
 
     [Header("Jobs")]
@@ -71,6 +71,11 @@ public class Villager : NetworkBehaviour, ISelectable
                 SetNewTarget(townCenter);
             }
         }
+        else if (hunger <= (maxHunger / 5))
+        {
+            SetNewTarget(townCenter);
+            ChangeState(VillagerState.Returning);
+        }
         else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             if (target == null) ChangeState(VillagerState.Pending);
@@ -114,7 +119,8 @@ public class Villager : NetworkBehaviour, ISelectable
         anim.SetBool("Working",false);
         anim.SetFloat("Walking",0);
         anim.SetBool("Dead",true);
-        anim.SetFloat("Death anim",-1);
+        float deathValue = UnityEngine.Random.Range(-1f, 1f);
+        anim.SetFloat("Death anim", deathValue);
     }
 
     public void FindNewDestination()

@@ -75,6 +75,9 @@ public class TownCenter : Targetable
             buildingGenerator.PlaceHouse();
             resources[(int)ResourceType.Wood] -= houseCost;
         }
+        int neededFood = (int)((villager.maxHunger - villager.hunger) / 20);
+        resources[(int)ResourceType.Food] -= neededFood + 1;
+        villager.hunger = villager.maxHunger;
         AssignVillagerJob(villager);
     }
 
