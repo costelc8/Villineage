@@ -22,18 +22,24 @@ public class TownCenter : Targetable
 
     public int lumberjackWeight;
     public int gathererWeight;
+    public int hunterWeight;
     public int houseCost = 60;
 
     private void Awake()
     {
         buildingGenerator = GetComponent<BuildingGenerator>();
+    }
+
+    public void Initialize()
+    {
         resources = new int[(int)ResourceType.MAX_VALUE];
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
+        PlaceOnGround();
     }
 
-    public void PlaceOnGround()
+    private void PlaceOnGround()
     {
         Debug.Log("Placing Town Center");
         transform.position = new Vector3(terrainGenerator.size / 2, terrainGenerator.depth, terrainGenerator.size / 2);
@@ -152,6 +158,7 @@ public class TownCenter : Targetable
     {
         jobWeights[(int)VillagerJob.Lumberjack] = lumberjackWeight;
         jobWeights[(int)VillagerJob.Gatherer] = gathererWeight;
+        jobWeights[(int)VillagerJob.Hunter] = hunterWeight;
         jobWeights[(int)VillagerJob.Builder] = BuildingGenerator.GetPendingBuildings().Count;
     }
 

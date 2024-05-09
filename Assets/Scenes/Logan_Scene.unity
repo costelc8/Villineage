@@ -454,6 +454,7 @@ MonoBehaviour:
   terrainGenerator: {fileID: 0}
   treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
+  sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
@@ -752,6 +753,7 @@ MonoBehaviour:
   enforceMaxVillagers: 0
   maxAssignedVillagers: 0
   assignedVillagers: 0
+  priority: 1
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   startingVillagers: 10
   villagers: []
@@ -766,6 +768,7 @@ MonoBehaviour:
   currentJobs: 00000000000000000000000000000000
   lumberjackWeight: 5
   gathererWeight: 0
+  hunterWeight: 5
   houseCost: 60
 --- !u!208 &1519554152
 NavMeshObstacle:

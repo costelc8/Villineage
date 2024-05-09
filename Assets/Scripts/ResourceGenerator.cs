@@ -10,8 +10,10 @@ public class ResourceGenerator : MonoBehaviour
     public TerrainGenerator terrainGenerator;
     public GameObject treePrefab;
     public GameObject berryPrefab;
+    public GameObject sheepPrefab;
     private static List<Targetable> trees = new List<Targetable>();
     private static List<Targetable> berries = new List<Targetable>();
+    private static List<Targetable> animals = new List<Targetable>();
     public Transform forestPosition;
     public int forestSpacing;
     [Range(0f, 1f)]
@@ -105,6 +107,19 @@ public class ResourceGenerator : MonoBehaviour
         Debug.Log(trees.Count + " Trees Generated");
     }
 
+    public void GenerateAnimals(Vector3 center, int count, float minRange, float maxRange)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
+            {
+                GameObject animal = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                animals.Add(animal.GetComponent<PassiveAnimal>());
+                NetworkServer.Spawn(animal);
+            }
+        }
+    }
+
     public static List<Targetable> GetTrees()
     {
         return trees;
@@ -113,6 +128,11 @@ public class ResourceGenerator : MonoBehaviour
     public static List<Targetable> GetBerries()
     {
         return berries;
+    }
+
+    public static List<Targetable> GetAnimals()
+    {
+        return animals;
     }
 
     public static void RemoveResource(Resource resource)

@@ -3868,6 +3868,8 @@ MonoBehaviour:
   state: 0
   axe: {fileID: 226699128288745174}
   hammer: {fileID: 5551859811417421694}
+  bow: {fileID: 7970216816093461313}
+  quiver: {fileID: 1093380569433272588}
 --- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0

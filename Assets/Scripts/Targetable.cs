@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshObstacle))]
 public class Targetable : NetworkBehaviour
 {
     private List<TargetPosition> targetPositions;
@@ -24,6 +23,7 @@ public class Targetable : NetworkBehaviour
     {
         targetPositions = new List<TargetPosition>();
         obstacle = GetComponent<NavMeshObstacle>();
+        if (obstacle == null) return;
         if (obstacle.shape == NavMeshObstacleShape.Capsule)
         {
             float radius = obstacle.radius + 0.5f;
@@ -59,6 +59,7 @@ public class Targetable : NetworkBehaviour
     public bool HasValidPositions()
     {
         if (targetPositions == null) GenerateValidPositions();
+        if (targetPositions.Count == 0) return true;
         if (enforceMaxVillagers) return assignedVillagers < targetPositions.Count && assignedVillagers < maxAssignedVillagers;
         else return assignedVillagers < targetPositions.Count;
     }
@@ -66,6 +67,7 @@ public class Targetable : NetworkBehaviour
     public Vector3 GetTargetPosition(Villager villager)
     {
         if (targetPositions == null) GenerateValidPositions();
+        if (targetPositions.Count == 0) return transform.position;
         TargetPosition nearest = null;
         float minMag = float.MaxValue;
         foreach (TargetPosition targetPos in targetPositions)

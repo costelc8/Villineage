@@ -92,6 +92,6 @@ public class DisplayController : MonoBehaviour
         }
 
         // Display the hunger of the villager
-        hungerTextMesh.text = "Hunger: " + villager.hunger.ToString();
+        hungerTextMesh.text = "Hunger: " + ((int)villager.hunger).ToString();
     }
 }

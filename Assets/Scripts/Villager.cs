@@ -39,6 +39,8 @@ public class Villager : NetworkBehaviour, ISelectable
     [Header("Tools")]
     public GameObject axe;
     public GameObject hammer;
+    public GameObject bow;
+    public GameObject quiver;
 
     private void Awake()
     {
@@ -86,6 +88,11 @@ public class Villager : NetworkBehaviour, ISelectable
                     ChangeState(VillagerState.Returning);
                     SetNewTarget(townCenter);
                 }
+                else if (job == VillagerJob.Hunter)
+                {
+                    SetNewTarget(target);
+                    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+                }
             }
             else if (state == VillagerState.Returning)
             {
@@ -132,6 +139,7 @@ public class Villager : NetworkBehaviour, ISelectable
             if (job == VillagerJob.Builder) candidates = BuildingGenerator.GetPendingBuildings();
             else if (job == VillagerJob.Lumberjack) candidates = ResourceGenerator.GetTrees();
             else if (job == VillagerJob.Gatherer) candidates = ResourceGenerator.GetBerries();
+            else if (job == VillagerJob.Hunter) candidates = ResourceGenerator.GetAnimals();
             Targetable bestCandidate = null;
             float lowestDistance = float.MaxValue;
             foreach (Targetable candidate in candidates)
@@ -197,8 +205,11 @@ public class Villager : NetworkBehaviour, ISelectable
     public void ChangeJob(VillagerJob job)
     {
         this.job = job;
+        agent.stoppingDistance = (job == VillagerJob.Hunter) ? 10f : 0.1f;
         axe.SetActive(job == VillagerJob.Lumberjack);
         hammer.SetActive(job == VillagerJob.Builder);
+        bow.SetActive(job == VillagerJob.Hunter);
+        quiver.SetActive(job == VillagerJob.Hunter);
     }
 
     public VillagerJob Job()
