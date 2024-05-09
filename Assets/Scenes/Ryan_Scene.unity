@@ -2740,6 +2740,7 @@ MonoBehaviour:
   terrainGenerator: {fileID: 0}
   treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
+  sheepPrefab: {fileID: 0}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
@@ -2819,7 +2820,7 @@ TerrainCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 53262d8dde1e8454b892eb43d3d112ed, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 8c43edbb8bda4cd499b882d94661d128, type: 2}
   m_EnableTreeColliders: 1
 --- !u!218 &1571284248
 Terrain:
@@ -2830,7 +2831,7 @@ Terrain:
   m_GameObject: {fileID: 1571284242}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 53262d8dde1e8454b892eb43d3d112ed, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 8c43edbb8bda4cd499b882d94661d128, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -3537,6 +3538,7 @@ MonoBehaviour:
   maxAssignedVillagers: 0
   assignedVillagers: 0
   priority: 1
+  liveAnimal: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   startingVillagers: 10
   villagers: []
@@ -3551,7 +3553,9 @@ MonoBehaviour:
   currentJobs: 00000000000000000000000000000000
   lumberjackWeight: 5
   gathererWeight: 0
+  hunterWeight: 0
   houseCost: 60
+  hungerPerFood: 20
 --- !u!65 &2014781354
 BoxCollider:
   m_ObjectHideFlags: 0
