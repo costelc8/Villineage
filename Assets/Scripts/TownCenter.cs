@@ -187,6 +187,8 @@ public enum VillagerJob
     Nitwit,
     Builder,
     Lumberjack,
+    Hunter,
     Gatherer,
+    Farmer,
     MAX_VALUE,
 }
