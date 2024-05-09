@@ -56,7 +56,6 @@ public class Targetable : NetworkBehaviour
                 targetPositions.Add(new TargetPosition(position2 + transform.position));
             }
         }
-        Debug.Log(gameObject.name + " generated target positions");
     }
 
     public bool HasValidPositions()
