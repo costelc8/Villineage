@@ -6,12 +6,14 @@ using UnityEngine.AI;
 
 public class Targetable : NetworkBehaviour
 {
+    [Header("Targetable Settings")]
     private List<TargetPosition> targetPositions;
     public bool enforceMaxVillagers;
     public int maxAssignedVillagers;
     public int assignedVillagers;
     public float priority = 1;
-    private NavMeshObstacle obstacle;
+    public bool liveAnimal = false;
+    protected NavMeshObstacle obstacle;
 
     public virtual bool Progress(Villager villager, float progressValue)
     {
@@ -23,7 +25,7 @@ public class Targetable : NetworkBehaviour
     {
         targetPositions = new List<TargetPosition>();
         obstacle = GetComponent<NavMeshObstacle>();
-        if (obstacle == null) return;
+        if (obstacle.enabled == false) return;
         if (obstacle.shape == NavMeshObstacleShape.Capsule)
         {
             float radius = obstacle.radius + 0.5f;
@@ -54,11 +56,12 @@ public class Targetable : NetworkBehaviour
                 targetPositions.Add(new TargetPosition(position2 + transform.position));
             }
         }
+        Debug.Log(gameObject.name + " generated target positions");
     }
 
     public bool HasValidPositions()
     {
-        if (targetPositions == null) GenerateValidPositions();
+        if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
         if (targetPositions.Count == 0) return true;
         if (enforceMaxVillagers) return assignedVillagers < targetPositions.Count && assignedVillagers < maxAssignedVillagers;
         else return assignedVillagers < targetPositions.Count;
@@ -66,7 +69,7 @@ public class Targetable : NetworkBehaviour
 
     public Vector3 GetTargetPosition(Villager villager)
     {
-        if (targetPositions == null) GenerateValidPositions();
+        if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
         if (targetPositions.Count == 0) return transform.position;
         TargetPosition nearest = null;
         float minMag = float.MaxValue;

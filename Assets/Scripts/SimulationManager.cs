@@ -16,6 +16,7 @@ public class SimulationManager : NetworkManager
     {
         terrainGenerator.GenerateTerrain();
         resourceGenerator.GenerateDefaultForest();
+        resourceGenerator.GenerateBerries();
         resourceGenerator.GenerateAnimals(townCenter.transform.position, 10, 20f, 30f);
         townCenter.Initialize();
         townCenter.SpawnVillagers(5);

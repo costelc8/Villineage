@@ -24,6 +24,7 @@ public class TownCenter : Targetable
     public int gathererWeight;
     public int hunterWeight;
     public int houseCost = 60;
+    public int hungerPerFood = 20;
 
     private void Awake()
     {
@@ -80,6 +81,12 @@ public class TownCenter : Targetable
         {
             buildingGenerator.PlaceHouse();
             resources[(int)ResourceType.Wood] -= houseCost;
+        }
+        int neededFood = Mathf.Min((int)((villager.maxHunger - villager.hunger) / hungerPerFood), resources[(int)ResourceType.Food]);
+        if (resources[(int)ResourceType.Food] >= neededFood)
+        {
+            resources[(int)ResourceType.Food] -= neededFood;
+            villager.hunger += neededFood * hungerPerFood;
         }
         AssignVillagerJob(villager);
     }

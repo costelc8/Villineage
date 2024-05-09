@@ -3858,7 +3858,7 @@ MonoBehaviour:
   alive: 0
   workSpeed: 1
   hunger: 0
-  hungerRate: 0
+  hungerRate: 1
   maxHunger: 100
   job: 0
   totalResources: 0

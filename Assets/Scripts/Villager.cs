@@ -15,10 +15,11 @@ public class Villager : NetworkBehaviour, ISelectable
 
     [Header("Stats")]
     public bool alive;
-    public float workSpeed = 1.0f;  // Speed of resource extraction
+    public float workSpeed = 1f;  // Speed of resource extraction
     public float hunger;
-    public float hungerRate = 0.0f;
-    public float maxHunger = 100.0f;
+    public float hungerRate = 1f;
+    public float maxHunger = 100f;
+    public float huntingRange = 10f;
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
@@ -64,7 +65,15 @@ public class Villager : NetworkBehaviour, ISelectable
     void Update()
     {
         if (!isServer || !alive) return;
-        if (state == VillagerState.Pending)
+
+        //if (target != null && target.liveAnimal && job == VillagerJob.Hunter)
+        //{
+        //    agent.stoppingDistance = 10f;
+        //    SetNewTarget(target);
+        //}
+        //else agent.stoppingDistance = 0.1f;
+
+        if (state == VillagerState.Pending) // If no job/target is assigned
         {
             FindNewDestination();
             if (target == null) // Edge case handling
@@ -73,38 +82,49 @@ public class Villager : NetworkBehaviour, ISelectable
                 SetNewTarget(townCenter);
             }
         }
-        else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance) // If the target has been reached
         {
-            if (target == null) ChangeState(VillagerState.Pending);
-            else if (state == VillagerState.Walking)
+            if (target == null) ChangeState(VillagerState.Pending); // If the target is gone, switch to pending
+            else
             {
-                ChangeState(VillagerState.Working);
-            }
-            else if (state == VillagerState.Working)
-            {
-                bool progress = target.Progress(this, workSpeed * Time.deltaTime);
-                if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
+                if (state == VillagerState.Walking) ChangeState(VillagerState.Working); // If walking, start working
+                else if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
-                    ChangeState(VillagerState.Returning);
-                    SetNewTarget(townCenter);
+                    bool progress = target.Progress(this, workSpeed * Time.deltaTime);
+                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
+                    {
+                        ChangeState(VillagerState.Returning);
+                        SetNewTarget(townCenter);
+                    }
+                    else if (job == VillagerJob.Hunter)
+                    {
+                        SetNewTarget(target);
+                        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+                    }
                 }
-                else if (job == VillagerJob.Hunter)
+                else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
-                    SetNewTarget(target);
-                    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+                    townCenter.DepositResources(this, inventory.ToArray());
+                    for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
+                    totalResources = 0;
+                    ChangeState(VillagerState.Pending);
                 }
             }
-            else if (state == VillagerState.Returning)
-            {
-                townCenter.DepositResources(this, inventory.ToArray());
-                for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
-                totalResources = 0;
-                ChangeState(VillagerState.Pending);
-            }
+        }
+        else // If the target has not been reached
+        {
+            if (target != null && target.liveAnimal) SetNewTarget(target);
+            if (state == VillagerState.Working) state = VillagerState.Walking;
         }
 
         // Decrease hunger:
         hunger -= hungerRate * Time.deltaTime;
+
+        if (hunger <= (maxHunger / 5))
+        {
+            SetNewTarget(townCenter);
+            ChangeState(VillagerState.Returning);
+        }
 
         // If starved to death
         if (hunger <= 0) 
@@ -121,7 +141,8 @@ public class Villager : NetworkBehaviour, ISelectable
         anim.SetBool("Working",false);
         anim.SetFloat("Walking",0);
         anim.SetBool("Dead",true);
-        anim.SetFloat("Death anim",-1);
+        float deathValue = UnityEngine.Random.Range(-1f, 1f);
+        anim.SetFloat("Death anim", deathValue);
     }
 
     public void FindNewDestination()
@@ -195,6 +216,8 @@ public class Villager : NetworkBehaviour, ISelectable
         if (target != null) target.ReturnTargetPosition(this);
         target = newTarget;
         if (target != null) agent.SetDestination(target.GetTargetPosition(this));
+        if (target != null && target.liveAnimal) agent.stoppingDistance = huntingRange;
+        else agent.stoppingDistance = 0.1f;
     }
 
     private void JobHook(VillagerJob oldJob, VillagerJob newJob)
@@ -205,7 +228,6 @@ public class Villager : NetworkBehaviour, ISelectable
     public void ChangeJob(VillagerJob job)
     {
         this.job = job;
-        agent.stoppingDistance = (job == VillagerJob.Hunter) ? 10f : 0.1f;
         axe.SetActive(job == VillagerJob.Lumberjack);
         hammer.SetActive(job == VillagerJob.Builder);
         bow.SetActive(job == VillagerJob.Hunter);

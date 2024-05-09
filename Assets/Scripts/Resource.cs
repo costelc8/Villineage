@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Resource : Targetable
 {
+    [Header("Resource Settings")]
     private GameObject stage0;
     private GameObject stage1;
     [SyncVar(hook = nameof(QuantityHook))]
@@ -33,8 +34,11 @@ public class Resource : Targetable
             villager.totalResources++;
             villager.inventory[(int)resourceType]++;
             durability += maxDurability;
-            stage0.SetActive(false);
-            stage1.SetActive(true);
+            if (stage1 != null)
+            {
+                stage0.SetActive(false);
+                stage1.SetActive(true);
+            }
             if (quantity <= 0)
             {
                 ResourceGenerator.RemoveResource(this);
@@ -47,7 +51,10 @@ public class Resource : Targetable
 
     private void QuantityHook(int oldQuantity, int newQuantity)
     {
-        stage0.SetActive(false);
-        stage1.SetActive(true);
+        if (stage1 != null)
+        {
+            stage0.SetActive(false);
+            stage1.SetActive(true);
+        }
     }
 }

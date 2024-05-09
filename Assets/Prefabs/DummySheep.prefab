@@ -711,8 +711,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1817486282413020718}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1342,9 +1342,10 @@ GameObject:
   - component: {fileID: 4191509910220376927}
   - component: {fileID: 1661348684683675529}
   - component: {fileID: 8433713914224054802}
+  - component: {fileID: -2277655515765280002}
+  - component: {fileID: 99225567558475682}
   - component: {fileID: 8047246721949191282}
   - component: {fileID: 5228293451435221680}
-  - component: {fileID: 99225567558475682}
   m_Layer: 0
   m_Name: DummySheep
   m_TagString: Untagged
@@ -1361,7 +1362,7 @@ Transform:
   m_GameObject: {fileID: 2947801369939053811}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256, y: 10, z: 250}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1428,7 +1429,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -1441,19 +1442,65 @@ NavMeshAgent:
   m_GameObject: {fileID: 2947801369939053811}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1.5
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 51
   m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!208 &-2277655515765280002
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947801369939053811}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &99225567558475682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947801369939053811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f589f0e8b05758a429395b7125018589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  priority: 1
+  liveAnimal: 1
+  quantity: 50
+  maxDurability: 1
+  assignedVillager: {fileID: 0}
+  resourceType: 2
+  wanderOrigin: {x: 250, y: 0, z: 250}
+  originTetherStrength: 0
+  maxWanderCooldown: 10
+  maxHealth: 2
+  health: 0
+  dead: 0
 --- !u!114 &8047246721949191282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,31 +1552,6 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
---- !u!114 &99225567558475682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2947801369939053811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f589f0e8b05758a429395b7125018589, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  enforceMaxVillagers: 0
-  maxAssignedVillagers: 0
-  assignedVillagers: 0
-  priority: 1
-  wanderOrigin: {x: 250, y: 0, z: 250}
-  originTetherStrength: 0
-  maxWanderCooldown: 2
-  maxHealth: 2
-  health: 0
-  dead: 0
 --- !u!1 &3636797946457442442
 GameObject:
   m_ObjectHideFlags: 0
