@@ -463,6 +463,8 @@ MonoBehaviour:
   scale: 2
   generateForest: 0
   destroyTrees: 0
+  generateBerries: 0
+  destroyBerries: 0
 --- !u!114 &1194879066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,6 +756,7 @@ MonoBehaviour:
   maxAssignedVillagers: 0
   assignedVillagers: 0
   priority: 1
+  liveAnimal: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   startingVillagers: 10
   villagers: []
@@ -766,10 +769,11 @@ MonoBehaviour:
   - 0
   neededJobs: 00000000000000000000000000000000
   currentJobs: 00000000000000000000000000000000
-  lumberjackWeight: 5
-  gathererWeight: 0
-  hunterWeight: 5
+  lumberjackWeight: 4
+  gathererWeight: 3
+  hunterWeight: 3
   houseCost: 60
+  hungerPerFood: 20
 --- !u!208 &1519554152
 NavMeshObstacle:
   m_ObjectHideFlags: 0

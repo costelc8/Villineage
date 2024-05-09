@@ -2748,6 +2748,8 @@ MonoBehaviour:
   scale: 2
   generateForest: 0
   destroyTrees: 0
+  generateBerries: 0
+  destroyBerries: 0
 --- !u!114 &1571284245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2873,103 +2875,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1591657914
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 532924853468632382, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: sceneId
-      value: 2815731601
-      objectReference: {fileID: 0}
-    - target: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_Name
-      value: DummyTree (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179928011865716739, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_FadeMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179928011865716739, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_AnimateCrossFading
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179928011865716739, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
-      value: 0.091299616
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 270.32297
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.111582
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 299.84317
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391476353511861150, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8496220334891080334, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_FadeMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8496220334891080334, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_AnimateCrossFading
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8496220334891080334, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
-      value: 0.19158837
-      objectReference: {fileID: 0}
-    - target: {fileID: 8496220334891080334, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
-      value: 0.033435114
-      objectReference: {fileID: 0}
-    - target: {fileID: 9187411089019562395, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
 --- !u!1 &1742435893
 GameObject:
   m_ObjectHideFlags: 0
@@ -3792,4 +3697,3 @@ SceneRoots:
   - {fileID: 2015511947}
   - {fileID: 896032954}
   - {fileID: 389850825}
-  - {fileID: 1591657914}

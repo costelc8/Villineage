@@ -3860,9 +3860,10 @@ MonoBehaviour:
   hunger: 0
   hungerRate: 1
   maxHunger: 100
+  huntingRange: 10
   job: 0
   totalResources: 0
-  capacity: 3
+  capacity: 5
   target: {fileID: 0}
   selectionRange: 10
   state: 0

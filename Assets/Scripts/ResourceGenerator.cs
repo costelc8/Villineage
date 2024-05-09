@@ -142,7 +142,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         // Temporary Berry bush generation
         Debug.Log("Generating Berry Bushes");
-        GameObject bushes = new GameObject("bushes");
+        GameObject bushes = new GameObject("Bushes");
         bushes.transform.position = Vector3.zero;
         Vector3 position = bushes.transform.position;
 
