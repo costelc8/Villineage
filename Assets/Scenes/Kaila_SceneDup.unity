@@ -1127,7 +1127,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dummyHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  dummyHUD1: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!114 &1302014788033251589
 MonoBehaviour:
   m_ObjectHideFlags: 0
