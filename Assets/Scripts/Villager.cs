@@ -8,36 +8,38 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Villager : NetworkBehaviour, ISelectable
 {
-    private NavMeshAgent agent;
-    private Animator anim;
-    public TownCenter townCenter;
-    public bool selected;
+    private NavMeshAgent agent;  // Navigates the villager
+    private Animator anim;  // Animates the villager
+    public TownCenter townCenter;  // The town center object
+    public bool selected;  // Have they been selected?
 
     [Header("Stats")]
-    public bool alive;
+    public bool alive;  // Are they alive?
     public float workSpeed = 1f;  // Speed of resource extraction
-    public float hunger;
-    public float hungerRate = 1f;
-    public float maxHunger = 100f;
+    public float hunger;  // How much hunger do they have left
+    public float hungerRate;  // How fast they lose hunger (hungerRate points a second)
+    public float hungerThreshold;  // How low their hunger can get before they need to return home.
+    public float maxHunger;  // The highest their hunger value can be (full)
     public float huntingRange = 10f;
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
-    public VillagerJob job;
-    public readonly SyncList<int> inventory = new SyncList<int>();
+    public VillagerJob job;  // Their current role
+    public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
     public int totalResources = 0; //Total number of resources across all types
     public int capacity = 3;  // Maximum amount of resources it can carry
-    public Targetable target;
+    public Targetable target;  // The object they are targeting for their role
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
-    private float distance;
+    private float distance;  // The distance to their target
+    private float targetPriority; // Priority of target object
 
     [Header("States")]
     [SyncVar(hook = nameof(StateHook))]
-    public VillagerState state;
+    public VillagerState state;  // The state of the villager (see enum below)
 
-    [Header("Tools")]
+    [Header("Tools")]  // For animation purposes
     public GameObject axe;
     public GameObject hammer;
     public GameObject bow;
@@ -45,17 +47,24 @@ public class Villager : NetworkBehaviour, ISelectable
 
     private void Awake()
     {
+        // Get anim and agent objects, set up hunger variables,
+        // and mark this villager as alive
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        maxHunger = 100.0f;
+        hungerRate = 1.0f;
+        hungerThreshold = maxHunger / 5.0f;
         hunger = maxHunger;
         alive = true;
     }
 
     public void Start()
     {
+        // Add to list of selectables
         Selection.Selector.AddSelectable(this);
         if (isServer)
         {
+            // If this is the server, initialize the agents.
             agent.enabled = true;
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
         }
@@ -120,7 +129,7 @@ public class Villager : NetworkBehaviour, ISelectable
         // Decrease hunger:
         hunger -= hungerRate * Time.deltaTime;
 
-        if (hunger <= (maxHunger / 5))
+        if (hunger <= hungerThreshold)
         {
             SetNewTarget(townCenter);
             ChangeState(VillagerState.Returning);
@@ -134,8 +143,10 @@ public class Villager : NetworkBehaviour, ISelectable
         }
     }
 
+    // Like it says on the tin.
     private void Death()
     {
+        // Set alive to false and trigger the death animation.
         alive = false;
         agent.isStopped = true;
         anim.SetBool("Working",false);
@@ -147,6 +158,7 @@ public class Villager : NetworkBehaviour, ISelectable
 
     public void FindNewDestination()
     {
+        // If the villager has no job, wander randomly.
         if (job == VillagerJob.Nitwit)
         {
             if (RandomNavmeshPoint.RandomPoint(transform.position, selectionRange, out Vector3 targetPosition))
@@ -156,36 +168,47 @@ public class Villager : NetworkBehaviour, ISelectable
         }
         else
         {
+            // Get list of possible targets based on role
             List<Targetable> candidates = new List<Targetable>();
             if (job == VillagerJob.Builder) candidates = BuildingGenerator.GetPendingBuildings();
             else if (job == VillagerJob.Lumberjack) candidates = ResourceGenerator.GetTrees();
             else if (job == VillagerJob.Gatherer) candidates = ResourceGenerator.GetBerries();
             else if (job == VillagerJob.Hunter) candidates = ResourceGenerator.GetAnimals();
             Targetable bestCandidate = null;
-            float lowestDistance = float.MaxValue;
+            float lowestDistance = float.MaxValue;  // Lowest distance of all candidates
+            // For each candidate, if they exist:
             foreach (Targetable candidate in candidates)
             {
                 if (candidate != null)
                 {
+                    // Find their distance and store the lowest
+                    // With high priority objects appearing closer
                     distance = Vector3.Distance(transform.position, candidate.transform.position);
                     distance = distance / candidate.priority;
                     if (distance < lowestDistance && candidate.HasValidPositions())
                     {
                         lowestDistance = distance;
                         bestCandidate = candidate;
+                        targetPriority = candidate.priority;
                     }
                 }
             }
+            // Use this new distance (without priority) to find the hunger threshold
+            float distanceHome = Vector3.Distance(bestCandidate.transform.position, townCenter.transform.position);
+            hungerThreshold = distanceHome / agent.speed;
+            hungerThreshold += UnityEngine.Random.Range(1, 5);
             SetNewTarget(bestCandidate);
         }
         ChangeState(VillagerState.Walking);
     }
 
+    // Change villager state via hook
     private void StateHook(VillagerState oldState, VillagerState newState)
     {
         ChangeState(newState);
     }
 
+    // Update the villager's state to newState
     private void ChangeState(VillagerState newState)
     {
         state = newState;
@@ -211,6 +234,7 @@ public class Villager : NetworkBehaviour, ISelectable
         }
     }
 
+    // Find opening at new target
     private void SetNewTarget(Targetable newTarget)
     {
         if (target != null) target.ReturnTargetPosition(this);
@@ -220,11 +244,13 @@ public class Villager : NetworkBehaviour, ISelectable
         else agent.stoppingDistance = 0.1f;
     }
 
+    // Change villager job via hook
     private void JobHook(VillagerJob oldJob, VillagerJob newJob)
     {
         ChangeJob(newJob);
     }
 
+    // Update the villager's job
     public void ChangeJob(VillagerJob job)
     {
         this.job = job;
@@ -234,11 +260,13 @@ public class Villager : NetworkBehaviour, ISelectable
         quiver.SetActive(job == VillagerJob.Hunter);
     }
 
+    // Getter for villager's job
     public VillagerJob Job()
     {
         return job;
     }
 
+    // When selected, display ui
     public void OnSelect()
     {
         selected = true;
@@ -246,12 +274,14 @@ public class Villager : NetworkBehaviour, ISelectable
         HUD.GetComponent<DisplayController>().villager = this;
     }
 
+    // When deselected, stop displaying ui
     public void OnDeselect()
     {
         selected = false;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
+    // When destroyed, remove villager from other objects
     private void OnDestroy()
     {
         Selection.Selector.RemoveSelectable(this);
