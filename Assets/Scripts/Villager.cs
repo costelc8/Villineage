@@ -270,7 +270,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public void OnSelect()
     {
         selected = true;
-        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.dummyHUD, 1f);
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.villagerHUD, 1f);
         HUD.GetComponent<DisplayController>().villager = this;
     }
 

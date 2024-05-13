@@ -7,7 +7,7 @@ using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TownCenter : Targetable
+public class TownCenter : Targetable, ISelectable
 {
     public GameObject villagerPrefab;
     public int startingVillagers = 5;
@@ -187,6 +187,22 @@ public class TownCenter : Targetable
     public void RemoveVillager(Villager villager)
     {
         villagers.Remove(villager);
+    }
+
+    public void Start()
+    {
+        Selection.Selector.AddSelectable(this);
+    }
+
+    public void OnSelect()
+    {
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.townHallHUD, 1f);
+        HUD.GetComponent<TownHallDisplay>().townCenter = this;
+    }
+
+    public void OnDeselect()
+    {
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 }
 

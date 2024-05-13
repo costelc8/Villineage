@@ -8,7 +8,7 @@ public class TownHallDisplay : MonoBehaviour
     public TownCenter townCenter;
     public TextMeshProUGUI resourceText;
 
-    void Start()
+    void Update()
     {
         // Ensure a reference to the townCenter is set
         if (townCenter == null)
