@@ -36,7 +36,6 @@ public class TownCenter : Targetable, ISelectable
     private void Initialize()
     {
         buildingGenerator = GetComponent<BuildingGenerator>();
-        hubs.Add(this);
         resources = new int[(int)ResourceType.MAX_VALUE];
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];

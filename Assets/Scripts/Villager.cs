@@ -11,7 +11,7 @@ public class Villager : NetworkBehaviour, ISelectable
     private NavMeshAgent agent;  // Navigates the villager
     private Animator anim;  // Animates the villager
     public TownCenter townCenter;  // The town center object
-    public List<Building> hubs;  // The different outposts/alternatives to town center
+    public List<Targetable> hubs;  // The different outposts/alternatives to town center
     public bool selected;  // Have they been selected?
 
     [Header("Stats")]

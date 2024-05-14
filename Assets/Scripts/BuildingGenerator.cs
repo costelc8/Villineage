@@ -11,7 +11,7 @@ public class BuildingGenerator : MonoBehaviour
     private int spacing = 2;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
     private static List<Building> buildings = new List<Building>();
-    public List<Building> hubs = new List<Building>();
+    private static List<Targetable> hubs = new List<Targetable>();
     private GameObject buildingParent;
 
     // Start is called before the first frame update
@@ -49,7 +49,7 @@ public class BuildingGenerator : MonoBehaviour
         return pendingBuildings;
     }
 
-    public static List<Building> GetHubs()
+    public static List<Targetable> GetHubs()
     {
         return hubs;
     }
