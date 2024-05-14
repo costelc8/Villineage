@@ -50,6 +50,7 @@ public class ResourceGenerator : MonoBehaviour
     private void Initialize()
     {
         terrainGenerator = GetComponent<TerrainGenerator>();
+
         initialized = true;
     }
 
