@@ -18,6 +18,7 @@ public class TerrainGenerator : NetworkBehaviour
     [Tooltip("Terrain seed, entering 0 will generate one")]
     [SyncVar(hook = nameof(SeedHook))]
     public int seed;
+    private bool initialized;
     private bool generated = false;
 
     [HideInInspector]
@@ -30,9 +31,7 @@ public class TerrainGenerator : NetworkBehaviour
 
     private void Awake()
     {
-        terrain = GetComponent<Terrain>();
-        terrainData = terrain.terrainData;
-        navMesh = GetComponent<NavMeshSurface>();
+        if (!initialized) Initialize();
     }
 
     private void Start()
@@ -41,6 +40,14 @@ public class TerrainGenerator : NetworkBehaviour
         {
             GenerateTerrain();
         }
+    }
+
+    private void Initialize()
+    {
+        terrain = GetComponent<Terrain>();
+        terrainData = terrain.terrainData;
+        navMesh = GetComponent<NavMeshSurface>();
+        initialized = true;
     }
 
     private void SeedHook(int oldSeed, int newSeed)
@@ -54,6 +61,7 @@ public class TerrainGenerator : NetworkBehaviour
 
     public void GenerateTerrain()
     {
+        if (!initialized) Initialize();
         Debug.Log("Generating Terrain");
         size = terrainData.heightmapResolution;
         terrainData.size = new Vector3(size - 1, depth, size - 1);

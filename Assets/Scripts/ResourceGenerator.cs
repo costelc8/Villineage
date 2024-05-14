@@ -30,9 +30,11 @@ public class ResourceGenerator : MonoBehaviour
     public bool generateBerries;
     public bool destroyBerries;
 
+    private bool initialized;
+
     private void Awake()
     {
-        terrainGenerator = GetComponent<TerrainGenerator>();
+        if (!initialized) Initialize();
     }
 
     // Start is called before the first frame update
@@ -43,6 +45,12 @@ public class ResourceGenerator : MonoBehaviour
             generateForest = false;
             GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, terrainGenerator.size, forestSpacing, forestDensity, forestVariation);
         }
+    }
+
+    private void Initialize()
+    {
+        terrainGenerator = GetComponent<TerrainGenerator>();
+        initialized = true;
     }
 
     // Update is called once per frame
@@ -84,6 +92,7 @@ public class ResourceGenerator : MonoBehaviour
     // This method generates a forest with the given parameters
     public void GenerateForest(Vector3 position, int size, int spacing, float density, float variation)
     {
+        if (!initialized) Initialize();
         Debug.Log("Generating Forest");
         // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
         GameObject forest = new GameObject("Forest");
@@ -126,20 +135,22 @@ public class ResourceGenerator : MonoBehaviour
 
     public void GenerateAnimals(Vector3 center, int count, float minRange, float maxRange)
     {
+        if (!initialized) Initialize();
         for (int i = 0; i < count; i++)
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
             {
                 GameObject animal = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                NetworkServer.Spawn(animal);
                 animals.Add(animal.GetComponent<PassiveAnimal>());
                 animal.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
-                NetworkServer.Spawn(animal);
             }
         }
     }
 
     public void GenerateBerries()
     {
+        if (!initialized) Initialize();
         // Temporary Berry bush generation
         Debug.Log("Generating Berry Bushes");
         GameObject bushes = new GameObject("Bushes");

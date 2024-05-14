@@ -758,7 +758,7 @@ MonoBehaviour:
   priority: 1
   liveAnimal: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
-  startingVillagers: 10
+  startingVillagers: 4
   villagers: []
   terrainGenerator: {fileID: 1194879060}
   resources: 000000000000000000000000
@@ -769,9 +769,9 @@ MonoBehaviour:
   - 0
   neededJobs: 00000000000000000000000000000000
   currentJobs: 00000000000000000000000000000000
-  lumberjackWeight: 4
-  gathererWeight: 3
-  hunterWeight: 3
+  lumberjackWeight: 2
+  gathererWeight: 1
+  hunterWeight: 1
   houseCost: 60
   hungerPerFood: 20
 --- !u!208 &1519554152
@@ -919,6 +919,7 @@ MonoBehaviour:
   - {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   - {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
   - {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
+  - {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -1126,8 +1127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 836c262a07608944787fd71f1a77bfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dummyHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  dummyHUD1: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
+  townHallHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!114 &1302014788033251589
 MonoBehaviour:
   m_ObjectHideFlags: 0

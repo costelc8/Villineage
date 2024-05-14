@@ -26,22 +26,26 @@ public class TownCenter : Targetable, ISelectable
     public int houseCost = 60;
     public int hungerPerFood = 20;
 
+    private bool initialized;
+
     private void Awake()
     {
-        buildingGenerator = GetComponent<BuildingGenerator>();
+        if (!initialized) Initialize();
     }
 
-    public void Initialize()
+    private void Initialize()
     {
+        buildingGenerator = GetComponent<BuildingGenerator>();
         resources = new int[(int)ResourceType.MAX_VALUE];
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
-        PlaceOnGround();
+        initialized = true;
     }
 
-    private void PlaceOnGround()
+    public void PlaceOnGround()
     {
+        if (!initialized) Initialize();
         Debug.Log("Placing Town Center");
         transform.position = new Vector3(terrainGenerator.size / 2, terrainGenerator.depth, terrainGenerator.size / 2);
         Physics.SyncTransforms();
@@ -54,8 +58,9 @@ public class TownCenter : Targetable, ISelectable
 
     public void SpawnVillagers(int villagerCount)
     {
+        if (!initialized) Initialize();
         Debug.Log("Spawning Villagers");
-        for (int i = 0; i < startingVillagers; i++) SpawnVillager();
+        for (int i = 0; i < villagerCount; i++) SpawnVillager();
         AssignAllVillagerJobs();
     }
 
