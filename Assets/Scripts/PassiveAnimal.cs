@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using static Unity.VisualScripting.Member;
 
 public class PassiveAnimal : Resource
@@ -13,17 +14,16 @@ public class PassiveAnimal : Resource
     public float maxWanderCooldown;
     public float maxHealth;
     public float health;
-    public bool dead;
     private Transform model;
     private NavMeshAgent agent;
-    //private NavMeshObstacle obstacle;
     private float wanderCooldown;
+    [SyncVar(hook = nameof(StateHook))]
+    public AnimalState state;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        //obstacle = GetComponent<NavMeshObstacle>();
         model = transform.GetChild(0);
         maxWanderCooldown = Mathf.Max(1f, maxWanderCooldown);
         wanderCooldown = Random.Range(1f, maxWanderCooldown);
@@ -33,8 +33,9 @@ public class PassiveAnimal : Resource
     // Update is called once per frame
     void Update()
     {
-        if (!dead) Wander();
-        else if (model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime));
+        if (state == AnimalState.Dead && model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime)); // Rotate on its side to "die"
+        if (!isServer) return;
+        if (state != AnimalState.Dead) Wander();
     }
 
     private void Wander()
@@ -50,10 +51,10 @@ public class PassiveAnimal : Resource
                     Vector3 towardsOrigin = wanderOrigin - target;
                     agent.SetDestination(target + (towardsOrigin * originTetherStrength));
                     agent.speed = 1f;
+                    ChangeState(AnimalState.Wandering);
                 }
-                anim.Play("walk_forward");
             }
-            else anim.Play("idle");
+            else ChangeState(AnimalState.Idle);
         }
     }
 
@@ -73,7 +74,7 @@ public class PassiveAnimal : Resource
                 agent.SetDestination(transform.position - towardsSource);
                 agent.speed = 2f;
                 wanderCooldown = 5f;
-                anim.Play("run_forward");
+                ChangeState(AnimalState.Running);
             }
             return false;
         }
@@ -82,13 +83,37 @@ public class PassiveAnimal : Resource
 
     private void Die()
     {
-        dead = true;
         agent.enabled = false;
-        liveAnimal = false;
+        movingTarget = false;
         agent.enabled = false;
         obstacle.enabled = true;
-        anim.Play("stand_to_sit");
-        priority *= 100;
-        anim.speed = 5f;
+        priority *= 100f;
+        ChangeState(AnimalState.Dead);
     }
+
+    private void StateHook(AnimalState oldState, AnimalState newState)
+    {
+        ChangeState(newState);
+    }
+
+    private void ChangeState(AnimalState state)
+    {
+        this.state = state;
+        if (state == AnimalState.Idle) anim.Play("idle");
+        if (state == AnimalState.Wandering) anim.Play("walk_forward");
+        if (state == AnimalState.Running) anim.Play("run_forward");
+        if (state == AnimalState.Dead)
+        {
+            anim.Play("stand_to_sit");
+            anim.speed = 5f;
+        }
+    }
+}
+
+public enum AnimalState
+{
+    Idle,
+    Wandering,
+    Running,
+    Dead,
 }
