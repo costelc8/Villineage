@@ -56,7 +56,8 @@ MonoBehaviour:
   maxAssignedVillagers: 0
   assignedVillagers: 0
   priority: 1
-  quantity: 60
+  movingTarget: 0
+  quantity: 0
   maxDurability: 1
   assignedVillager: {fileID: 0}
   resourceType: 1

@@ -15,21 +15,21 @@ public class Villager : NetworkBehaviour, ISelectable
     public bool selected;  // Have they been selected?
 
     [Header("Stats")]
-    public bool alive;  // Are they alive?
-    public float workSpeed = 1f;  // Speed of resource extraction
+    public bool alive = true;  // Are they alive?
     public float hunger;  // How much hunger do they have left
-    public float hungerRate;  // How fast they lose hunger (hungerRate points a second)
     public float hungerThreshold;  // How low their hunger can get before they need to return home.
-    public float maxHunger;  // The highest their hunger value can be (full)
+    public float maxHunger = 100f;  // The highest their hunger value can be (full)
     public float huntingRange = 10f;
+    private float workSpeed;  // Speed of resource extraction
+    private float hungerRate;  // How fast they lose hunger (hungerRate points a second)
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
     public VillagerJob job;  // Their current role
     public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
     public int totalResources = 0; //Total number of resources across all types
-    public int capacity = 3;  // Maximum amount of resources it can carry
     public Targetable target;  // The object they are targeting for their role
+    private int capacity;  // Maximum amount of resources it can carry
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
@@ -45,18 +45,17 @@ public class Villager : NetworkBehaviour, ISelectable
     public GameObject hammer;
     public GameObject bow;
     public GameObject quiver;
+    public GameObject backWood;
+    public GameObject backFood;
+    public GameObject backOther;
 
     private void Awake()
     {
-        // Get anim and agent objects, set up hunger variables,
-        // and mark this villager as alive
+        // Get anim and agent objects and set up hunger variables
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        maxHunger = 100.0f;
-        hungerRate = 1.0f;
         hungerThreshold = maxHunger / 5.0f;
         hunger = maxHunger;
-        alive = true;
     }
 
     public void Start()
@@ -68,6 +67,10 @@ public class Villager : NetworkBehaviour, ISelectable
             // If this is the server, initialize the agents.
             agent.enabled = true;
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
+            hungerRate = SimVars.VARS.villagerHungerRate;
+            workSpeed = SimVars.VARS.villagerWorkSpeed;
+            agent.speed = SimVars.VARS.villagerMoveSpeed;
+            capacity = SimVars.VARS.villagerCarryCapacity;
         }
     }
 
@@ -75,13 +78,6 @@ public class Villager : NetworkBehaviour, ISelectable
     void Update()
     {
         if (!isServer || !alive) return;
-
-        //if (target != null && target.liveAnimal && job == VillagerJob.Hunter)
-        //{
-        //    agent.stoppingDistance = 10f;
-        //    SetNewTarget(target);
-        //}
-        //else agent.stoppingDistance = 0.1f;
 
         if (state == VillagerState.Pending) // If no job/target is assigned
         {
@@ -117,6 +113,9 @@ public class Villager : NetworkBehaviour, ISelectable
                     townCenter.DepositResources(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
+                    backWood.SetActive(false);
+                    backFood.SetActive(false);
+                    backOther.SetActive(false);
                     ChangeState(VillagerState.Pending);
                 }
             }
@@ -225,6 +224,11 @@ public class Villager : NetworkBehaviour, ISelectable
             agent.updateRotation = true;
             anim.SetBool("Working",false);
             anim.SetFloat("Walking",1);
+            if (state == VillagerState.Returning)
+            {
+                if (job == VillagerJob.Lumberjack) backWood.SetActive(true);
+                else if (job == VillagerJob.Gatherer) backFood.SetActive(true);
+            }
         }
         else if (newState == VillagerState.Working)
         {

@@ -3854,16 +3854,15 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   townCenter: {fileID: 0}
+  hubs: []
   selected: 0
-  alive: 0
-  workSpeed: 1
+  alive: 1
   hunger: 0
-  hungerRate: 1
+  hungerThreshold: 0
   maxHunger: 100
   huntingRange: 10
   job: 0
   totalResources: 0
-  capacity: 5
   target: {fileID: 0}
   selectionRange: 10
   state: 0
@@ -3871,6 +3870,9 @@ MonoBehaviour:
   hammer: {fileID: 5551859811417421694}
   bow: {fileID: 7970216816093461313}
   quiver: {fileID: 1093380569433272588}
+  backWood: {fileID: 8700926656657626543}
+  backFood: {fileID: 6253418137142339708}
+  backOther: {fileID: 8022836218949984422}
 --- !u!195 &5122210100640433560
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -19607,6 +19609,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c40cd488e7d8fc419ed5b2e20b0ef6f, type: 3}
+--- !u!1 &6253418137142339708 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 9c40cd488e7d8fc419ed5b2e20b0ef6f, type: 3}
+  m_PrefabInstance: {fileID: 6253418137142374108}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6253418137142506588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9c40cd488e7d8fc419ed5b2e20b0ef6f, type: 3}
@@ -19682,6 +19689,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 3832cb469e9c2ee47af1a2d52e4c5efe, type: 3}
   m_PrefabInstance: {fileID: 8022836218950018566}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8022836218949984422 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 3832cb469e9c2ee47af1a2d52e4c5efe, type: 3}
+  m_PrefabInstance: {fileID: 8022836218950018566}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8700926656657724175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19750,5 +19762,10 @@ PrefabInstance:
 --- !u!4 &8700926656657328527 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: e3312162e22d94b48b76cdb244148643, type: 3}
+  m_PrefabInstance: {fileID: 8700926656657724175}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8700926656657626543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: e3312162e22d94b48b76cdb244148643, type: 3}
   m_PrefabInstance: {fileID: 8700926656657724175}
   m_PrefabAsset: {fileID: 0}

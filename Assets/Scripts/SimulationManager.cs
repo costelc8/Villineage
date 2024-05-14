@@ -15,11 +15,11 @@ public class SimulationManager : NetworkManager
     public void StartSimulation()
     {
         terrainGenerator.GenerateTerrain();
+        townCenter.PlaceOnGround();
         resourceGenerator.GenerateDefaultForest();
         resourceGenerator.GenerateBerries();
-        resourceGenerator.GenerateAnimals(townCenter.transform.position, 10, 20f, 30f);
-        townCenter.PlaceOnGround();
-        townCenter.SpawnVillagers(4);
+        resourceGenerator.GenerateAnimals(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
+        townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
     }
 
     public override void OnStartServer()

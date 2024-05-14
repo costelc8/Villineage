@@ -1491,7 +1491,7 @@ MonoBehaviour:
   assignedVillagers: 0
   priority: 1
   movingTarget: 1
-  quantity: 50
+  quantity: 0
   maxDurability: 1
   assignedVillager: {fileID: 0}
   resourceType: 2
@@ -1500,7 +1500,6 @@ MonoBehaviour:
   maxWanderCooldown: 10
   maxHealth: 2
   health: 0
-  dead: 0
   state: 0
 --- !u!114 &8047246721949191282
 MonoBehaviour:

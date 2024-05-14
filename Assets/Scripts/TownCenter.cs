@@ -10,9 +10,8 @@ using UnityEngine.AI;
 public class TownCenter : Targetable, ISelectable
 {
     public GameObject villagerPrefab;
-    public int startingVillagers = 5;
     public List<Villager> villagers;
-    public TerrainGenerator terrainGenerator;
+    //public TerrainGenerator terrainGenerator;
     private BuildingGenerator buildingGenerator;
 
     public int[] resources;
@@ -47,7 +46,7 @@ public class TownCenter : Targetable, ISelectable
     {
         if (!initialized) Initialize();
         Debug.Log("Placing Town Center");
-        transform.position = new Vector3(terrainGenerator.size / 2, terrainGenerator.depth, terrainGenerator.size / 2);
+        transform.position = new Vector3(SimVars.VARS.terrainSize / 2, SimVars.VARS.terrainDepth, SimVars.VARS.terrainSize / 2);
         Physics.SyncTransforms();
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
         {

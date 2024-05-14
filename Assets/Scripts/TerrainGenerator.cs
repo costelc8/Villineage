@@ -13,21 +13,16 @@ public class TerrainGenerator : NetworkBehaviour
     private TerrainData terrainData;
     private NavMeshSurface navMesh;
     public bool generateTerrainOnStart;
-    [Tooltip("Terrain hill height")]
-    public int depth = 8;
-    [Tooltip("Terrain seed, entering 0 will generate one")]
-    [SyncVar(hook = nameof(SeedHook))]
-    public int seed;
     private bool initialized;
     private bool generated = false;
 
     [HideInInspector]
     public int size;
 
-    [Tooltip("Perlin image scale size, entering 0 will be flat")]
-    [Range(0.5f, 1.5f)]
-    public float scale = 1f;
-    public float[,] perlin;
+    [Tooltip("Perlin image scale size, a smaller scale will generate more hilly terrain")]
+    [Range(0.5f, 2f)]
+    public float perlinScale = 1f;
+    private float[,] perlin;
 
     private void Awake()
     {
@@ -36,10 +31,7 @@ public class TerrainGenerator : NetworkBehaviour
 
     private void Start()
     {
-        if (generateTerrainOnStart)
-        {
-            GenerateTerrain();
-        }
+        if (generateTerrainOnStart) GenerateTerrain();
     }
 
     private void Initialize()
@@ -53,20 +45,20 @@ public class TerrainGenerator : NetworkBehaviour
     private void SeedHook(int oldSeed, int newSeed)
     {
         Debug.Log("Seed Changed");
-        if (!generated)
-        {
-            GenerateTerrain();
-        }
+        if (!generated) GenerateTerrain();
     }
 
-    public void GenerateTerrain()
+    public void GenerateTerrain(int terrainScale = 5, int terrainDepth = 8, int seed = 0)
     {
         if (!initialized) Initialize();
         Debug.Log("Generating Terrain");
-        size = terrainData.heightmapResolution;
-        terrainData.size = new Vector3(size - 1, depth, size - 1);
+        size = 32;
+        for (int i = 1; i < terrainScale; i++) size *= 2;
+        size++;
+        terrainData.heightmapResolution = size;
+        terrainData.size = new Vector3(size - 1, terrainDepth, size - 1);
         if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
-        perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
+        perlin = PerlinGenerator.GeneratePerlin(size, size, perlinScale, seed);
         terrainData.SetHeights(0, 0, perlin);
         gameObject.SetActive(true);
         navMesh.BuildNavMesh();
