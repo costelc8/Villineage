@@ -12,7 +12,7 @@ public class Targetable : NetworkBehaviour
     public int maxAssignedVillagers;
     public int assignedVillagers;
     public float priority = 1;
-    public bool liveAnimal = false;
+    public bool movingTarget = false;
     protected NavMeshObstacle obstacle;
 
     public virtual bool Progress(Villager villager, float progressValue)

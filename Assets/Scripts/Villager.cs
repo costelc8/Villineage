@@ -122,7 +122,7 @@ public class Villager : NetworkBehaviour, ISelectable
         }
         else // If the target has not been reached
         {
-            if (target != null && target.liveAnimal) SetNewTarget(target);
+            if (target != null && target.movingTarget) SetNewTarget(target);
             if (state == VillagerState.Working) state = VillagerState.Walking;
         }
 
@@ -240,7 +240,7 @@ public class Villager : NetworkBehaviour, ISelectable
         if (target != null) target.ReturnTargetPosition(this);
         target = newTarget;
         if (target != null) agent.SetDestination(target.GetTargetPosition(this));
-        if (target != null && target.liveAnimal) agent.stoppingDistance = huntingRange;
+        if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
         else agent.stoppingDistance = 0.1f;
     }
 
@@ -284,8 +284,8 @@ public class Villager : NetworkBehaviour, ISelectable
     // When destroyed, remove villager from other objects
     private void OnDestroy()
     {
+        if (isServer) townCenter.RemoveVillager(this);
         Selection.Selector.RemoveSelectable(this);
-        townCenter.RemoveVillager(this);
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 }

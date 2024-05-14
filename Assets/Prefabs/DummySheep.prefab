@@ -1490,7 +1490,7 @@ MonoBehaviour:
   maxAssignedVillagers: 0
   assignedVillagers: 0
   priority: 1
-  liveAnimal: 1
+  movingTarget: 1
   quantity: 50
   maxDurability: 1
   assignedVillager: {fileID: 0}
@@ -1501,6 +1501,7 @@ MonoBehaviour:
   maxHealth: 2
   health: 0
   dead: 0
+  state: 0
 --- !u!114 &8047246721949191282
 MonoBehaviour:
   m_ObjectHideFlags: 0
