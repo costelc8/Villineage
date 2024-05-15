@@ -39,6 +39,7 @@ public class BuildingGenerator : MonoBehaviour
             
             Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
             Building house = Instantiate(housePrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            house.maxBuildTime = SimVars.VARS.houseBuildTime;
             NetworkServer.Spawn(house.gameObject);
             pendingBuildings.Add(house);
         }

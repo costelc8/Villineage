@@ -40,24 +40,25 @@ public class DisplayController : MonoBehaviour
         }
 
         // Check the job of the villager and display it
-        switch (villager.Job())
-        {
-            case VillagerJob.Nitwit:
-                jobTextMesh.text = "Job: Nitwit";
-                break;
-            case VillagerJob.Gatherer:
-                jobTextMesh.text = "Job: Gatherer";
-                break;
-            case VillagerJob.Lumberjack:
-                jobTextMesh.text = "Job: Lumberjack";
-                break;
-            case VillagerJob.Builder:
-                jobTextMesh.text = "Job: Builder";
-                break;
-            default:
-                jobTextMesh.text = "Job: Unknown";
-                break;
-        }
+        //switch (villager.Job())
+        //{
+        //    case VillagerJob.Nitwit:
+        //        jobTextMesh.text = "Job: Nitwit";
+        //        break;
+        //    case VillagerJob.Gatherer:
+        //        jobTextMesh.text = "Job: Gatherer";
+        //        break;
+        //    case VillagerJob.Lumberjack:
+        //        jobTextMesh.text = "Job: Lumberjack";
+        //        break;
+        //    case VillagerJob.Builder:
+        //        jobTextMesh.text = "Job: Builder";
+        //        break;
+        //    default:
+        //        jobTextMesh.text = "Job: Unknown";
+        //        break;
+        //}
+        jobTextMesh.text = "Job: " + villager.job;
     }
 
     void DisplayInventory()
@@ -92,6 +93,6 @@ public class DisplayController : MonoBehaviour
         }
 
         // Display the hunger of the villager
-        hungerTextMesh.text = "Hunger: " + ((int)villager.hunger).ToString();
+        hungerTextMesh.text = "Vitality: " + ((int)villager.vitality).ToString();
     }
 }

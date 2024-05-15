@@ -12,6 +12,7 @@ public class ResourceGenerator : MonoBehaviour
     public GameObject treePrefab;
     public GameObject berryPrefab;
     public GameObject sheepPrefab;
+    public GameObject goatPrefab;
     private static List<Targetable> trees = new List<Targetable>();
     private static List<Targetable> berries = new List<Targetable>();
     private static List<Targetable> animals = new List<Targetable>();
@@ -22,7 +23,6 @@ public class ResourceGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float forestVariation;
 
-    public int seed;
     public float scale;
 
     public bool generateForest;
@@ -106,8 +106,7 @@ public class ResourceGenerator : MonoBehaviour
         size = (size / spacing) * spacing;
         Vector2 center = new Vector2(size / 2f, size / 2f);
 
-        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
-        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, seed);
+        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, SimVars.VARS.GetSeed());
 
         // Just generate trees in a square for now
         for (int x = spacing; x < size; x += spacing)
@@ -135,18 +134,36 @@ public class ResourceGenerator : MonoBehaviour
     }
 
 
-    public void GenerateAnimals(Vector3 center, int count, float minRange, float maxRange)
+    public void GenerateSheep(Vector3 center, int count, float minRange, float maxRange)
+    {
+        if (!initialized) Initialize();
+        for (int i = 0; i < count; i++)
+        {
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 1.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
+            {
+                GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                sheep.GetComponent<Animal>().wanderOrigin = center;
+                sheep.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
+                NetworkServer.Spawn(sheep);
+                animals.Add(sheep.GetComponent<Animal>());
+                sheep.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
+            }
+        }
+    }
+
+    public void GenerateGoats(Vector3 center, int count, float minRange, float maxRange)
     {
         if (!initialized) Initialize();
         for (int i = 0; i < count; i++)
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
             {
-                GameObject animal = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
-                animal.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
-                NetworkServer.Spawn(animal);
-                animals.Add(animal.GetComponent<PassiveAnimal>());
-                animal.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
+                GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                goat.GetComponent<Animal>().wanderOrigin = center;
+                goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
+                NetworkServer.Spawn(goat);
+                animals.Add(goat.GetComponent<Animal>());
+                goat.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
             }
         }
     }

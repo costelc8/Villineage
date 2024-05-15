@@ -61,14 +61,22 @@ public class Targetable : NetworkBehaviour
     public bool HasValidPositions()
     {
         if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
-        if (targetPositions.Count == 0) return true;
-        if (enforceMaxVillagers) return assignedVillagers < targetPositions.Count && assignedVillagers < maxAssignedVillagers;
-        else return assignedVillagers < targetPositions.Count;
+        if (targetPositions.Count == 0)
+        {
+            if (enforceMaxVillagers) return assignedVillagers < maxAssignedVillagers;
+            else return true;
+        }
+        else
+        {
+            if (enforceMaxVillagers) return assignedVillagers < targetPositions.Count && assignedVillagers < maxAssignedVillagers;
+            else return assignedVillagers < targetPositions.Count;
+        }
     }
 
     public Vector3 GetTargetPosition(Villager villager)
     {
         if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
+        assignedVillagers++;
         if (targetPositions.Count == 0) return transform.position;
         TargetPosition nearest = null;
         float minMag = float.MaxValue;
@@ -84,7 +92,8 @@ public class Targetable : NetworkBehaviour
                 nearest = targetPos;
             }
         }
-        if (nearest == null || (enforceMaxVillagers && assignedVillagers >= maxAssignedVillagers)) // Do the check again, allowing already-reserved spots
+        if (nearest != null) return nearest.position;
+        else if(!enforceMaxVillagers) // Do the check again, allowing already-reserved spots
         {
             foreach (TargetPosition targetPos in targetPositions)
             {
@@ -97,11 +106,7 @@ public class Targetable : NetworkBehaviour
             }
             return nearest.position;
         }
-        else
-        {
-            assignedVillagers++;
-            return nearest.position;
-        }
+        else return transform.position;
     }
 
     public void ReturnTargetPosition(Villager villager)
@@ -111,9 +116,9 @@ public class Targetable : NetworkBehaviour
             if (targetPos.assignedVillager == villager)
             {
                 targetPos.assignedVillager = null;
-                assignedVillagers--;
             }
         }
+        assignedVillagers--;
     }
 
     private void OnDrawGizmosSelected()

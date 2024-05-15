@@ -1339,7 +1339,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8046018224886348101}
   - component: {fileID: 5450333337551086552}
-  - component: {fileID: 4191509910220376927}
   - component: {fileID: 1661348684683675529}
   - component: {fileID: 8433713914224054802}
   - component: {fileID: -2277655515765280002}
@@ -1391,27 +1390,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4191509910220376927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2947801369939053811}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e5010bff315c6e4c8a413f69e3d6458, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  walkForwardAnimation: walk_forward
-  walkBackwardAnimation: walk_backwards
-  runForwardAnimation: run_forward
-  turn90LAnimation: turn_90_L
-  turn90RAnimation: turn_90_R
-  trotAnimation: trot_forward
-  sittostandAnimation: sit_to_stand
-  standtositAnimation: stand_to_sit
 --- !u!135 &1661348684683675529
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1429,7 +1407,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -1442,12 +1420,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 2947801369939053811}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
-  m_Speed: 2
+  m_Radius: 0.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 51
   m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -1486,8 +1464,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  enforceMaxVillagers: 0
-  maxAssignedVillagers: 0
+  enforceMaxVillagers: 1
+  maxAssignedVillagers: 6
   assignedVillagers: 0
   priority: 1
   movingTarget: 1
@@ -1496,11 +1474,12 @@ MonoBehaviour:
   assignedVillager: {fileID: 0}
   resourceType: 2
   wanderOrigin: {x: 250, y: 0, z: 250}
-  originTetherStrength: 0
+  originTetherStrength: 1
   maxWanderCooldown: 10
   maxHealth: 2
   health: 0
   state: 0
+  hostile: 0
 --- !u!114 &8047246721949191282
 MonoBehaviour:
   m_ObjectHideFlags: 0

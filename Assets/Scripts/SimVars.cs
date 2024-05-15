@@ -8,45 +8,69 @@ public class SimVars : NetworkBehaviour
     public static SimVars VARS;
 
     [Header("Timescale")]
-    [SyncVar]
-    public float timeScale = 1f;
+    [SyncVar] public float timeScale = 1f;
 
     [Header("Simulation Seed")]
     [Tooltip("Terrain seed, entering 0 will generate one")]
-    //[SyncVar(hook = nameof(SeedHook))]
-    public int seed = 0;
+    [SyncVar] public int seed = 0;
+
+    [Header("Job Weights")]
+    [SyncVar] public int lumberjackWeight = 2;
+    [SyncVar] public int gathererWeight = 1;
+    [SyncVar] public int hunterWeight = 1;
 
     [Header("Villager Variables")]
-    public int startingVillagers = 4;
-    public int villagerCarryCapacity = 5;
-    public float villagerMoveSpeed = 4f;
-    public float villagerWorkSpeed = 1f;
-    public float villagerHungerRate = 1f;
+    [SyncVar] public int startingVillagers = 4;
+    [SyncVar] public int villagerCarryCapacity = 10;
+    [SyncVar] public float villagerMoveSpeed = 4f;
+    [SyncVar] public float villagerWorkSpeed = 1f;
+    [SyncVar] public float villagerHungerRate = 1f;
+    [SyncVar] public float hungerPerFood = 10f;
 
     [Header("Resource Variables")]
-    public int startingSheep = 4;
-    public int startingGoats = 4;
-    public int woodPerTree = 60;
-    public int foodPerBerry = 60;
-    public int foodPerSheep = 60;
-    public int foodPerGoat = 120;
+    [SyncVar] public int startingSheep = 4;
+    [SyncVar] public int startingGoats = 6;
+    [SyncVar] public int woodPerTree = 60;
+    [SyncVar] public int foodPerBerry = 60;
+    [SyncVar] public int foodPerSheep = 60;
+    [SyncVar] public int foodPerGoat = 60;
+
+    [Header("Building Variables")]
+    [SyncVar] public int woodPerHouse = 60;
+    [SyncVar] public float houseBuildTime = 30f;
 
     [Header("Terrain Variables")]
     [Tooltip("Map scale, map size will be 2^(4+scale)")]
-    [Range(2, 8)]
-    public int terrainScale = 5;
+    [Range(1, 4)]
+    [SyncVar] public int terrainScale = 3;
     [HideInInspector]
-    public int terrainSize = 32;
+    [SyncVar] public int terrainSize = 32;
     [Tooltip("Terrain hill height")]
-    public int terrainDepth = 8;
+    [SyncVar] public int terrainDepth = 8;
 
-    private void Awake()
+    public void Initialize()
     {
         if (VARS == null || VARS == this) VARS = this;
         else Destroy(this);
-        Time.timeScale = timeScale;
-        terrainSize = 32;
-        for (int i = 2; i < terrainScale; i++) terrainSize *= 2;
+        terrainSize = 128;
+        for (int i = 1; i < terrainScale; i++) terrainSize *= 2;
         terrainSize++;
+    }
+
+    public int GetSeed()
+    {
+        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
+        return seed;
+    }
+
+    public float GetMaxVillagerRange()
+    {
+        return 50f * villagerMoveSpeed / villagerHungerRate;
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!isServer) Initialize();
     }
 }

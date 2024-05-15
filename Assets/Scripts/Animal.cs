@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.UIElements;
 using static Unity.VisualScripting.Member;
 
-public class PassiveAnimal : Resource
+public class Animal : Resource
 {
     Animator anim;
     public Vector3 wanderOrigin;
@@ -19,6 +19,9 @@ public class PassiveAnimal : Resource
     private float wanderCooldown;
     [SyncVar(hook = nameof(StateHook))]
     public AnimalState state;
+    public bool hostile;
+    private float attackCooldown;
+    private Villager targetVillager;
 
     private void Awake()
     {
@@ -40,21 +43,41 @@ public class PassiveAnimal : Resource
 
     private void Wander()
     {
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             wanderCooldown -= Time.deltaTime;
             if (wanderCooldown <= 0)
             {
                 wanderCooldown = Random.Range(1f, maxWanderCooldown);
-                if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 1.5f, 1f, out Vector3 target, 5f, 1f, 10f))
+                Vector3 randomDirection = (Random.onUnitSphere * 100 + (wanderOrigin - transform.position) * originTetherStrength).normalized;
+                Vector3 targetPos = transform.position + (randomDirection * (Random.Range(4f, 8f) * (hostile ? 2.5f : 1f)));
+                targetPos.y = transform.position.y;
+                if (RandomNavmeshPoint.RandomPointFromCenterCapsule(targetPos, 1.5f, 1f, out Vector3 target, 0, 1f, 10f))
                 {
-                    Vector3 towardsOrigin = wanderOrigin - target;
-                    agent.SetDestination(target + (towardsOrigin * originTetherStrength));
-                    agent.speed = 1f;
+                    agent.SetDestination(target);
+                    agent.speed = hostile ? 2.5f : 1f;
                     ChangeState(AnimalState.Wandering);
+                    targetVillager = null;
                 }
             }
-            else ChangeState(AnimalState.Idle);
+            else if (hostile && targetVillager != null && targetVillager.alive)
+            {
+                agent.updateRotation = false;
+                transform.rotation = Quaternion.LookRotation(targetVillager.transform.position - transform.position);
+                attackCooldown -= Time.deltaTime;
+                if (attackCooldown <= 0)
+                {
+                    attackCooldown = 1f;
+                    targetVillager.TakeDamage(Random.Range(20f, 40f));
+                }
+                Vector3 towardsSource = targetVillager.transform.position - transform.position;
+                agent.SetDestination(transform.position + towardsSource);
+            }
+            else
+            {
+                agent.updateRotation = true;
+                ChangeState(AnimalState.Idle);
+            }
         }
     }
 
@@ -70,9 +93,11 @@ public class PassiveAnimal : Resource
             }
             else
             {
-                Vector3 towardsSource = villager.transform.position - transform.position;
-                agent.SetDestination(transform.position - towardsSource);
-                agent.speed = 2f;
+                if (targetVillager == null) targetVillager = villager;
+                Vector3 towardsSource = targetVillager.transform.position - transform.position;
+                if (hostile) agent.SetDestination(transform.position + towardsSource);
+                else agent.SetDestination(transform.position - towardsSource);
+                agent.speed = hostile ? 5f : 2f;
                 wanderCooldown = 5f;
                 ChangeState(AnimalState.Running);
             }
@@ -98,6 +123,7 @@ public class PassiveAnimal : Resource
 
     private void ChangeState(AnimalState state)
     {
+        if (this.state == state) return;
         this.state = state;
         if (state == AnimalState.Idle) anim.Play("idle");
         if (state == AnimalState.Wandering) anim.Play("walk_forward");

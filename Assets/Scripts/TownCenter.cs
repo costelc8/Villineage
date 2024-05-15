@@ -19,11 +19,9 @@ public class TownCenter : Targetable, ISelectable
     public int[] neededJobs;
     public int[] currentJobs;
 
-    public int lumberjackWeight;
-    public int gathererWeight;
-    public int hunterWeight;
-    public int houseCost = 60;
-    public int hungerPerFood = 20;
+    //public int lumberjackWeight;
+    //public int gathererWeight;
+    //public int hunterWeight;
 
     private bool initialized;
 
@@ -51,8 +49,13 @@ public class TownCenter : Targetable, ISelectable
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
             transform.position = hitInfo.point;
-            Camera.main.transform.parent.parent.position = transform.position;
         }
+        CenterCamera();
+    }
+
+    public void CenterCamera()
+    {
+        Camera.main.transform.parent.parent.position = transform.position;
     }
 
     public void SpawnVillagers(int villagerCount)
@@ -81,16 +84,16 @@ public class TownCenter : Targetable, ISelectable
         {
             resources[i] += deposit[i];
         }
-        if (resources[(int)ResourceType.Wood] >= houseCost)
+        if (resources[(int)ResourceType.Wood] >= SimVars.VARS.woodPerHouse)
         {
             buildingGenerator.PlaceHouse();
-            resources[(int)ResourceType.Wood] -= houseCost;
+            resources[(int)ResourceType.Wood] -= SimVars.VARS.woodPerHouse;
         }
-        int neededFood = Mathf.Min((int)((villager.maxHunger - villager.hunger) / hungerPerFood), resources[(int)ResourceType.Food]);
+        int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.hungerPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)
         {
             resources[(int)ResourceType.Food] -= neededFood;
-            villager.hunger += neededFood * hungerPerFood;
+            villager.vitality += neededFood * SimVars.VARS.hungerPerFood;
         }
         AssignVillagerJob(villager);
     }
@@ -167,9 +170,9 @@ public class TownCenter : Targetable, ISelectable
     // Placeholder until we have more complex formulas to determine how much of each resource is desired
     private void CalculateJobWeights()
     {
-        jobWeights[(int)VillagerJob.Lumberjack] = lumberjackWeight;
-        jobWeights[(int)VillagerJob.Gatherer] = gathererWeight;
-        jobWeights[(int)VillagerJob.Hunter] = hunterWeight;
+        jobWeights[(int)VillagerJob.Lumberjack] = SimVars.VARS.lumberjackWeight;
+        jobWeights[(int)VillagerJob.Gatherer] = SimVars.VARS.gathererWeight;
+        jobWeights[(int)VillagerJob.Hunter] = SimVars.VARS.hunterWeight;
         jobWeights[(int)VillagerJob.Builder] = BuildingGenerator.GetPendingBuildings().Count;
     }
 
@@ -207,6 +210,12 @@ public class TownCenter : Targetable, ISelectable
     public void OnDeselect()
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        CenterCamera();
     }
 }
 

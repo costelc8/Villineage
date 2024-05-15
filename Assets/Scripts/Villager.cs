@@ -16,9 +16,9 @@ public class Villager : NetworkBehaviour, ISelectable
 
     [Header("Stats")]
     public bool alive = true;  // Are they alive?
-    public float hunger;  // How much hunger do they have left
-    public float hungerThreshold;  // How low their hunger can get before they need to return home.
-    public float maxHunger = 100f;  // The highest their hunger value can be (full)
+    public float vitality;  // How much hunger do they have left
+    public float maxVitality = 100f;  // The highest their hunger value can be (full)
+    public float vitalityThreshold;
     public float huntingRange = 10f;
     private float workSpeed;  // Speed of resource extraction
     private float hungerRate;  // How fast they lose hunger (hungerRate points a second)
@@ -54,8 +54,7 @@ public class Villager : NetworkBehaviour, ISelectable
         // Get anim and agent objects and set up hunger variables
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        hungerThreshold = maxHunger / 5.0f;
-        hunger = maxHunger;
+        vitality = maxVitality;
     }
 
     public void Start()
@@ -105,7 +104,9 @@ public class Villager : NetworkBehaviour, ISelectable
                     else if (job == VillagerJob.Hunter)
                     {
                         SetNewTarget(target);
-                        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+                        Vector3 towards = target.transform.position - transform.position;
+                        towards.y = 0;
+                        transform.rotation = Quaternion.LookRotation(towards);
                     }
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
@@ -113,9 +114,6 @@ public class Villager : NetworkBehaviour, ISelectable
                     townCenter.DepositResources(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
-                    backWood.SetActive(false);
-                    backFood.SetActive(false);
-                    backOther.SetActive(false);
                     ChangeState(VillagerState.Pending);
                 }
             }
@@ -127,27 +125,34 @@ public class Villager : NetworkBehaviour, ISelectable
         }
 
         // Decrease hunger:
-        hunger -= hungerRate * Time.deltaTime;
+        vitality -= hungerRate * Time.deltaTime;
 
-        if (hunger <= hungerThreshold)
+        if (vitality <= vitalityThreshold)
         {
+            vitalityThreshold = 0;
             SetNewTarget(townCenter);
             ChangeState(VillagerState.Returning);
         }
 
         // If starved to death
-        if (hunger <= 0) 
+        if (vitality <= 0) 
         {
-            hunger = 0;
-            Death();
+            vitality = 0;
+            Die();
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        vitality -= damage;
+    }
+
     // Like it says on the tin.
-    private void Death()
+    private void Die()
     {
         // Set alive to false and trigger the death animation.
         alive = false;
+        townCenter.RemoveVillager(this);
         agent.isStopped = true;
         anim.SetBool("Working",false);
         anim.SetFloat("Walking",0);
@@ -194,9 +199,11 @@ public class Villager : NetworkBehaviour, ISelectable
                 }
             }
             // Use this new distance (without priority) to find the hunger threshold
-            float distanceHome = Vector3.Distance(bestCandidate.transform.position, townCenter.transform.position);
-            hungerThreshold = distanceHome / agent.speed;
-            hungerThreshold += UnityEngine.Random.Range(1, 5);
+            if (bestCandidate != null)
+            {
+                float distanceHome = Vector3.Distance(bestCandidate.transform.position, townCenter.transform.position) * 1.2f;
+                vitalityThreshold = (distanceHome / agent.speed) + 5;
+            }
             SetNewTarget(bestCandidate);
         }
         ChangeState(VillagerState.Walking);
@@ -229,11 +236,22 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (job == VillagerJob.Lumberjack) backWood.SetActive(true);
                 else if (job == VillagerJob.Gatherer) backFood.SetActive(true);
             }
+            else
+            {
+                backWood.SetActive(false);
+                backFood.SetActive(false);
+                backOther.SetActive(false);
+            }
         }
         else if (newState == VillagerState.Working)
         {
             agent.updateRotation = false;
-            if (target != null && target != townCenter) transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            if (target != null && target != townCenter)
+            {
+                Vector3 towards = target.transform.position - transform.position;
+                towards.y = 0;
+                transform.rotation = Quaternion.LookRotation(towards);
+            }
             anim.SetBool("Working",true);
             anim.SetFloat("Walking",0);
         }
@@ -242,6 +260,11 @@ public class Villager : NetworkBehaviour, ISelectable
     // Find opening at new target
     private void SetNewTarget(Targetable newTarget)
     {
+        if (newTarget == null)
+        {
+            newTarget = townCenter;
+            ChangeState(VillagerState.Returning);
+        }
         if (target != null) target.ReturnTargetPosition(this);
         target = newTarget;
         if (target != null) agent.SetDestination(target.GetTargetPosition(this));
@@ -289,7 +312,7 @@ public class Villager : NetworkBehaviour, ISelectable
     // When destroyed, remove villager from other objects
     private void OnDestroy()
     {
-        if (isServer) townCenter.RemoveVillager(this);
+        if (townCenter != null) townCenter.RemoveVillager(this);
         Selection.Selector.RemoveSelectable(this);
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class Building : Targetable
 {
     public Villager assignedVillager;
-    public float maxBuildTime = 10f;
+    public float maxBuildTime;
     public int stage;
 
     [SyncVar(hook = nameof(ProgressHook))]

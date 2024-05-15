@@ -14,10 +14,7 @@ public class TerrainGenerator : NetworkBehaviour
     private NavMeshSurface navMesh;
     public bool generateTerrainOnStart;
     private bool initialized;
-    private bool generated = false;
-
-    [HideInInspector]
-    public int size;
+    private bool generated;
 
     [Tooltip("Perlin image scale size, a smaller scale will generate more hilly terrain")]
     [Range(0.5f, 2f)]
@@ -34,6 +31,11 @@ public class TerrainGenerator : NetworkBehaviour
         if (generateTerrainOnStart) GenerateTerrain();
     }
 
+    private void Update()
+    {
+        if (!generated && !isServer && SimVars.VARS != null) GenerateTerrain();
+    }
+
     private void Initialize()
     {
         terrain = GetComponent<Terrain>();
@@ -42,23 +44,15 @@ public class TerrainGenerator : NetworkBehaviour
         initialized = true;
     }
 
-    private void SeedHook(int oldSeed, int newSeed)
-    {
-        Debug.Log("Seed Changed");
-        if (!generated) GenerateTerrain();
-    }
-
-    public void GenerateTerrain(int terrainScale = 5, int terrainDepth = 8, int seed = 0)
+    public void GenerateTerrain()
     {
         if (!initialized) Initialize();
         Debug.Log("Generating Terrain");
-        size = 32;
-        for (int i = 1; i < terrainScale; i++) size *= 2;
-        size++;
+        int size = SimVars.VARS.terrainSize;
+        int depth = SimVars.VARS.terrainDepth;
         terrainData.heightmapResolution = size;
-        terrainData.size = new Vector3(size - 1, terrainDepth, size - 1);
-        if (seed == 0) seed = Random.Range(int.MinValue, int.MaxValue);
-        perlin = PerlinGenerator.GeneratePerlin(size, size, perlinScale, seed);
+        terrainData.size = new Vector3(size - 1, depth, size - 1);
+        perlin = PerlinGenerator.GeneratePerlin(size, size, perlinScale, SimVars.VARS.GetSeed());
         terrainData.SetHeights(0, 0, perlin);
         gameObject.SetActive(true);
         navMesh.BuildNavMesh();
@@ -72,6 +66,6 @@ public class TerrainGenerator : NetworkBehaviour
 
     public float GetTerrainSteepness(Vector3 position)
     {
-        return terrain.terrainData.GetSteepness(position.x / size, position.z / size);
+        return terrain.terrainData.GetSteepness(position.x / SimVars.VARS.terrainSize, position.z / SimVars.VARS.terrainSize);
     }
 }
