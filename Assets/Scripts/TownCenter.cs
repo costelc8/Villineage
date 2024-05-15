@@ -86,7 +86,7 @@ public class TownCenter : Targetable, ISelectable
         }
         if (resources[(int)ResourceType.Wood] >= SimVars.VARS.woodPerHouse)
         {
-            buildingGenerator.PlaceHouse();
+            buildingGenerator.PlaceBuilding(BuildingType.House);
             resources[(int)ResourceType.Wood] -= SimVars.VARS.woodPerHouse;
         }
         int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.hungerPerFood), resources[(int)ResourceType.Food]);
@@ -238,4 +238,10 @@ public enum VillagerJob
     Gatherer,
     Farmer,
     MAX_VALUE,
+}
+
+public enum BuildingType
+{
+    House,
+    Outpost,
 }

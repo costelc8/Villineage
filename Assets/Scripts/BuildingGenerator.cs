@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class BuildingGenerator : MonoBehaviour
 {
-    public GameObject housePrefab;
-
-    private Vector3 spacingSize;
+    public List<GameObject> buildingPrefabs;
+    private Vector3 spacingSizeSmall;
+    private Vector3 spacingSizeLarge;
     private int spacing = 2;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
     private static List<Building> buildings = new List<Building>();
@@ -17,7 +17,7 @@ public class BuildingGenerator : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        spacingSize = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
+        spacingSizeSmall = buildingPrefabs[0].GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
         buildingParent = new GameObject("Buildings");
     }
 
@@ -26,19 +26,19 @@ public class BuildingGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            PlaceHouse();
+            //PlaceHouse();
         }
     }
 
-    public void PlaceHouse()
+    public void PlaceBuilding(BuildingType building)
     {
-        // Test grabbing a point on the navmesh
-        if (RandomNavmeshPoint.RandomPointFromCenterBox(transform.position, spacingSize, out Vector3 point, 8f, 3f, 1000f))
+
+        // Grab point on NavMesh
+        if (RandomNavmeshPoint.RandomPointFromCenterBox(transform.position, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
         {
-            // Make a house
-            
+            // Make a building
             Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
-            Building house = Instantiate(housePrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            Building house = Instantiate(buildingPrefabs[0], point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
             house.maxBuildTime = SimVars.VARS.houseBuildTime;
             NetworkServer.Spawn(house.gameObject);
             pendingBuildings.Add(house);
