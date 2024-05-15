@@ -26,15 +26,6 @@ public class Storage : Targetable, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-
-    // idk if this is necessary or not at this point for this script
-    // please yell at me if it is and im breaking everything by commenting it out
-
-    //public override void OnStartClient()
-    //{
-    //    base.OnStartClient();
-    //}
-
     public void Store(Villager villager, int[] deposit)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
