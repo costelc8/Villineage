@@ -378,6 +378,7 @@ MonoBehaviour:
   foodPerGoat: 60
   woodPerHouse: 60
   houseBuildTime: 30
+  outpostBuildTime: 30
   terrainScale: 2
   terrainSize: 32
   terrainDepth: 8
@@ -437,7 +438,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201739741}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8948a1283f45c204c9fea116679261bc, type: 3}
   m_Name: 
@@ -804,8 +805,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 836c262a07608944787fd71f1a77bfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerHUD: {fileID: 0}
-  townHallHUD: {fileID: 0}
+  villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
+  townHallHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!114 &605153522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,9 +955,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146f5f823e9bc30468b02f20f30177f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingPrefabs:
-  - {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
-  - {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
+  housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
+  outpostPrefab: {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
+  farmPrefab: {fileID: 100000, guid: 520e20395d1150a4c94174228bde0499, type: 3}
 --- !u!114 &709847946
 MonoBehaviour:
   m_ObjectHideFlags: 0

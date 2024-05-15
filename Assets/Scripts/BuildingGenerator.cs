@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class BuildingGenerator : MonoBehaviour
 {
-    public List<GameObject> buildingPrefabs;
+    public GameObject housePrefab;
+    public GameObject outpostPrefab;
+    public GameObject farmPrefab;
     private Vector3 spacingSizeSmall;
     private Vector3 spacingSizeLarge;
     private int spacing = 2;
@@ -17,31 +19,48 @@ public class BuildingGenerator : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        spacingSizeSmall = buildingPrefabs[0].GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
+        spacingSizeSmall = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
         buildingParent = new GameObject("Buildings");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        /*if (Input.GetKeyDown(KeyCode.E))
         {
-            //PlaceHouse();
-        }
+
+        }*/
     }
 
-    public void PlaceBuilding(BuildingType building)
+    public void PlaceBuilding(BuildingType buildingType)
     {
+        GameObject buildingPrefab;
+        Vector3 spawnCenter = transform.position;
 
+        switch(buildingType)
+        {
+            case BuildingType.House:
+                buildingPrefab = housePrefab;
+                break;
+            case BuildingType.Outpost:
+                buildingPrefab = outpostPrefab;
+                
+                break;
+            default:
+                // cube of shame (should never occur)
+                buildingPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                break;
+
+        }
         // Grab point on NavMesh
-        if (RandomNavmeshPoint.RandomPointFromCenterBox(transform.position, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
+        if (RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
         {
             // Make a building
             Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
-            Building house = Instantiate(buildingPrefabs[0], point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
-            house.maxBuildTime = SimVars.VARS.houseBuildTime;
-            NetworkServer.Spawn(house.gameObject);
-            pendingBuildings.Add(house);
+            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            building.maxBuildTime = SimVars.VARS.houseBuildTime;
+            NetworkServer.Spawn(building.gameObject);
+            pendingBuildings.Add(building);
         }
     }
 
