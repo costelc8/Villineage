@@ -1041,6 +1041,7 @@ MonoBehaviour:
   priority: 1
   movingTarget: 0
   resources: 
+  townCenter: {fileID: 709847946}
 --- !u!1 &1010161099
 GameObject:
   m_ObjectHideFlags: 0

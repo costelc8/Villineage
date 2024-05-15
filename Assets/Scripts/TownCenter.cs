@@ -73,12 +73,6 @@ public class TownCenter : NetworkBehaviour
         Physics.SyncTransforms();
     }
 
-    public void DepositResources(Villager villager, int[] deposit)
-    {
-        
-        AssignVillagerJob(villager);
-    }
-
     private void AssignAllVillagerJobs()
     {
         CalculateNeededJobs();
@@ -92,7 +86,7 @@ public class TownCenter : NetworkBehaviour
         CalculateJobWeights();
     }
 
-    private void AssignVillagerJob(Villager villager)
+    public void AssignVillagerJob(Villager villager)
     {
         CalculateNeededJobs();
         if (neededJobs[(int)villager.job] >= 0) return;

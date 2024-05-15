@@ -6,6 +6,7 @@ public class Storage : Targetable, ISelectable
 {
     public int[] resources;
     private BuildingGenerator buildingGenerator;
+    public TownCenter townCenter;
 
     public void Start()
     {
@@ -24,6 +25,10 @@ public class Storage : Targetable, ISelectable
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
+
+
+    // idk if this is necessary or not at this point for this script
+    // please yell at me if it is and im breaking everything by commenting it out
 
     //public override void OnStartClient()
     //{
@@ -47,5 +52,6 @@ public class Storage : Targetable, ISelectable
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.hungerPerFood;
         }
+        townCenter.GetComponent<TownCenter>().AssignVillagerJob(villager);
     }
 }
