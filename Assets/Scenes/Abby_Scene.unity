@@ -174,15 +174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dfec87d58df77842b59acf5866f4a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainGenerator: {fileID: 0}
   treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
+  goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
   forestVariation: 1
-  seed: 0
   scale: 2
   generateForest: 0
   destroyTrees: 0
@@ -204,10 +203,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   generateTerrainOnStart: 0
-  depth: 10
-  seed: 0
-  size: 0
-  scale: 1
+  perlinScale: 1
 --- !u!114 &38443238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +301,93 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 38443234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &161751721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 161751724}
+  - component: {fileID: 161751723}
+  - component: {fileID: 161751722}
+  m_Layer: 0
+  m_Name: SimulationVariables
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &161751722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161751721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 4288561812
+  _assetId: 0
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
+--- !u!114 &161751723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161751721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edebec02a710e94baf2578ed76df4f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  timeScale: 1
+  seed: 0
+  lumberjackWeight: 2
+  gathererWeight: 1
+  hunterWeight: 1
+  startingVillagers: 4
+  villagerCarryCapacity: 10
+  villagerMoveSpeed: 4
+  villagerWorkSpeed: 1
+  villagerHungerRate: 1
+  hungerPerFood: 10
+  startingSheep: 4
+  startingGoats: 6
+  woodPerTree: 60
+  foodPerBerry: 60
+  foodPerSheep: 60
+  foodPerGoat: 60
+  woodPerHouse: 60
+  houseBuildTime: 30
+  terrainScale: 2
+  terrainSize: 32
+  terrainDepth: 8
+--- !u!4 &161751724
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161751721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -893,9 +976,7 @@ MonoBehaviour:
   priority: 1
   movingTarget: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
-  startingVillagers: 10
   villagers: []
-  terrainGenerator: {fileID: 38443237}
   resources: 000000000000000000000000
   jobWeights:
   - 0
@@ -904,11 +985,6 @@ MonoBehaviour:
   - 0
   neededJobs: 00000000000000000000000000000000
   currentJobs: 00000000000000000000000000000000
-  lumberjackWeight: 4
-  gathererWeight: 3
-  hunterWeight: 3
-  houseCost: 60
-  hungerPerFood: 20
 --- !u!65 &709847947
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1059,6 +1135,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   runSimulation: 1
+  simVars: {fileID: 161751723}
   terrainGenerator: {fileID: 38443237}
   resourceGenerator: {fileID: 38443236}
   townCenter: {fileID: 709847946}
@@ -1323,9 +1400,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 201739742}
   - {fileID: 605153525}
-  - {fileID: 1010161103}
   - {fileID: 709847948}
   - {fileID: 1021135308}
   - {fileID: 345230283}
   - {fileID: 38443241}
   - {fileID: 346103515}
+  - {fileID: 1010161103}
+  - {fileID: 161751724}
