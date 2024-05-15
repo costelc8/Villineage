@@ -806,7 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  townHallHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  storageHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!114 &605153522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -900,6 +900,7 @@ GameObject:
   - component: {fileID: 709847948}
   - component: {fileID: 709847947}
   - component: {fileID: 709847946}
+  - component: {fileID: 709847949}
   - component: {fileID: 709847945}
   - component: {fileID: 709847944}
   - component: {fileID: 709847943}
@@ -973,14 +974,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  enforceMaxVillagers: 0
-  maxAssignedVillagers: 0
-  assignedVillagers: 0
-  priority: 1
-  movingTarget: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
-  resources: 000000000000000000000000
   jobWeights:
   - 0
   - 0
@@ -1025,6 +1020,27 @@ Transform:
   - {fileID: 563162860}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &709847949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709847942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc419fc6a504d443a37c5dd0e1111a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  priority: 1
+  movingTarget: 0
+  resources: 
 --- !u!1 &1010161099
 GameObject:
   m_ObjectHideFlags: 0

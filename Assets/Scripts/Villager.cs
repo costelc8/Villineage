@@ -10,8 +10,9 @@ public class Villager : NetworkBehaviour, ISelectable
 {
     private NavMeshAgent agent;  // Navigates the villager
     private Animator anim;  // Animates the villager
-    public TownCenter townCenter;  // The town center object
-    public List<Targetable> hubs;  // The different outposts/alternatives to town center
+    public TownCenter townCenter;  // The town center script
+    public List<Storage> hubs;  // The different outposts/alternatives to town center
+    private Storage hub; // Current parent hub 
     public bool selected;  // Have they been selected?
 
     [Header("Stats")]
@@ -70,6 +71,10 @@ public class Villager : NetworkBehaviour, ISelectable
             workSpeed = SimVars.VARS.villagerWorkSpeed;
             agent.speed = SimVars.VARS.villagerMoveSpeed;
             capacity = SimVars.VARS.villagerCarryCapacity;
+
+            // set default hub to town center
+            // if they're reparented to an outpost later, can change this
+            hub = townCenter.GetComponent<Storage>(); 
         }
     }
 
@@ -84,7 +89,7 @@ public class Villager : NetworkBehaviour, ISelectable
             if (target == null) // Edge case handling
             {
                 ChangeState(VillagerState.Pending);
-                SetNewTarget(townCenter);
+                SetNewTarget(hub);
             }
         }
         else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance) // If the target has been reached
@@ -99,7 +104,7 @@ public class Villager : NetworkBehaviour, ISelectable
                     if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
                     {
                         ChangeState(VillagerState.Returning);
-                        SetNewTarget(townCenter);
+                        SetNewTarget(hub);
                     }
                     else if (job == VillagerJob.Hunter)
                     {
@@ -111,7 +116,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
-                    townCenter.DepositResources(this, inventory.ToArray());
+                    hub.Store(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
                     ChangeState(VillagerState.Pending);
@@ -130,7 +135,7 @@ public class Villager : NetworkBehaviour, ISelectable
         if (vitality <= vitalityThreshold)
         {
             vitalityThreshold = 0;
-            SetNewTarget(townCenter);
+            SetNewTarget(hub);
             ChangeState(VillagerState.Returning);
         }
 
@@ -262,7 +267,7 @@ public class Villager : NetworkBehaviour, ISelectable
     {
         if (newTarget == null)
         {
-            newTarget = townCenter;
+            newTarget = hub;
             ChangeState(VillagerState.Returning);
         }
         if (target != null) target.ReturnTargetPosition(this);

@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 779366218782408890}
   - component: {fileID: 3369034053890955261}
   m_Layer: 0
-  m_Name: HUDPanel TownHall
+  m_Name: HUDPanel Storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TownCenter : Targetable, ISelectable
+public class TownCenter : NetworkBehaviour
 {
     public GameObject villagerPrefab;
     public List<Villager> villagers;
     //public TerrainGenerator terrainGenerator;
-    private BuildingGenerator buildingGenerator;
 
-    public int[] resources;
+
     public float[] jobWeights;
     public int[] neededJobs;
     public int[] currentJobs;
@@ -29,8 +28,7 @@ public class TownCenter : Targetable, ISelectable
 
     private void Initialize()
     {
-        buildingGenerator = GetComponent<BuildingGenerator>();
-        resources = new int[(int)ResourceType.MAX_VALUE];
+
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
@@ -77,21 +75,7 @@ public class TownCenter : Targetable, ISelectable
 
     public void DepositResources(Villager villager, int[] deposit)
     {
-        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
-        {
-            resources[i] += deposit[i];
-        }
-        if (resources[(int)ResourceType.Wood] >= SimVars.VARS.woodPerHouse)
-        {
-            buildingGenerator.PlaceBuilding(BuildingType.House);
-            resources[(int)ResourceType.Wood] -= SimVars.VARS.woodPerHouse;
-        }
-        int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.hungerPerFood), resources[(int)ResourceType.Food]);
-        if (resources[(int)ResourceType.Food] >= neededFood)
-        {
-            resources[(int)ResourceType.Food] -= neededFood;
-            villager.vitality += neededFood * SimVars.VARS.hungerPerFood;
-        }
+        
         AssignVillagerJob(villager);
     }
 
@@ -191,22 +175,6 @@ public class TownCenter : Targetable, ISelectable
     public void RemoveVillager(Villager villager)
     {
         villagers.Remove(villager);
-    }
-
-    public void Start()
-    {
-        Selection.Selector.AddSelectable(this);
-    }
-
-    public void OnSelect()
-    {
-        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.townHallHUD, 1f);
-        HUD.GetComponent<TownHallDisplay>().townCenter = this;
-    }
-
-    public void OnDeselect()
-    {
-        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
     public override void OnStartClient()

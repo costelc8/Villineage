@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TownHallDisplay : MonoBehaviour
+public class StorageDisplay : MonoBehaviour
 {
-    public TownCenter townCenter;
+    public Storage storage;
     public TextMeshProUGUI resourceText;
 
     void Update()
     {
-        // Ensure a reference to the townCenter is set
-        if (townCenter == null)
+        // Ensure a reference to the storage is set
+        if (storage == null)
         {
             Debug.LogError("TownCenter reference not set in ResourceDisplay script!");
             return;
@@ -30,9 +30,9 @@ public class TownHallDisplay : MonoBehaviour
 
     void UpdateResourceDisplay()
     {
-        // Get the resources from the TownCenter
-        int wood = townCenter.resources[(int)ResourceType.Wood];
-        int food = townCenter.resources[(int)ResourceType.Food];
+        // Get the resources from the storage
+        int wood = storage.resources[(int)ResourceType.Wood];
+        int food = storage.resources[(int)ResourceType.Food];
 
         // Update the Text component with the resources
         resourceText.text = "Wood: " + wood + "\n" + "Food: " + food;
