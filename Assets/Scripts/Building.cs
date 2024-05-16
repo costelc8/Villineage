@@ -31,7 +31,6 @@ public class Building : Targetable
                 buildTime = maxBuildProgress;
                 BuildingGenerator.AddBuilding(this);
                 UntargetAll();
-                if (buildingType == BuildingType.House) TownCenter.TC.SpawnVillager(transform.position, true);
                 return true;
             }
             else return false;

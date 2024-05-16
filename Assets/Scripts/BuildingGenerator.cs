@@ -12,9 +12,11 @@ public class BuildingGenerator : MonoBehaviour
     private Vector3 spacingSizeLarge;
     private int spacing = 2;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
-    private static List<Building> buildings = new List<Building>();
+    private static List<Building> houses = new List<Building>();
     private static List<Targetable> hubs = new List<Targetable>();
     private GameObject buildingParent;
+
+  
 
     // Start is called before the first frame update
     private void Awake()
@@ -72,6 +74,11 @@ public class BuildingGenerator : MonoBehaviour
         return pendingBuildings;
     }
 
+    public static List<Building> GetHouses()
+    {
+        return houses;
+    }
+
     public static List<Targetable> GetHubs()
     {
         return hubs;
@@ -82,13 +89,13 @@ public class BuildingGenerator : MonoBehaviour
         if (pendingBuildings.Contains(building))
         {
             pendingBuildings.Remove(building);
-            buildings.Add(building);
+            houses.Add(building);
         }
     }
 
     public static void RemoveBuilding(Building building)
     {
         pendingBuildings.Remove(building);
-        buildings.Remove(building);
+        houses.Remove(building);
     }
 }
