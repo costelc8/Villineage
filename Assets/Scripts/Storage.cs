@@ -36,10 +36,10 @@ public class Storage : Targetable, ISelectable
         {
             resources[i] += deposit[i];
         }
-        if (resources[(int)ResourceType.Wood] >= SimVars.VARS.woodPerHouse)
+        if (resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
         {
             TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.House);
-            resources[(int)ResourceType.Wood] -= SimVars.VARS.woodPerHouse;
+            resources[(int)ResourceType.Wood] -= SimVars.VARS.houseBuildCost;
         }
         int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.vitalityPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)

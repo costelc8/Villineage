@@ -39,18 +39,18 @@ public class BuildingGenerator : MonoBehaviour
         Vector3 point = new Vector3();
         bool gotPoint = false;
         Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
-        float buildTime = 0;
+        int buildCost = 0;
 
         switch (buildingType)
         {
             case BuildingType.House:
                 buildingPrefab = housePrefab;
-                buildTime = SimVars.VARS.houseBuildTime;
+                buildCost = SimVars.VARS.houseBuildCost;
                 gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 8f, 3f, 1000f);
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
-                buildTime = SimVars.VARS.outpostBuildTime;
+                buildCost = SimVars.VARS.outpostBuildCost;
                 gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 50f, 3f, 1000f);
                 break;
         }
@@ -59,7 +59,7 @@ public class BuildingGenerator : MonoBehaviour
         {
             // Make the building
             Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
-            building.maxBuildTime = buildTime;
+            building.maxBuildProgress = buildCost;
             building.buildingType = buildingType;
             NetworkServer.Spawn(building.gameObject);
             pendingBuildings.Add(building);

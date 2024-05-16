@@ -7,7 +7,8 @@ using UnityEngine;
 public class Building : Targetable
 {
     public Villager assignedVillager;
-    public float maxBuildTime;
+    public int maxBuildProgress;
+    public int buildCap;
     public int stage;
     public BuildingType buildingType;
 
@@ -16,13 +17,18 @@ public class Building : Targetable
 
     public override bool Progress(Villager villager, float progressValue)
     {
-        if (buildTime < maxBuildTime)
+        if (buildTime < maxBuildProgress)
         {
+            //if (buildTime >= buildCap)
+            //{
+            //    buildTime = buildCap;
+            //    UntargetAll();
+            //}
             buildTime += progressValue;
             UpdateStage();
-            if (buildTime >= maxBuildTime)
+            if (buildTime >= maxBuildProgress)
             {
-                buildTime = maxBuildTime;
+                buildTime = maxBuildProgress;
                 BuildingGenerator.AddBuilding(this);
                 UntargetAll();
                 if (buildingType == BuildingType.House) TownCenter.TC.SpawnVillager(transform.position, true);
@@ -33,6 +39,14 @@ public class Building : Targetable
         else return true;
     }
 
+    public int ContributeWood(int woodAmount)
+    {
+        int neededWood = maxBuildProgress - buildCap;
+        int usedWood = Math.Min(neededWood, woodAmount);
+        buildCap += usedWood;
+        return usedWood;
+    }
+
     private void ProgressHook(float oldProgress, float newProgress)
     {
         UpdateStage();
@@ -40,7 +54,7 @@ public class Building : Targetable
 
     private void UpdateStage()
     {
-        int newStage = Mathf.Clamp((int)(buildTime * (transform.childCount - 1) / maxBuildTime), 0, transform.childCount - 1);
+        int newStage = Mathf.Clamp((int)(buildTime * (transform.childCount - 1) / maxBuildProgress), 0, transform.childCount - 1);
         if (newStage != stage)
         {
             stage = newStage;

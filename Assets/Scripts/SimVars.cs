@@ -37,9 +37,8 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int foodPerGoat = 60;
 
     [Header("Building Variables")]
-    [SyncVar] public int woodPerHouse = 60;
-    [SyncVar] public float houseBuildTime = 30f;
-    [SyncVar] public float outpostBuildTime = 30f;
+    [SyncVar] public int houseBuildCost = 60;
+    [SyncVar] public int outpostBuildCost = 60;
 
     [Header("Terrain Variables")]
     [Tooltip("Map scale, map size will be 2^(4+scale)")]
