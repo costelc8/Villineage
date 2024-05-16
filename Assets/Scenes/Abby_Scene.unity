@@ -364,12 +364,13 @@ MonoBehaviour:
   lumberjackWeight: 2
   gathererWeight: 1
   hunterWeight: 1
+  builderWeight: 1
   startingVillagers: 4
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
-  hungerPerFood: 10
+  vitalityPerFood: 10
   startingSheep: 4
   startingGoats: 6
   woodPerTree: 60
@@ -806,7 +807,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  storageHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  storageHUD: {fileID: 7220710526218812636, guid: 6dd79cf54942ed543a2d4ceeb24fb583, type: 3}
+  resourceHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!114 &605153522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,6 +978,7 @@ MonoBehaviour:
   syncInterval: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
+  buildingGenerator: {fileID: 0}
   jobWeights:
   - 0
   - 0
@@ -1040,8 +1043,6 @@ MonoBehaviour:
   assignedVillagers: 0
   priority: 1
   movingTarget: 0
-  resources: 
-  townCenter: {fileID: 709847946}
 --- !u!1 &1010161099
 GameObject:
   m_ObjectHideFlags: 0
