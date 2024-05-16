@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -673,6 +673,7 @@ GameObject:
   - component: {fileID: 1519554149}
   - component: {fileID: 1519554146}
   - component: {fileID: 1519554151}
+  - component: {fileID: 1519554154}
   - component: {fileID: 1519554150}
   - component: {fileID: 1519554152}
   - component: {fileID: 1519554153}
@@ -733,6 +734,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
+  outpostPrefab: {fileID: 0}
+  farmPrefab: {fileID: 0}
 --- !u!114 &1519554151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,14 +751,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  enforceMaxVillagers: 0
-  maxAssignedVillagers: 0
-  assignedVillagers: 0
-  priority: 1
-  movingTarget: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
-  resources: 000000000000000000000000
+  buildingGenerator: {fileID: 0}
   jobWeights:
   - 0
   - 0
@@ -796,6 +794,26 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &1519554154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519554144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc419fc6a504d443a37c5dd0e1111a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  priority: 1
+  movingTarget: 0
 --- !u!1 &1874911279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1119,7 +1137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  townHallHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  storageHUD: {fileID: 7220710526218812636, guid: 6dd79cf54942ed543a2d4ceeb24fb583, type: 3}
+  resourceHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
 --- !u!1 &2127958818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,16 +1173,17 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeScale: 1
-  seed: 0
+  seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
   hunterWeight: 1
+  builderWeight: 1
   startingVillagers: 4
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
-  hungerPerFood: 10
+  vitalityPerFood: 10
   startingSheep: 4
   startingGoats: 6
   woodPerTree: 60
@@ -1172,7 +1192,8 @@ MonoBehaviour:
   foodPerGoat: 60
   woodPerHouse: 60
   houseBuildTime: 30
-  terrainScale: 2
+  outpostBuildTime: 30
+  terrainScale: 3
   terrainSize: 32
   terrainDepth: 8
 --- !u!4 &2127958821

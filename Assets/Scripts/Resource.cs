@@ -34,15 +34,18 @@ public class Resource : Targetable, ISelectable
             villager.totalResources++;
             villager.inventory[(int)resourceType]++;
             durability += maxDurability;
-            if (stage1 != null)
+            if (stage1 != null && !stage1.activeInHierarchy)
             {
                 stage0.SetActive(false);
                 stage1.SetActive(true);
+                priority *= 2;
             }
             if (quantity <= 0)
             {
                 ResourceGenerator.RemoveResource(this);
-
+                Selection.Selector.RemoveSelectable(this);
+                UnitHUD.HUD.RemoveUnitHUD(gameObject);
+                UntargetAll();
                 StartCoroutine(DestroyResource());
             }
             return true;
@@ -78,14 +81,25 @@ public class Resource : Targetable, ISelectable
 
     public void OnSelect()
     {
-
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.resourceHUD, 1f);
+        HUD.GetComponent<ResourceDisplay>().resource = this;
     }
+
+    // When deselected, stop displaying ui
     public void OnDeselect()
     {
-
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
+
+    private void OnDestroy()
+    {
+        ResourceGenerator.RemoveResource(this);
+        Selection.Selector.RemoveSelectable(this);
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
     public void Start()
     {
-        
+        Selection.Selector.AddSelectable(this);
     }
 }

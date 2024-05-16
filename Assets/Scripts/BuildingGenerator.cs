@@ -34,7 +34,7 @@ public class BuildingGenerator : MonoBehaviour
 
     public void PlaceBuilding(BuildingType buildingType)
     {
-        GameObject buildingPrefab;
+        GameObject buildingPrefab = null;
         Vector3 spawnCenter = transform.position;
 
         switch(buildingType)
@@ -44,23 +44,21 @@ public class BuildingGenerator : MonoBehaviour
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
-                
                 break;
-            default:
-                // cube of shame (should never occur)
-                buildingPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                break;
-
         }
-        // Grab point on NavMesh
-        if (RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
+        if (buildingPrefab != null)
         {
-            // Make a building
-            Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
-            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
-            building.maxBuildTime = SimVars.VARS.houseBuildTime;
-            NetworkServer.Spawn(building.gameObject);
-            pendingBuildings.Add(building);
+            // Grab point on NavMesh
+            if (RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
+            {
+                // Make a building
+                Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
+                Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+                building.maxBuildTime = SimVars.VARS.houseBuildTime;
+                building.buildingType = buildingType;
+                NetworkServer.Spawn(building.gameObject);
+                pendingBuildings.Add(building);
+            }
         }
     }
 
@@ -81,5 +79,11 @@ public class BuildingGenerator : MonoBehaviour
             pendingBuildings.Remove(building);
             buildings.Add(building);
         }
+    }
+
+    public static void RemoveBuilding(Building building)
+    {
+        pendingBuildings.Remove(building);
+        buildings.Remove(building);
     }
 }

@@ -13,9 +13,16 @@ public class SimulationManager : NetworkManager
     public ResourceGenerator resourceGenerator;
     public TownCenter townCenter;
 
-    public void StartSimulation()
+    public override void Awake()
     {
         simVars.Initialize();
+        townCenter.Initialize();
+        terrainGenerator.Initialize();
+        resourceGenerator.Initialize();
+    }
+
+    public void StartSimulation()
+    {
         terrainGenerator.GenerateTerrain();
         townCenter.PlaceOnGround();
         resourceGenerator.GenerateDefaultForest();
@@ -23,12 +30,17 @@ public class SimulationManager : NetworkManager
         resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
         resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 30f, 45f);
         townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
-        Time.timeScale = SimVars.VARS.timeScale;
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
         StartSimulation();
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        Time.timeScale = SimVars.VARS.timeScale;
     }
 }

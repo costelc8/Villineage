@@ -13,18 +13,12 @@ public class TerrainGenerator : NetworkBehaviour
     private TerrainData terrainData;
     private NavMeshSurface navMesh;
     public bool generateTerrainOnStart;
-    private bool initialized;
     private bool generated;
 
     [Tooltip("Perlin image scale size, a smaller scale will generate more hilly terrain")]
     [Range(0.5f, 2f)]
     public float perlinScale = 1f;
     private float[,] perlin;
-
-    private void Awake()
-    {
-        if (!initialized) Initialize();
-    }
 
     private void Start()
     {
@@ -36,17 +30,15 @@ public class TerrainGenerator : NetworkBehaviour
         if (!generated && !isServer && SimVars.VARS != null) GenerateTerrain();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         terrain = GetComponent<Terrain>();
         terrainData = terrain.terrainData;
         navMesh = GetComponent<NavMeshSurface>();
-        initialized = true;
     }
 
     public void GenerateTerrain()
     {
-        if (!initialized) Initialize();
         Debug.Log("Generating Terrain");
         int size = SimVars.VARS.terrainSize;
         int depth = SimVars.VARS.terrainDepth;

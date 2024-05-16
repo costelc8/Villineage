@@ -32,6 +32,7 @@ public class Selection : MonoBehaviour
     public void RemoveSelectable(ISelectable selectable)
     {
         if (selectables.Contains(selectable)) selectables.Remove(selectable);
+        if (selected.Contains(selectable)) selected.Remove(selectable);
     }
 
     // Update is called once per frame

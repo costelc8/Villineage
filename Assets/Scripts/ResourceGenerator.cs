@@ -30,13 +30,6 @@ public class ResourceGenerator : MonoBehaviour
     public bool generateBerries;
     public bool destroyBerries;
 
-    private bool initialized;
-
-    private void Awake()
-    {
-        if (!initialized) Initialize();
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -47,11 +40,9 @@ public class ResourceGenerator : MonoBehaviour
         }
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         terrainGenerator = GetComponent<TerrainGenerator>();
-
-        initialized = true;
     }
 
     // Update is called once per frame
@@ -93,7 +84,6 @@ public class ResourceGenerator : MonoBehaviour
     // This method generates a forest with the given parameters
     public void GenerateForest(Vector3 position, int size, int spacing, float density, float variation)
     {
-        if (!initialized) Initialize();
         Debug.Log("Generating Forest");
         // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
         GameObject forest = new GameObject("Forest");
@@ -136,7 +126,6 @@ public class ResourceGenerator : MonoBehaviour
 
     public void GenerateSheep(Vector3 center, int count, float minRange, float maxRange)
     {
-        if (!initialized) Initialize();
         for (int i = 0; i < count; i++)
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 1.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
@@ -153,7 +142,6 @@ public class ResourceGenerator : MonoBehaviour
 
     public void GenerateGoats(Vector3 center, int count, float minRange, float maxRange)
     {
-        if (!initialized) Initialize();
         for (int i = 0; i < count; i++)
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
@@ -170,7 +158,6 @@ public class ResourceGenerator : MonoBehaviour
 
     public void GenerateBerries()
     {
-        if (!initialized) Initialize();
         // Temporary Berry bush generation
         Debug.Log("Generating Berry Bushes");
         GameObject bushes = new GameObject("Bushes");
@@ -210,5 +197,7 @@ public class ResourceGenerator : MonoBehaviour
     public static void RemoveResource(Resource resource)
     {
         trees.Remove(resource);
+        berries.Remove(resource);
+        animals.Remove(resource);
     }
 }

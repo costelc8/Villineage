@@ -18,6 +18,7 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int lumberjackWeight = 2;
     [SyncVar] public int gathererWeight = 1;
     [SyncVar] public int hunterWeight = 1;
+    [SyncVar] public int builderWeight = 1;
 
     [Header("Villager Variables")]
     [SyncVar] public int startingVillagers = 4;
@@ -25,7 +26,7 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float villagerMoveSpeed = 4f;
     [SyncVar] public float villagerWorkSpeed = 1f;
     [SyncVar] public float villagerHungerRate = 1f;
-    [SyncVar] public float hungerPerFood = 10f;
+    [SyncVar] public float vitalityPerFood = 10f;
 
     [Header("Resource Variables")]
     [SyncVar] public int startingSheep = 4;

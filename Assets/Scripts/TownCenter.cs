@@ -2,42 +2,35 @@ using Mirror;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 
 public class TownCenter : NetworkBehaviour
 {
+    public static TownCenter TC;
+    private Storage storage;
     public GameObject villagerPrefab;
     public List<Villager> villagers;
-    //public TerrainGenerator terrainGenerator;
-
+    public BuildingGenerator buildingGenerator;
 
     public float[] jobWeights;
     public int[] neededJobs;
     public int[] currentJobs;
 
-    //public int lumberjackWeight;
-    //public int gathererWeight;
-    //public int hunterWeight;
-
-    private bool initialized;
-
-    private void Awake()
+    public void Initialize()
     {
-        if (!initialized) Initialize();
-    }
-
-    private void Initialize()
-    {
-
+        if (TC == null || TC == this) TC = this;
+        else Destroy(this);
+        buildingGenerator = GetComponent<BuildingGenerator>();
+        storage = GetComponent<Storage>();
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
-        initialized = true;
     }
 
     public void PlaceOnGround()
     {
-        if (!initialized) Initialize();
         Debug.Log("Placing Town Center");
         transform.position = new Vector3(SimVars.VARS.terrainSize / 2, SimVars.VARS.terrainDepth, SimVars.VARS.terrainSize / 2);
         Physics.SyncTransforms();
@@ -55,20 +48,21 @@ public class TownCenter : NetworkBehaviour
 
     public void SpawnVillagers(int villagerCount)
     {
-        if (!initialized) Initialize();
         Debug.Log("Spawning Villagers");
-        for (int i = 0; i < villagerCount; i++) SpawnVillager();
+        for (int i = 0; i < villagerCount; i++) SpawnVillager(transform.position);
         AssignAllVillagerJobs();
     }
 
-    public void SpawnVillager()
+    public void SpawnVillager(Vector3 centerPosition, bool assignJob = false)
     {
-        if (RandomNavmeshPoint.RandomPointFromCenterCapsule(transform.position, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
+        if (RandomNavmeshPoint.RandomPointFromCenterCapsule(centerPosition, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity).GetComponent<Villager>();
             NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
-            villager.townCenter = this;
+            villager.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 50);
+            currentJobs[(int)VillagerJob.Nitwit]++;
+            if (assignJob) AssignVillagerJob(villager);
         }
         Physics.SyncTransforms();
     }
@@ -83,7 +77,6 @@ public class TownCenter : NetworkBehaviour
             currentJobs[(int)villager.Job()]++;
             CalculateNeededJobs();
         }
-        CalculateJobWeights();
     }
 
     public void AssignVillagerJob(Villager villager)
@@ -97,7 +90,6 @@ public class TownCenter : NetworkBehaviour
             villager.ChangeJob(job);
             currentJobs[(int)villager.Job()]++;
         }
-        CalculateJobWeights();
     }
 
     private VillagerJob GetMostNeededJob()
@@ -140,15 +132,34 @@ public class TownCenter : NetworkBehaviour
             neededJobs[(int)highestWeight]++;
             neededJobs[(int)villager.Job()]--;
         }
+        CalculateJobWeights();
     }
 
     // Placeholder until we have more complex formulas to determine how much of each resource is desired
     private void CalculateJobWeights()
     {
-        jobWeights[(int)VillagerJob.Lumberjack] = SimVars.VARS.lumberjackWeight;
-        jobWeights[(int)VillagerJob.Gatherer] = SimVars.VARS.gathererWeight;
-        jobWeights[(int)VillagerJob.Hunter] = SimVars.VARS.hunterWeight;
-        jobWeights[(int)VillagerJob.Builder] = BuildingGenerator.GetPendingBuildings().Count;
+        float woodWeight, foodWeight, averageWeight;
+        if (storage.resources.Count > 0)
+        {
+            woodWeight = 100f / (100f + storage.resources[(int)ResourceType.Wood]);
+            foodWeight = 100f / (100f + storage.resources[(int)ResourceType.Food]);
+            averageWeight = (woodWeight + foodWeight) / 2f;
+        }
+        else
+        {
+            woodWeight = 1;
+            foodWeight = 1;
+            averageWeight = 1;
+        }
+        
+        bool treesExist = ResourceGenerator.GetTrees().Count > 0;
+        bool berriesExist = ResourceGenerator.GetBerries().Count > 0;
+        bool animalsExist = ResourceGenerator.GetAnimals().Count > 0;
+        bool buildingsExist = BuildingGenerator.GetPendingBuildings().Count > 0;
+        jobWeights[(int)VillagerJob.Lumberjack] = treesExist ? SimVars.VARS.lumberjackWeight * woodWeight : 0;
+        jobWeights[(int)VillagerJob.Gatherer] = berriesExist ? SimVars.VARS.gathererWeight * foodWeight : 0;
+        jobWeights[(int)VillagerJob.Hunter] = animalsExist ? SimVars.VARS.hunterWeight * foodWeight : 0;
+        jobWeights[(int)VillagerJob.Builder] = buildingsExist ? SimVars.VARS.builderWeight * averageWeight : 0;
     }
 
     private VillagerJob HighestWeightJob()
@@ -168,6 +179,7 @@ public class TownCenter : NetworkBehaviour
 
     public void RemoveVillager(Villager villager)
     {
+        currentJobs[(int)villager.job]--;
         villagers.Remove(villager);
     }
 

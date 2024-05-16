@@ -121,6 +121,14 @@ public class Targetable : NetworkBehaviour
         assignedVillagers--;
     }
 
+    public void UntargetAll()
+    {
+        foreach (TargetPosition targetPos in targetPositions)
+        {
+            if (targetPos.assignedVillager != null) targetPos.assignedVillager.target = null;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (targetPositions != null)

@@ -10,9 +10,8 @@ public class Villager : NetworkBehaviour, ISelectable
 {
     private NavMeshAgent agent;  // Navigates the villager
     private Animator anim;  // Animates the villager
-    public TownCenter townCenter;  // The town center script
     public List<Storage> hubs;  // The different outposts/alternatives to town center
-    private Storage hub; // Current parent hub 
+    public Storage hub; // Current parent hub 
     public bool selected;  // Have they been selected?
 
     [Header("Stats")]
@@ -30,12 +29,13 @@ public class Villager : NetworkBehaviour, ISelectable
     public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
     public int totalResources = 0; //Total number of resources across all types
     public Targetable target;  // The object they are targeting for their role
-    private int capacity;  // Maximum amount of resources it can carry
+    public int capacity;  // Maximum amount of resources it can carry
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
     private float distance;  // The distance to their target
     private float targetPriority; // Priority of target object
+    private Vector3 previousPosition;
 
     [Header("States")]
     [SyncVar(hook = nameof(StateHook))]
@@ -70,11 +70,13 @@ public class Villager : NetworkBehaviour, ISelectable
             hungerRate = SimVars.VARS.villagerHungerRate;
             workSpeed = SimVars.VARS.villagerWorkSpeed;
             agent.speed = SimVars.VARS.villagerMoveSpeed;
+            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 2;
             capacity = SimVars.VARS.villagerCarryCapacity;
 
             // set default hub to town center
             // if they're reparented to an outpost later, can change this
-            hub = townCenter.GetComponent<Storage>(); 
+            hub = TownCenter.TC.GetComponent<Storage>();
+            previousPosition = transform.position;
         }
     }
 
@@ -86,11 +88,7 @@ public class Villager : NetworkBehaviour, ISelectable
         if (state == VillagerState.Pending) // If no job/target is assigned
         {
             FindNewDestination();
-            if (target == null) // Edge case handling
-            {
-                ChangeState(VillagerState.Pending);
-                SetNewTarget(hub);
-            }
+            if (target == hub) ChangeState(VillagerState.Returning);
         }
         else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance) // If the target has been reached
         {
@@ -130,11 +128,16 @@ public class Villager : NetworkBehaviour, ISelectable
         }
 
         // Decrease hunger:
-        vitality -= hungerRate * Time.deltaTime;
-
-        if (vitality <= vitalityThreshold)
+        if (state == VillagerState.Working) vitality -= hungerRate * Time.deltaTime;
+        else
         {
-            vitalityThreshold = 0;
+            float distance = Vector3.Distance(previousPosition, transform.position);
+            previousPosition = transform.position;
+            if (distance < agent.speed * Time.deltaTime * 2) vitality -= hungerRate * distance / agent.speed;
+        }
+
+        if (vitality <= vitalityThreshold && state == VillagerState.Working)
+        {
             SetNewTarget(hub);
             ChangeState(VillagerState.Returning);
         }
@@ -142,8 +145,16 @@ public class Villager : NetworkBehaviour, ISelectable
         // If starved to death
         if (vitality <= 0) 
         {
-            vitality = 0;
-            Die();
+            if (inventory[(int)ResourceType.Food] > 0)
+            {
+                inventory[(int)ResourceType.Food]--;
+                vitality += SimVars.VARS.vitalityPerFood;
+            }
+            else
+            {
+                vitality = 0;
+                Die();
+            }
         }
     }
 
@@ -157,8 +168,9 @@ public class Villager : NetworkBehaviour, ISelectable
     {
         // Set alive to false and trigger the death animation.
         alive = false;
-        townCenter.RemoveVillager(this);
+        TownCenter.TC.RemoveVillager(this);
         agent.isStopped = true;
+        agent.enabled = false;
         anim.SetBool("Working",false);
         anim.SetFloat("Walking",0);
         anim.SetBool("Dead",true);
@@ -206,7 +218,7 @@ public class Villager : NetworkBehaviour, ISelectable
             // Use this new distance (without priority) to find the hunger threshold
             if (bestCandidate != null)
             {
-                float distanceHome = Vector3.Distance(bestCandidate.transform.position, townCenter.transform.position) * 1.2f;
+                float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.2f;
                 vitalityThreshold = (distanceHome / agent.speed) + 5;
             }
             SetNewTarget(bestCandidate);
@@ -251,7 +263,7 @@ public class Villager : NetworkBehaviour, ISelectable
         else if (newState == VillagerState.Working)
         {
             agent.updateRotation = false;
-            if (target != null && target != townCenter)
+            if (target != null && target != TownCenter.TC)
             {
                 Vector3 towards = target.transform.position - transform.position;
                 towards.y = 0;
@@ -317,7 +329,7 @@ public class Villager : NetworkBehaviour, ISelectable
     // When destroyed, remove villager from other objects
     private void OnDestroy()
     {
-        if (townCenter != null) townCenter.RemoveVillager(this);
+        if (TownCenter.TC != null) TownCenter.TC.RemoveVillager(this);
         Selection.Selector.RemoveSelectable(this);
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }

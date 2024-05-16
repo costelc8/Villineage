@@ -9,21 +9,28 @@ public class Building : Targetable
     public Villager assignedVillager;
     public float maxBuildTime;
     public int stage;
+    public BuildingType buildingType;
 
     [SyncVar(hook = nameof(ProgressHook))]
     public float buildTime;
 
     public override bool Progress(Villager villager, float progressValue)
     {
-        buildTime += progressValue;
-        UpdateStage();
-        if (buildTime >= maxBuildTime)
+        if (buildTime < maxBuildTime)
         {
-            buildTime = maxBuildTime;
-            BuildingGenerator.AddBuilding(this);
-            return true;
+            buildTime += progressValue;
+            UpdateStage();
+            if (buildTime >= maxBuildTime)
+            {
+                buildTime = maxBuildTime;
+                BuildingGenerator.AddBuilding(this);
+                UntargetAll();
+                if (buildingType == BuildingType.House) TownCenter.TC.SpawnVillager(transform.position, true);
+                return true;
+            }
+            else return false;
         }
-        return false;
+        else return true;
     }
 
     private void ProgressHook(float oldProgress, float newProgress)
@@ -42,5 +49,10 @@ public class Building : Targetable
                 transform.GetChild(i).gameObject.SetActive(i == stage);
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        BuildingGenerator.RemoveBuilding(this);
     }
 }

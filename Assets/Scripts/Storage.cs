@@ -1,18 +1,22 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Storage : Targetable, ISelectable
 {
-    public int[] resources;
-    private BuildingGenerator buildingGenerator;
-    public TownCenter townCenter;
+    public readonly SyncList<int> resources = new SyncList<int>();
 
     public void Start()
     {
         Selection.Selector.AddSelectable(this);
-        resources = new int[(int)ResourceType.MAX_VALUE];
-        buildingGenerator = GetComponent<BuildingGenerator>();
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        resources.Clear();
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) resources.Add(0);
     }
 
     public void OnSelect()
@@ -34,15 +38,15 @@ public class Storage : Targetable, ISelectable
         }
         if (resources[(int)ResourceType.Wood] >= SimVars.VARS.woodPerHouse)
         {
-            buildingGenerator.PlaceBuilding(BuildingType.House);
+            TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.House);
             resources[(int)ResourceType.Wood] -= SimVars.VARS.woodPerHouse;
         }
-        int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.hungerPerFood), resources[(int)ResourceType.Food]);
+        int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.vitalityPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)
         {
             resources[(int)ResourceType.Food] -= neededFood;
-            villager.vitality += neededFood * SimVars.VARS.hungerPerFood;
+            villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
-        townCenter.GetComponent<TownCenter>().AssignVillagerJob(villager);
+        TownCenter.TC.AssignVillagerJob(villager);
     }
 }
