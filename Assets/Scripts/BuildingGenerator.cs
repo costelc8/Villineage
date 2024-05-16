@@ -26,39 +26,44 @@ public class BuildingGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-
-        }*/
+            PlaceBuilding(BuildingType.Outpost);
+        }
     }
 
     public void PlaceBuilding(BuildingType buildingType)
     {
         GameObject buildingPrefab = null;
         Vector3 spawnCenter = transform.position;
+        Vector3 point = new Vector3();
+        bool gotPoint = false;
+        Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
+        float buildTime = 0;
 
-        switch(buildingType)
+        switch (buildingType)
         {
             case BuildingType.House:
                 buildingPrefab = housePrefab;
+                buildTime = SimVars.VARS.houseBuildTime;
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 8f, 3f, 1000f);
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
+                buildTime = SimVars.VARS.outpostBuildTime;
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 50f, 3f, 1000f);
                 break;
         }
-        if (buildingPrefab != null)
+
+        if (buildingPrefab != null && gotPoint) 
         {
-            // Grab point on NavMesh
-            if (RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out Vector3 point, 8f, 3f, 1000f))
-            {
-                // Make a building
-                Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
-                Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
-                building.maxBuildTime = SimVars.VARS.houseBuildTime;
-                building.buildingType = buildingType;
-                NetworkServer.Spawn(building.gameObject);
-                pendingBuildings.Add(building);
-            }
+            // Make the building
+            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            building.maxBuildTime = buildTime;
+            building.buildingType = buildingType;
+            NetworkServer.Spawn(building.gameObject);
+            pendingBuildings.Add(building);
+
         }
     }
 
