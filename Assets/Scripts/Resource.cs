@@ -34,12 +34,6 @@ public class Resource : Targetable, ISelectable
             villager.totalResources++;
             villager.inventory[(int)resourceType]++;
             durability += maxDurability;
-            if (stage1 != null && !stage1.activeInHierarchy)
-            {
-                stage0.SetActive(false);
-                stage1.SetActive(true);
-                priority *= 2;
-            }
             if (quantity <= 0)
             {
                 ResourceGenerator.RemoveResource(this);
@@ -55,10 +49,11 @@ public class Resource : Targetable, ISelectable
 
     private void QuantityHook(int oldQuantity, int newQuantity)
     {
-        if (newQuantity < oldQuantity && stage1 != null)
+        if (newQuantity < oldQuantity && stage1 != null && !stage1.activeInHierarchy)
         {
             stage0.SetActive(false);
             stage1.SetActive(true);
+            priority *= 2;
         }
     }
 

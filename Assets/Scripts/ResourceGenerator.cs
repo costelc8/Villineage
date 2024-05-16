@@ -13,6 +13,9 @@ public class ResourceGenerator : MonoBehaviour
     public GameObject berryPrefab;
     public GameObject sheepPrefab;
     public GameObject goatPrefab;
+    private GameObject treeParent;
+    private GameObject berryParent;
+    private GameObject animalParent;
     private static List<Targetable> trees = new List<Targetable>();
     private static List<Targetable> berries = new List<Targetable>();
     private static List<Targetable> animals = new List<Targetable>();
@@ -43,6 +46,9 @@ public class ResourceGenerator : MonoBehaviour
     public void Initialize()
     {
         terrainGenerator = GetComponent<TerrainGenerator>();
+        treeParent = new GameObject("Trees");
+        berryParent = new GameObject("Berries");
+        animalParent = new GameObject("Animals");
     }
 
     // Update is called once per frame
@@ -86,8 +92,6 @@ public class ResourceGenerator : MonoBehaviour
     {
         Debug.Log("Generating Forest");
         // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
-        GameObject forest = new GameObject("Forest");
-        forest.transform.position = position;
 
         // Clamp the input values to their allowed ranges
         spacing = Mathf.Max(1, spacing);
@@ -112,7 +116,7 @@ public class ResourceGenerator : MonoBehaviour
                     {
                         // Generate new tree
                         treePos.y = terrainGenerator.GetTerrainHeight(treePos);
-                        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), forest.transform);
+                        GameObject tree = Instantiate(treePrefab, treePos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), treeParent.transform);
                         tree.GetComponent<Resource>().quantity = SimVars.VARS.woodPerTree;
                         NetworkServer.Spawn(tree);
                         trees.Add(tree.GetComponent<Resource>());
@@ -130,7 +134,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 1.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
             {
-                GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 sheep.GetComponent<Animal>().wanderOrigin = center;
                 sheep.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
                 NetworkServer.Spawn(sheep);
@@ -146,7 +150,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
             {
-                GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+                GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 goat.GetComponent<Animal>().wanderOrigin = center;
                 goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
                 NetworkServer.Spawn(goat);
@@ -160,21 +164,18 @@ public class ResourceGenerator : MonoBehaviour
     {
         // Temporary Berry bush generation
         Debug.Log("Generating Berry Bushes");
-        GameObject bushes = new GameObject("Bushes");
-        bushes.transform.position = Vector3.zero;
-        Vector3 position = bushes.transform.position;
 
-        for (int x = Random.Range(20, 60); x < SimVars.VARS.terrainSize; x += Random.Range(30, 100))
+        for (int x = Random.Range(20, 40); x < SimVars.VARS.terrainSize; x += Random.Range(20, 40))
         {
-            for (int z = Random.Range(20, 60); z < SimVars.VARS.terrainSize; z += Random.Range(30, 100))
+            for (int z = Random.Range(20, 40); z < SimVars.VARS.terrainSize; z += Random.Range(20, 40))
             {
-                position.x = x;
-                position.z = z;
-                position.y = terrainGenerator.GetTerrainHeight(position);
-                GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), bushes.transform);
-                bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
-                NetworkServer.Spawn(bush);
-                berries.Add(bush.GetComponent<Resource>());
+                if (RandomNavmeshPoint.RandomPointFromCenterSphere(new Vector3(x, 10, z), 1.5f, out Vector3 position, 0, 0.1f, 1))
+                {
+                    GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), berryParent.transform);
+                    bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
+                    NetworkServer.Spawn(bush);
+                    berries.Add(bush.GetComponent<Resource>());
+                }
             }
         }
     }
