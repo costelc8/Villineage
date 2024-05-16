@@ -15,6 +15,9 @@ public class TownCenter : NetworkBehaviour
     public BuildingGenerator buildingGenerator;
     public GameObject villagerParent;
 
+    public bool spawning = false;
+    public float timer = 0.0f;
+
     public float[] jobWeights;
     public int[] neededJobs;
     public int[] currentJobs;
@@ -55,8 +58,23 @@ public class TownCenter : NetworkBehaviour
         AssignAllVillagerJobs();
     }
 
+    public void OnDeposit()
+    {
+        if (storage.resources[(int)(ResourceType.Food)] >= SimVars.VARS.villagerSpawnCost)
+        {
+            print(SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count);
+            if (villagers.Count < SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count)
+            {
+                print("Begin Spawning");
+                storage.resources[(int)ResourceType.Food] -= SimVars.VARS.villagerSpawnCost;
+                spawning = true;
+            }
+        }
+    }
+
     public void SpawnVillager(Vector3 centerPosition, bool assignJob = false)
     {
+        print("Spawning Villager");
         if (RandomNavmeshPoint.RandomPointFromCenterCapsule(centerPosition, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity, villagerParent.transform).GetComponent<Villager>();
@@ -190,6 +208,20 @@ public class TownCenter : NetworkBehaviour
     {
         base.OnStartClient();
         CenterCamera();
+    }
+
+    public void Update()
+    {
+        if (spawning)
+        {
+            timer += Time.deltaTime;
+            if (timer > SimVars.VARS.villagerSpawnTime)
+            {
+                spawning = false;
+                timer = 0.0f;
+                SpawnVillager(this.transform.position);
+            }
+        }
     }
 }
 

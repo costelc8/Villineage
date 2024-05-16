@@ -47,6 +47,7 @@ public class Storage : Targetable, ISelectable
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
+        TownCenter.TC.OnDeposit();
         TownCenter.TC.AssignVillagerJob(villager);
     }
 }

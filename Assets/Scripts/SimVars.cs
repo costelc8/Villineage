@@ -22,6 +22,7 @@ public class SimVars : NetworkBehaviour
 
     [Header("Villager Variables")]
     [SyncVar] public int startingVillagers = 4;
+    [SyncVar] public float villagerSpawnTime = 30.0f;
     [SyncVar] public int villagerCarryCapacity = 10;
     [SyncVar] public float villagerMoveSpeed = 4f;
     [SyncVar] public float villagerWorkSpeed = 1f;
@@ -39,6 +40,7 @@ public class SimVars : NetworkBehaviour
     [Header("Building Variables")]
     [SyncVar] public int houseBuildCost = 60;
     [SyncVar] public int outpostBuildCost = 60;
+    [SyncVar] public int villagerSpawnCost = 30;
 
     [Header("Terrain Variables")]
     [Tooltip("Map scale, map size will be 2^(4+scale)")]
