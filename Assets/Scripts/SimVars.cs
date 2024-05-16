@@ -9,6 +9,7 @@ public class SimVars : NetworkBehaviour
 
     [Header("Timescale")]
     [SyncVar] public float timeScale = 1f;
+    [SyncVar] public bool logSim = false;
 
     [Header("Simulation Seed")]
     [Tooltip("Terrain seed, entering 0 will generate one")]

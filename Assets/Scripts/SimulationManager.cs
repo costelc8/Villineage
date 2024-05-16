@@ -12,6 +12,7 @@ public class SimulationManager : NetworkManager
     public TerrainGenerator terrainGenerator;
     public ResourceGenerator resourceGenerator;
     public TownCenter townCenter;
+    public SimLogs simLogs;
 
     public override void Awake()
     {
@@ -30,6 +31,7 @@ public class SimulationManager : NetworkManager
         resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
         resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 30f, 45f);
         townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
+        if (SimVars.VARS.logSim) simLogs.StartLogging();
     }
 
     public override void OnStartServer()

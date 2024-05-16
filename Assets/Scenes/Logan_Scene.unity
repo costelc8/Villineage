@@ -825,6 +825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1874911280}
   - component: {fileID: 1874911284}
+  - component: {fileID: 1874911285}
   - component: {fileID: 1874911282}
   - component: {fileID: 1874911281}
   m_Layer: 0
@@ -949,6 +950,19 @@ MonoBehaviour:
   terrainGenerator: {fileID: 1194879060}
   resourceGenerator: {fileID: 1194879065}
   townCenter: {fileID: 1519554151}
+  simLogs: {fileID: 1874911285}
+--- !u!114 &1874911285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874911279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec9ac581d7450e4f8e0b70e480e709d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1916079618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1174,6 +1188,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeScale: 5
+  logSim: 1
   seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
@@ -1191,9 +1206,8 @@ MonoBehaviour:
   foodPerBerry: 60
   foodPerSheep: 60
   foodPerGoat: 60
-  woodPerHouse: 60
-  houseBuildTime: 30
-  outpostBuildTime: 30
+  houseBuildCost: 60
+  outpostBuildCost: 60
   terrainScale: 3
   terrainSize: 32
   terrainDepth: 8
