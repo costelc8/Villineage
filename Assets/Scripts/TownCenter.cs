@@ -13,6 +13,7 @@ public class TownCenter : NetworkBehaviour
     public GameObject villagerPrefab;
     public List<Villager> villagers;
     public BuildingGenerator buildingGenerator;
+    public GameObject villagerParent;
 
     public float[] jobWeights;
     public int[] neededJobs;
@@ -24,6 +25,7 @@ public class TownCenter : NetworkBehaviour
         else Destroy(this);
         buildingGenerator = GetComponent<BuildingGenerator>();
         storage = GetComponent<Storage>();
+        villagerParent = new GameObject("Villagers");
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
@@ -57,7 +59,7 @@ public class TownCenter : NetworkBehaviour
     {
         if (RandomNavmeshPoint.RandomPointFromCenterCapsule(centerPosition, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
-            Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity).GetComponent<Villager>();
+            Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity, villagerParent.transform).GetComponent<Villager>();
             NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
             villager.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 50);

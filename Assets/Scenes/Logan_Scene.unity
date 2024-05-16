@@ -754,6 +754,7 @@ MonoBehaviour:
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
   buildingGenerator: {fileID: 0}
+  villagerParent: {fileID: 0}
   jobWeights:
   - 0
   - 0
@@ -1172,7 +1173,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 1
+  timeScale: 5
   seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
