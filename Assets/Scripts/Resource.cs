@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : Targetable
+public class Resource : Targetable, ISelectable
 {
     [Header("Resource Settings")]
     private GameObject stage0;
@@ -74,5 +74,18 @@ public class Resource : Targetable
         }
 
         Destroy(gameObject);
+    }
+
+    public void OnSelect()
+    {
+
+    }
+    public void OnDeselect()
+    {
+
+    }
+    public void Start()
+    {
+        
     }
 }

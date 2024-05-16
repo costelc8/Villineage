@@ -6,7 +6,7 @@ using TMPro;
 public class StorageDisplay : MonoBehaviour
 {
     public Storage storage;
-    public TextMeshProUGUI resourceText;
+    public TextMeshProUGUI storageText;
 
     void Update()
     {
@@ -18,7 +18,7 @@ public class StorageDisplay : MonoBehaviour
         }
 
         // Ensure a reference to the Text component is set
-        if (resourceText == null)
+        if (storageText == null)
         {
             Debug.LogError("Text component reference not set in ResourceDisplay script!");
             return;
@@ -35,6 +35,6 @@ public class StorageDisplay : MonoBehaviour
         int food = storage.resources[(int)ResourceType.Food];
 
         // Update the Text component with the resources
-        resourceText.text = "Wood: " + wood + "\n" + "Food: " + food;
+        storageText.text = "Wood: " + wood + "\n" + "Food: " + food;
     }
 }

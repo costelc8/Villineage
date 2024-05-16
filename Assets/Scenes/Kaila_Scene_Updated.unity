@@ -330,10 +330,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   generateTerrainOnStart: 0
-  depth: 10
-  seed: 0
-  size: 0
-  scale: 1
+  perlinScale: 1
 --- !u!114 &1194879061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,15 +448,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dfec87d58df77842b59acf5866f4a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainGenerator: {fileID: 0}
   treePrefab: {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
+  goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
   forestVariation: 1
-  seed: 0
   scale: 2
   generateForest: 0
   destroyTrees: 0
@@ -717,7 +713,7 @@ Transform:
   m_GameObject: {fileID: 1519554144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256, y: 10, z: 256}
+  m_LocalPosition: {x: 128, y: 10, z: 128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -737,6 +733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
+  outpostPrefab: {fileID: 0}
+  farmPrefab: {fileID: 0}
 --- !u!114 &1519554151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,16 +750,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  enforceMaxVillagers: 0
-  maxAssignedVillagers: 0
-  assignedVillagers: 0
-  priority: 1
-  liveAnimal: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
-  startingVillagers: 10
   villagers: []
-  terrainGenerator: {fileID: 1194879060}
-  resources: 000000000000000000000000
   jobWeights:
   - 0
   - 0
@@ -769,11 +759,6 @@ MonoBehaviour:
   - 0
   neededJobs: 00000000000000000000000000000000
   currentJobs: 00000000000000000000000000000000
-  lumberjackWeight: 4
-  gathererWeight: 3
-  hunterWeight: 3
-  houseCost: 60
-  hungerPerFood: 20
 --- !u!208 &1519554152
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -919,6 +904,8 @@ MonoBehaviour:
   - {fileID: 1337135381761424518, guid: 197e22e8d8b2bbd4baa6d7f48b84adae, type: 3}
   - {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
   - {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
+  - {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
+  - {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -935,6 +922,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   runSimulation: 1
+  simVars: {fileID: 2127958820}
   terrainGenerator: {fileID: 1194879060}
   resourceGenerator: {fileID: 1194879065}
   townCenter: {fileID: 1519554151}
@@ -1126,7 +1114,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 836c262a07608944787fd71f1a77bfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dummyHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
+  villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
+  storageHUD: {fileID: 0}
+--- !u!1 &2127958818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127958821}
+  - component: {fileID: 2127958820}
+  - component: {fileID: 2127958822}
+  m_Layer: 0
+  m_Name: SimulationVariables
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2127958820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127958818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edebec02a710e94baf2578ed76df4f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  timeScale: 1
+  seed: 0
+  lumberjackWeight: 2
+  gathererWeight: 1
+  hunterWeight: 1
+  startingVillagers: 4
+  villagerCarryCapacity: 10
+  villagerMoveSpeed: 4
+  villagerWorkSpeed: 1
+  villagerHungerRate: 1
+  hungerPerFood: 10
+  startingSheep: 4
+  startingGoats: 6
+  woodPerTree: 20
+  foodPerBerry: 60
+  foodPerSheep: 60
+  foodPerGoat: 60
+  woodPerHouse: 60
+  houseBuildTime: 30
+  outpostBuildTime: 30
+  terrainScale: 2
+  terrainSize: 32
+  terrainDepth: 8
+--- !u!4 &2127958821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127958818}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2127958822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127958818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 4288561812
+  _assetId: 0
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!114 &1302014788033251589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,7 +1231,7 @@ Transform:
   m_GameObject: {fileID: 5456134112014648360}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256, y: 5, z: 256}
+  m_LocalPosition: {x: 128, y: 5, z: 128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1328,3 +1405,4 @@ SceneRoots:
   - {fileID: 1251709332}
   - {fileID: 1194879064}
   - {fileID: 1874911280}
+  - {fileID: 2127958821}
