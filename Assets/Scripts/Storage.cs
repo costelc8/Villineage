@@ -30,24 +30,31 @@ public class Storage : Targetable, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-    public void Store(Villager villager, int[] deposit)
+    public void Store(int[] deposit)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
             resources[i] += deposit[i];
         }
+    }
+
+    public void Deposit(Villager villager, int[] deposit)
+    {
+        Store(deposit);
         if (resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
         {
+            // house
             TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.House);
             resources[(int)ResourceType.Wood] -= SimVars.VARS.houseBuildCost;
         }
         int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.vitalityPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)
         {
+            // eat
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
-        TownCenter.TC.OnDeposit();
+        TownCenter.TC.spawnCheck();
         TownCenter.TC.AssignVillagerJob(villager);
     }
 }

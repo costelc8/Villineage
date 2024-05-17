@@ -114,7 +114,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
-                    hub.Store(this, inventory.ToArray());
+                    hub.Deposit(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
                     ChangeState(VillagerState.Pending);
@@ -215,9 +215,27 @@ public class Villager : NetworkBehaviour, ISelectable
                     }
                 }
             }
-            // Use this new distance (without priority) to find the hunger threshold
+            
+            
+                    // Use this new distance (without priority) to find the hunger threshold
             if (bestCandidate != null)
             {
+
+                // outpost check
+                if (lowestDistance > SimVars.VARS.GetMaxVillagerRange())
+                {
+                    // means unreachable target
+                    // need to spawn an outpost
+                    BuildingGenerator currentBuildingGenerator = hub.GetComponent<BuildingGenerator>();
+                    bool succeeded = currentBuildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
+                    print("OUTPOST " + succeeded);
+                    // and go back to hub
+                    ChangeState(VillagerState.Returning);
+                    SetNewTarget(hub);
+                    return;
+                }
+
+
                 float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.2f;
                 vitalityThreshold = (distanceHome / agent.speed) + 5;
             }

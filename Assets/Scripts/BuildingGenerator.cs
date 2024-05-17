@@ -15,7 +15,6 @@ public class BuildingGenerator : MonoBehaviour
     private static List<Building> houses = new List<Building>();
     private static List<Targetable> hubs = new List<Targetable>();
     private GameObject buildingParent;
-
   
 
     // Start is called before the first frame update
@@ -34,10 +33,20 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
 
-    public void PlaceBuilding(BuildingType buildingType)
+    public bool PlaceBuilding(BuildingType buildingType, Vector3 center = new Vector3())
     {
+        float starveRange = SimVars.VARS.GetMaxVillagerRange();
         GameObject buildingPrefab = null;
-        Vector3 spawnCenter = transform.position;
+        Vector3 spawnCenter;
+        if (center ==  Vector3.zero)
+        {
+            // spawn @ current position
+            spawnCenter = transform.position;
+        } else
+        {
+            // spawn @ given position
+            spawnCenter = center;
+        }
         Vector3 point = new Vector3();
         bool gotPoint = false;
         Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
@@ -48,12 +57,12 @@ public class BuildingGenerator : MonoBehaviour
             case BuildingType.House:
                 buildingPrefab = housePrefab;
                 buildCost = SimVars.VARS.houseBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 8f, 3f, 1000f);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 8f, 3f, starveRange);
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
                 buildCost = SimVars.VARS.outpostBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 50f, 3f, 1000f);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 3f, 3f, starveRange);
                 break;
         }
 
@@ -65,8 +74,10 @@ public class BuildingGenerator : MonoBehaviour
             building.buildingType = buildingType;
             NetworkServer.Spawn(building.gameObject);
             pendingBuildings.Add(building);
+            return true;
 
         }
+        return false;
     }
 
     public static List<Targetable> GetPendingBuildings()

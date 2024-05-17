@@ -359,27 +359,29 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 1
+  timeScale: 10
+  logSim: 0
   seed: 0
   lumberjackWeight: 2
   gathererWeight: 1
   hunterWeight: 1
   builderWeight: 1
   startingVillagers: 4
+  villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingSheep: 4
+  startingSheep: 50
   startingGoats: 6
   woodPerTree: 60
   foodPerBerry: 60
   foodPerSheep: 60
   foodPerGoat: 60
-  woodPerHouse: 60
-  houseBuildTime: 30
-  outpostBuildTime: 30
+  houseBuildCost: 60
+  outpostBuildCost: 60
+  villagerSpawnCost: 30
   terrainScale: 2
   terrainSize: 32
   terrainDepth: 8
@@ -979,6 +981,9 @@ MonoBehaviour:
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
   buildingGenerator: {fileID: 0}
+  villagerParent: {fileID: 0}
+  spawning: 0
+  timer: 0
   jobWeights:
   - 0
   - 0
@@ -1160,6 +1165,7 @@ MonoBehaviour:
   terrainGenerator: {fileID: 38443237}
   resourceGenerator: {fileID: 38443236}
   townCenter: {fileID: 709847946}
+  simLogs: {fileID: 0}
 --- !u!4 &1010161103
 Transform:
   m_ObjectHideFlags: 0
