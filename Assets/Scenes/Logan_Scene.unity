@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
-  outpostPrefab: {fileID: 0}
+  outpostPrefab: {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
   farmPrefab: {fileID: 0}
 --- !u!114 &1519554151
 MonoBehaviour:
@@ -755,6 +755,8 @@ MonoBehaviour:
   villagers: []
   buildingGenerator: {fileID: 0}
   villagerParent: {fileID: 0}
+  spawning: 0
+  timer: 0
   jobWeights:
   - 0
   - 0
@@ -1188,13 +1190,14 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeScale: 5
-  logSim: 1
-  seed: 1
-  lumberjackWeight: 2
+  logSim: 0
+  seed: 0
+  lumberjackWeight: 0
   gathererWeight: 1
-  hunterWeight: 1
-  builderWeight: 1
-  startingVillagers: 4
+  hunterWeight: 0
+  builderWeight: 0
+  startingVillagers: 40
+  villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
@@ -1208,6 +1211,7 @@ MonoBehaviour:
   foodPerGoat: 60
   houseBuildCost: 60
   outpostBuildCost: 60
+  villagerSpawnCost: 30
   terrainScale: 3
   terrainSize: 32
   terrainDepth: 8

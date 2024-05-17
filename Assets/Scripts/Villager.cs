@@ -222,7 +222,7 @@ public class Villager : NetworkBehaviour, ISelectable
             {
 
                 // outpost check
-                if (lowestDistance > SimVars.VARS.GetMaxVillagerRange())
+                if (lowestDistance > SimVars.VARS.GetMaxVillagerRange() / 2)
                 {
                     // means unreachable target
                     // need to spawn an outpost

@@ -38,6 +38,6 @@ public class SimLogs : MonoBehaviour
 
     private void OnDestroy()
     {
-        sw.Close();
+        if (sw != null) sw.Close();
     }
 }

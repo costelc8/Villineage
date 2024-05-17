@@ -58,7 +58,7 @@ public class TownCenter : NetworkBehaviour
         AssignAllVillagerJobs();
     }
 
-    public void spawnCheck()
+    public void SpawnCheck()
     {
         if (storage.resources[(int)(ResourceType.Food)] >= SimVars.VARS.villagerSpawnCost)
         {
@@ -104,12 +104,14 @@ public class TownCenter : NetworkBehaviour
         CalculateNeededJobs();
         if (neededJobs[(int)villager.job] >= 0) return;
         VillagerJob job = GetMostNeededJob();
-        if (job != VillagerJob.Nitwit)
-        {
-            currentJobs[(int)villager.Job()]--;
-            villager.ChangeJob(job);
-            currentJobs[(int)villager.Job()]++;
-        }
+        if (job != VillagerJob.Nitwit) ChangeVillagerJob(villager, job);
+    }
+
+    public void ChangeVillagerJob(Villager villager, VillagerJob job)
+    {
+        currentJobs[(int)villager.job]--;
+        villager.ChangeJob(job);
+        currentJobs[(int)villager.job]++;
     }
 
     private VillagerJob GetMostNeededJob()
