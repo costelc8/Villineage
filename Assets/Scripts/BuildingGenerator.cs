@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class BuildingGenerator : MonoBehaviour
 {
@@ -12,8 +13,11 @@ public class BuildingGenerator : MonoBehaviour
     private Vector3 spacingSizeLarge;
     private int spacing = 2;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
+    private static List<Targetable> pendingHouses = new List<Targetable>();
+    private static List<Targetable> pendingOutposts = new List<Targetable>();
     private static List<Building> houses = new List<Building>();
-    private static List<Building> hubs = new List<Building>();
+    private static List<Building> outposts = new List<Building>();
+    private static List<Storage> hubs = new List<Storage>();
     private GameObject buildingParent;
   
 
@@ -33,12 +37,12 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
 
-    public bool PlaceBuilding(BuildingType buildingType, Vector3 center = new Vector3())
+    public Building PlaceBuilding(BuildingType buildingType, Vector3 center = new Vector3())
     {
         float starveRange = SimVars.VARS.GetMaxVillagerRange();
         GameObject buildingPrefab = null;
         Vector3 spawnCenter;
-        if (center ==  Vector3.zero)
+        if (center == Vector3.zero)
         {
             // spawn @ current position
             spawnCenter = transform.position;
@@ -76,12 +80,17 @@ public class BuildingGenerator : MonoBehaviour
             building.maxBuildProgress = buildCost;
             building.buildingType = buildingType;
             building.priority = priority;
+            switch(buildingType)
+            {
+                case BuildingType.House: pendingHouses.Add(building); break;
+                case BuildingType.Outpost: pendingOutposts.Add(building); break;
+            }
             NetworkServer.Spawn(building.gameObject);
             pendingBuildings.Add(building);
-            return true;
+            return building;
 
         }
-        return false;
+        return null;
     }
 
     public static List<Targetable> GetPendingBuildings()
@@ -89,28 +98,59 @@ public class BuildingGenerator : MonoBehaviour
         return pendingBuildings;
     }
 
+    public static List<Targetable> GetPendingHouses()
+    {
+        return pendingHouses;
+    }
+
+    public static List<Targetable> GetPendingOutposts()
+    {
+        return pendingOutposts;
+    }
+
     public static List<Building> GetHouses()
     {
         return houses;
     }
 
-    public static List<Building> GetHubs()
+    public static List<Building> GetOutposts()
+    {
+        return outposts;
+    }
+
+    public static List<Storage> GetHubs()
     {
         return hubs;
     }
 
-    public static void AddBuilding(Building building)
+    public static void AddHouse(Building house)
     {
-        if (pendingBuildings.Contains(building))
-        {
-            pendingBuildings.Remove(building);
-            houses.Add(building);
-        }
+        pendingBuildings.Remove(house);
+        pendingHouses.Remove(house);
+        houses.Add(house);
+    }
+
+    public static void AddOutpost(Building outpost)
+    {
+        pendingBuildings.Remove(outpost);
+        pendingOutposts.Remove(outpost);
+        outposts.Add(outpost);
+        hubs.Add(outpost.GetComponent<Storage>());
+    }
+
+    public static void AddHub(Storage hub)
+    {
+        hubs.Add(hub);
     }
 
     public static void RemoveBuilding(Building building)
     {
         pendingBuildings.Remove(building);
+        pendingHouses.Remove(building);
+        pendingOutposts.Remove(building);
         houses.Remove(building);
+        outposts.Remove(building);
+        Storage hub = building.GetComponent<Storage>();
+        if (hub != null) hubs.Remove(hub);
     }
 }

@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public float movementSpeed;
-    public float rotationSpeed;
-    public float zoomSpeed;
-    public float zoomDistance;
-    public float minZoomDistance;
-    public float maxZoomDistance;
+    public float movementSpeed = 5;
+    public float rotationSpeed = 5;
+    public float zoomSpeed = 5;
+    public float zoomDistance = 30;
+    public float minZoomDistance = 10;
+    public float maxZoomDistance = 100;
 
     // Start is called before the first frame update
     private void Awake()
@@ -47,7 +47,8 @@ public class CameraControl : MonoBehaviour
         // Camera Zoom
         if (Input.mouseScrollDelta.y != 0f)
         {
-            zoomDistance = Mathf.Clamp(zoomDistance - (Input.mouseScrollDelta.y * zoomSpeed), minZoomDistance, maxZoomDistance);
+            zoomDistance = Mathf.Pow(10, Mathf.Log10(zoomDistance) - (Input.mouseScrollDelta.y * zoomSpeed / 100f));
+            zoomDistance = Mathf.Clamp(zoomDistance, minZoomDistance, maxZoomDistance);
             Camera.main.transform.localPosition = new Vector3(0f, 0f, -zoomDistance);
         }
     }

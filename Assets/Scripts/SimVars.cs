@@ -78,4 +78,9 @@ public class SimVars : NetworkBehaviour
         base.OnStartClient();
         if (!isServer) Initialize();
     }
+
+    private void Update()
+    {
+        Time.timeScale = timeScale;
+    }
 }

@@ -41,12 +41,6 @@ public class Storage : Targetable, ISelectable
     public void Deposit(Villager villager, int[] deposit)
     {
         Store(deposit);
-        if (resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
-        {
-            // house
-            TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.House);
-            resources[(int)ResourceType.Wood] -= SimVars.VARS.houseBuildCost;
-        }
         int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.vitalityPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)
         {
@@ -54,7 +48,13 @@ public class Storage : Targetable, ISelectable
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
+        TownCenter.TC.CheckSpawnHouse();
         TownCenter.TC.SpawnCheck();
         TownCenter.TC.AssignVillagerJob(villager);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (SimVars.VARS != null) Gizmos.DrawWireSphere(transform.position, SimVars.VARS.GetMaxVillagerRange() / 2f);
     }
 }

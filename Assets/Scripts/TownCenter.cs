@@ -28,6 +28,7 @@ public class TownCenter : NetworkBehaviour
         else Destroy(this);
         buildingGenerator = GetComponent<BuildingGenerator>();
         storage = GetComponent<Storage>();
+        BuildingGenerator.AddHub(storage);
         villagerParent = new GameObject("Villagers");
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
@@ -60,10 +61,12 @@ public class TownCenter : NetworkBehaviour
 
     public void SpawnCheck()
     {
-        if (!spawning && storage.resources[(int)ResourceType.Food] >= SimVars.VARS.villagerSpawnCost * villagers.Count)
+        bool enoughFood = storage.resources[(int)ResourceType.Food] >= 10 * villagers.Count;
+        bool enoughHouses = villagers.Count < SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count;
+        if (!spawning && enoughFood && enoughHouses)
         {
             //print(SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count);
-            if (villagers.Count < SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count)
+            if (storage.resources[(int)ResourceType.Food] >= SimVars.VARS.villagerSpawnCost)
             {
                 //print("Begin Spawning");
                 storage.resources[(int)ResourceType.Food] -= SimVars.VARS.villagerSpawnCost;
@@ -85,6 +88,18 @@ public class TownCenter : NetworkBehaviour
             if (assignJob) AssignVillagerJob(villager);
         }
         Physics.SyncTransforms();
+    }
+
+    public void CheckSpawnHouse()
+    {
+        if (BuildingGenerator.GetPendingHouses().Count < BuildingGenerator.GetHubs().Count)
+        {
+            if (storage.resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
+            {
+                buildingGenerator.PlaceBuilding(BuildingType.House);
+                storage.resources[(int)ResourceType.Wood] -= SimVars.VARS.houseBuildCost;
+            }
+        }
     }
 
     private void AssignAllVillagerJobs()

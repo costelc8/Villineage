@@ -29,7 +29,11 @@ public class Building : Targetable
             if (buildTime >= maxBuildProgress)
             {
                 buildTime = maxBuildProgress;
-                BuildingGenerator.AddBuilding(this);
+                switch(buildingType)
+                {
+                    case BuildingType.House: BuildingGenerator.AddHouse(this); break;
+                    case BuildingType.Outpost: BuildingGenerator.AddOutpost(this); break;
+                }
                 UntargetAll();
                 return true;
             }

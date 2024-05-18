@@ -1191,7 +1191,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeScale: 10
-  logSim: 1
+  logSim: 0
   seed: 0
   lumberjackWeight: 2
   gathererWeight: 1
@@ -1263,10 +1263,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   rotationSpeed: 5
-  zoomSpeed: 1
+  zoomSpeed: 5
   zoomDistance: 30
   minZoomDistance: 10
-  maxZoomDistance: 50
+  maxZoomDistance: 100
 --- !u!4 &2284993121416841795
 Transform:
   m_ObjectHideFlags: 0

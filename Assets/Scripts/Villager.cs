@@ -212,39 +212,59 @@ public class Villager : NetworkBehaviour, ISelectable
                     }
                 }
             }
-            
+
             // Use this new distance (without priority) to find the hunger threshold
             if (bestCandidate != null)
             {
                 // outpost check
-                if (TargetInRange(bestCandidate, SimVars.VARS.GetMaxVillagerRange() / 2f))
+                bool inRange = TargetInRange(bestCandidate, SimVars.VARS.GetMaxVillagerRange() / 2f, out Targetable pendingOutpost);
+                if (!inRange)
                 {
                     // means unreachable target
                     // need to spawn an outpost
-                    BuildingGenerator currentBuildingGenerator = hub.GetComponent<BuildingGenerator>();
-                    bool succeeded = currentBuildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
-                    print("OUTPOST " + succeeded);
-                    // and go back to hub
-                    ReturnToHub();
-                    return;
+                    Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
+                    if (building != null)
+                    {
+                        TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
+                        SetNewTarget(building);
+                    }
                 }
-                float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.2f;
-                vitalityThreshold = (distanceHome / agent.speed) + 5;
+                else if (pendingOutpost != null)
+                {
+                    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
+                    SetNewTarget(pendingOutpost);
+                }
+                else SetNewTarget(bestCandidate);
+                float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.5f;
+                vitalityThreshold = distanceHome / agent.speed;
             }
-            SetNewTarget(bestCandidate);
+            else SetNewTarget(bestCandidate);
         }
         ChangeState(VillagerState.Walking);
     }
 
-    private bool TargetInRange(Targetable target, float distance)
+    private bool TargetInRange(Targetable target, float distance, out Targetable pendingOutpost)
     {
-        List<Building> hubs = BuildingGenerator.GetHubs();
-        foreach (Building hub in hubs)
+        List<Storage> hubs = BuildingGenerator.GetHubs();
+        foreach (Storage hub in hubs)
         {
-            if (Vector3.Distance(hub.transform.position, target.transform.position) < distance) return true;
+            if (Vector3.Distance(hub.transform.position, target.transform.position) < distance)
+            {
+                pendingOutpost = null;
+                return true;
+            }
         }
+        List<Targetable> pendingOutposts = BuildingGenerator.GetPendingOutposts();
+        foreach (Targetable outpost in pendingOutposts)
+        {
+            if (Vector3.Distance(outpost.transform.position, target.transform.position) < distance)
+            {
+                pendingOutpost = outpost;
+                return true;
+            }
+        }
+        pendingOutpost = null;
         return false;
-        // hello
     }
 
     // Change villager state via hook
@@ -311,19 +331,20 @@ public class Villager : NetworkBehaviour, ISelectable
 
     private void ReturnToHub()
     {
-        Targetable nearestHub = TownCenter.TC.GetComponent<Storage>();
+        Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
         float lowestDistance = float.MaxValue;
-        List<Building> hubs = BuildingGenerator.GetHubs();
-        foreach (Building hub in hubs)
+        List<Storage> hubs = BuildingGenerator.GetHubs();
+        foreach (Storage storage in hubs)
         {
-            float distance = Vector3.Distance(transform.position, hub.transform.position);
-            distance /= hub.priority;
-            if (distance < lowestDistance && hub.HasValidPositions())
+            float distance = Vector3.Distance(transform.position, storage.transform.position);
+            distance /= storage.priority;
+            if (distance < lowestDistance && storage.HasValidPositions())
             {
                 lowestDistance = distance;
-                nearestHub = hub;
+                nearestHub = storage;
             }
         }
+        hub = nearestHub;
         SetNewTarget(nearestHub);
         ChangeState(VillagerState.Returning);
     }
