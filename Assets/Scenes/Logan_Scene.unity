@@ -452,6 +452,7 @@ MonoBehaviour:
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
+  wolfPrefab: {fileID: 8090313371282963140, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
@@ -1189,14 +1190,14 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 5
-  logSim: 0
+  timeScale: 10
+  logSim: 1
   seed: 0
-  lumberjackWeight: 0
+  lumberjackWeight: 2
   gathererWeight: 1
-  hunterWeight: 0
-  builderWeight: 0
-  startingVillagers: 40
+  hunterWeight: 1
+  builderWeight: 1
+  startingVillagers: 4
   villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
@@ -1205,6 +1206,7 @@ MonoBehaviour:
   vitalityPerFood: 10
   startingSheep: 4
   startingGoats: 6
+  startingWolves: 0
   woodPerTree: 60
   foodPerBerry: 60
   foodPerSheep: 60

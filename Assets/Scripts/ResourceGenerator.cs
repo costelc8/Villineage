@@ -13,6 +13,7 @@ public class ResourceGenerator : MonoBehaviour
     public GameObject berryPrefab;
     public GameObject sheepPrefab;
     public GameObject goatPrefab;
+    public GameObject wolfPrefab;
     private GameObject treeParent;
     private GameObject berryParent;
     private GameObject animalParent;
@@ -139,7 +140,7 @@ public class ResourceGenerator : MonoBehaviour
                 sheep.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
                 NetworkServer.Spawn(sheep);
                 animals.Add(sheep.GetComponent<Animal>());
-                sheep.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
+                sheep.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(91, 100);
             }
         }
     }
@@ -152,10 +153,24 @@ public class ResourceGenerator : MonoBehaviour
             {
                 GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 goat.GetComponent<Animal>().wanderOrigin = center;
-                goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
+                goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerGoat;
                 NetworkServer.Spawn(goat);
                 animals.Add(goat.GetComponent<Animal>());
-                goat.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(51, 100);
+                goat.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(81, 90);
+            }
+        }
+    }
+
+    public void GenerateWolves(Vector3 center, int count, float minRange, float maxRange)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 0.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 0.1f, maxRange))
+            {
+                GameObject wolf = Instantiate(wolfPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
+                wolf.GetComponent<Animal>().wanderOrigin = center;
+                NetworkServer.Spawn(wolf);
+                wolf.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(71, 80);
             }
         }
     }

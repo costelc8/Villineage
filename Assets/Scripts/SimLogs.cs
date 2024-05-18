@@ -7,6 +7,7 @@ using UnityEngine;
 public class SimLogs : MonoBehaviour
 {
     private const string filename = "simlog.txt";
+    private bool firstLine = true;
     Storage tcStorage;
     StreamWriter sw;
 
@@ -14,6 +15,7 @@ public class SimLogs : MonoBehaviour
     public void StartLogging()
     {
         sw = File.CreateText(filename);
+        sw.WriteLine('[');
         tcStorage = TownCenter.TC.GetComponent<Storage>();
         InvokeRepeating(nameof(LogVillageStats), 0, 60);
         Debug.Log("Logging...");
@@ -21,23 +23,43 @@ public class SimLogs : MonoBehaviour
 
     void LogVillageStats()
     {
-        Debug.Log("Logging Info");
         StringBuilder sb = new StringBuilder();
-        sb.Append('[');
-        for (int i = 0; i < (int)ResourceType.MAX_VALUE - 1; i++)
+        if (!firstLine) sb.Append(",\n");
+        sb.Append("{\"Resources\":{");
+        for (int i = 1; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            if (i != 0) sb.Append(',');
+            if (i != 1) sb.Append(',');
+            sb.Append('\"');
+            sb.Append((ResourceType)i);
+            sb.Append('\"');
+            sb.Append(':');
             sb.Append(tcStorage.resources[i]);
         }
-        sb.Append("]:");
+        sb.Append("},\"Villagers\":");
         sb.Append(TownCenter.TC.villagers.Count);
-        Debug.Log(sb.ToString());
-        sw.WriteLine(sb.ToString());
+        sb.Append(",\"Houses\":");
+        sb.Append(BuildingGenerator.GetHouses().Count);
+        sb.Append('}');
+        Debug.Log("Logging: " + sb.ToString());
+        firstLine = false;
+        sw.Write(sb.ToString());
         sw.Flush();
     }
 
     private void OnDestroy()
     {
-        if (sw != null) sw.Close();
+        StopLogging();
+    }
+
+    public void StopLogging()
+    {
+        CancelInvoke(nameof(LogVillageStats));
+        if (sw != null)
+        {
+            sw.WriteLine("\n]");
+            sw.Close();
+            firstLine = true;
+            sw = null;
+        }
     }
 }

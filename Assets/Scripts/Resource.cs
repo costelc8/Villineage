@@ -53,7 +53,7 @@ public class Resource : Targetable, ISelectable
         {
             stage0.SetActive(false);
             stage1.SetActive(true);
-            priority *= 2;
+            priority *= 1.1f;
         }
     }
 

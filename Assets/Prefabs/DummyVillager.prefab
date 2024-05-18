@@ -3791,6 +3791,7 @@ GameObject:
   - component: {fileID: 5122210100640433560}
   - component: {fileID: -5571549955263603796}
   - component: {fileID: -5653475819082716281}
+  - component: {fileID: 2260686121163531534}
   m_Layer: 0
   m_Name: DummyVillager
   m_TagString: Villager
@@ -3837,7 +3838,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &6096172965408856617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3853,17 +3854,18 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  townCenter: {fileID: 0}
   hubs: []
+  hub: {fileID: 0}
   selected: 0
   alive: 1
-  hunger: 0
-  hungerThreshold: 0
-  maxHunger: 100
+  vitality: 0
+  maxVitality: 100
+  vitalityThreshold: 0
   huntingRange: 10
   job: 0
   totalResources: 0
   target: {fileID: 0}
+  capacity: 0
   selectionRange: 10
   state: 0
   axe: {fileID: 226699128288745174}
@@ -3891,7 +3893,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.5
   m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -3946,6 +3948,33 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!54 &2260686121163531534
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020194912628289861}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2045088464112562668
 GameObject:
   m_ObjectHideFlags: 0

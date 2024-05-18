@@ -74,7 +74,7 @@ public class Selection : MonoBehaviour
     private void SelectSingle(Vector3 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
-        RaycastHit[] hits = Physics.RaycastAll(ray);
+        RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore);
         foreach (RaycastHit hit in hits)
         {
             ISelectable selectable = hit.collider.GetComponent<ISelectable>();

@@ -33,6 +33,7 @@ public class SimVars : NetworkBehaviour
     [Header("Resource Variables")]
     [SyncVar] public int startingSheep = 4;
     [SyncVar] public int startingGoats = 6;
+    [SyncVar] public int startingWolves = 2;
     [SyncVar] public int woodPerTree = 60;
     [SyncVar] public int foodPerBerry = 60;
     [SyncVar] public int foodPerSheep = 60;

@@ -1093,7 +1093,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!195 &8288406652604242288
 NavMeshAgent:
@@ -1158,12 +1158,13 @@ MonoBehaviour:
   assignedVillager: {fileID: 0}
   resourceType: 2
   wanderOrigin: {x: 250, y: 0, z: 250}
-  originTetherStrength: 1
+  originTetherStrength: 0.5
   maxWanderCooldown: 10
   maxHealth: 4
   health: 0
+  wanderCooldown: 0
   state: 0
-  hostile: 1
+  type: 1
 --- !u!114 &3961304320394080271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,7 +1194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   target: {fileID: 1061192926796552652}

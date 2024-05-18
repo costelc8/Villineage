@@ -16,10 +16,10 @@ public class Animal : Resource
     public float health;
     private Transform model;
     private NavMeshAgent agent;
-    private float wanderCooldown;
+    public float wanderCooldown;
     [SyncVar(hook = nameof(StateHook))]
     public AnimalState state;
-    public bool hostile;
+    public AnimalType type;
     private float attackCooldown;
     private Villager targetVillager;
 
@@ -38,46 +38,53 @@ public class Animal : Resource
     {
         if (state == AnimalState.Dead && model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime)); // Rotate on its side to "die"
         if (!isServer) return;
+        if (targetVillager != null && !targetVillager.alive) targetVillager = null;
         if (state != AnimalState.Dead) Wander();
     }
 
     private void Wander()
     {
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f)
         {
             wanderCooldown -= Time.deltaTime;
             if (wanderCooldown <= 0)
             {
                 wanderCooldown = Random.Range(1f, maxWanderCooldown);
-                Vector3 randomDirection = (Random.onUnitSphere * 100 + (wanderOrigin - transform.position) * originTetherStrength).normalized;
-                Vector3 targetPos = transform.position + (randomDirection * (Random.Range(4f, 8f) * (hostile ? 2.5f : 1f)));
+                Vector3 randomDirection = (Random.onUnitSphere * 100 + ((wanderOrigin - transform.position) * originTetherStrength)).normalized;
+                Vector3 targetPos = transform.position + (randomDirection * (Random.Range(4f, 8f) * agent.speed));
                 targetPos.y = transform.position.y;
                 if (RandomNavmeshPoint.RandomPointFromCenterCapsule(targetPos, 1.5f, 1f, out Vector3 target, 0, 1f, 10f))
                 {
                     agent.SetDestination(target);
-                    agent.speed = hostile ? 2.5f : 1f;
+                    ChangeSpeed(false);
                     ChangeState(AnimalState.Wandering);
                     targetVillager = null;
                 }
             }
-            else if (hostile && targetVillager != null && targetVillager.alive)
+            else if (type != AnimalType.Passive && targetVillager != null && targetVillager.alive)
             {
                 agent.updateRotation = false;
                 transform.rotation = Quaternion.LookRotation(targetVillager.transform.position - transform.position);
+                Vector3 towardsSource = targetVillager.transform.position - transform.position;
+                agent.SetDestination(transform.position + towardsSource);
                 attackCooldown -= Time.deltaTime;
                 if (attackCooldown <= 0)
                 {
                     attackCooldown = 1f;
                     targetVillager.TakeDamage(Random.Range(20f, 40f));
+                    if (!targetVillager.alive) targetVillager = null;
                 }
-                Vector3 towardsSource = targetVillager.transform.position - transform.position;
-                agent.SetDestination(transform.position + towardsSource);
             }
             else
             {
                 agent.updateRotation = true;
                 ChangeState(AnimalState.Idle);
             }
+        }
+        else if (type != AnimalType.Passive && targetVillager != null && targetVillager.alive)
+        {
+            Vector3 towardsSource = targetVillager.transform.position - transform.position;
+            agent.SetDestination(transform.position + towardsSource);
         }
     }
 
@@ -95,15 +102,22 @@ public class Animal : Resource
             {
                 if (targetVillager == null) targetVillager = villager;
                 Vector3 towardsSource = targetVillager.transform.position - transform.position;
-                if (hostile) agent.SetDestination(transform.position + towardsSource);
+                if (type != AnimalType.Passive) agent.SetDestination(transform.position + towardsSource);
                 else agent.SetDestination(transform.position - towardsSource);
-                agent.speed = hostile ? 5f : 2f;
+                ChangeSpeed(true);
                 wanderCooldown = 5f;
                 ChangeState(AnimalState.Running);
             }
             return false;
         }
         else return base.Progress(villager, progressValue);
+    }
+
+    private void ChangeSpeed(bool run)
+    {
+        if (run) agent.speed = (type == AnimalType.Passive) ? 2f : 6f;
+        else agent.speed = (type == AnimalType.Passive) ? 1f : 3f;
+        agent.acceleration = agent.speed * 2;
     }
 
     private void Die()
@@ -116,6 +130,23 @@ public class Animal : Resource
         ChangeState(AnimalState.Dead);
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (type == AnimalType.Hostile)
+        {
+            Villager villager = other.GetComponent<Villager>();
+            if (villager != null && (targetVillager == null || targetVillager == villager) && villager.alive)
+            {
+                targetVillager = villager;
+                Vector3 towardsSource = targetVillager.transform.position - transform.position;
+                agent.SetDestination(transform.position + towardsSource);
+                ChangeSpeed(true);
+                wanderCooldown = 5f;
+                ChangeState(AnimalState.Running);
+            }
+        }
+    }
+
     private void StateHook(AnimalState oldState, AnimalState newState)
     {
         ChangeState(newState);
@@ -125,15 +156,29 @@ public class Animal : Resource
     {
         if (this.state == state) return;
         this.state = state;
-        if (state == AnimalState.Idle) anim.Play("idle");
-        if (state == AnimalState.Wandering) anim.Play("walk_forward");
-        if (state == AnimalState.Running) anim.Play("run_forward");
-        if (state == AnimalState.Dead)
+        if (type != AnimalType.Hostile)
         {
-            anim.Play("stand_to_sit");
-            anim.speed = 5f;
+            if (state == AnimalState.Idle) anim.Play("idle");
+            if (state == AnimalState.Wandering) anim.Play("walk_forward");
+            if (state == AnimalState.Running) anim.Play("run_forward");
+            if (state == AnimalState.Dead)
+            {
+                anim.Play("stand_to_sit");
+                anim.speed = 5f;
+            }
+        }
+        else
+        {
+            // Wolf animations
         }
     }
+}
+
+public enum AnimalType
+{
+    Passive,
+    Neutral,
+    Hostile,
 }
 
 public enum AnimalState

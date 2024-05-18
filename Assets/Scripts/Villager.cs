@@ -22,6 +22,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public float huntingRange = 10f;
     private float workSpeed;  // Speed of resource extraction
     private float hungerRate;  // How fast they lose hunger (hungerRate points a second)
+    public string causeOfDeath;
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
@@ -33,8 +34,6 @@ public class Villager : NetworkBehaviour, ISelectable
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
-    private float distance;  // The distance to their target
-    private float targetPriority; // Priority of target object
     private Vector3 previousPosition;
 
     [Header("States")]
@@ -99,11 +98,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 else if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
                     bool progress = target.Progress(this, workSpeed * Time.deltaTime);
-                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity))
-                    {
-                        ChangeState(VillagerState.Returning);
-                        SetNewTarget(hub);
-                    }
+                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity)) ReturnToHub();
                     else if (job == VillagerJob.Hunter)
                     {
                         SetNewTarget(target);
@@ -136,11 +131,7 @@ public class Villager : NetworkBehaviour, ISelectable
             if (distance < agent.speed * Time.deltaTime * 2) vitality -= hungerRate * distance / agent.speed;
         }
 
-        if (vitality <= vitalityThreshold && state == VillagerState.Working)
-        {
-            SetNewTarget(hub);
-            ChangeState(VillagerState.Returning);
-        }
+        if (vitality <= vitalityThreshold && state == VillagerState.Working) ReturnToHub();
 
         // If starved to death
         if (vitality <= 0) 
@@ -154,6 +145,7 @@ public class Villager : NetworkBehaviour, ISelectable
             {
                 vitality = 0;
                 Die();
+                causeOfDeath = "Starvation";
             }
         }
     }
@@ -161,6 +153,12 @@ public class Villager : NetworkBehaviour, ISelectable
     public void TakeDamage(float damage)
     {
         vitality -= damage;
+        if (vitality <= 0)
+        {
+            vitality = 0;
+            Die();
+            causeOfDeath = "Wild Animal";
+        }
     }
 
     // Like it says on the tin.
@@ -205,24 +203,21 @@ public class Villager : NetworkBehaviour, ISelectable
                 {
                     // Find their distance and store the lowest
                     // With high priority objects appearing closer
-                    distance = Vector3.Distance(transform.position, candidate.transform.position);
-                    distance = distance / candidate.priority;
+                    float distance = Vector3.Distance(transform.position, candidate.transform.position);
+                    distance /= candidate.priority;
                     if (distance < lowestDistance && candidate.HasValidPositions())
                     {
                         lowestDistance = distance;
                         bestCandidate = candidate;
-                        targetPriority = candidate.priority;
                     }
                 }
             }
             
-            
-                    // Use this new distance (without priority) to find the hunger threshold
+            // Use this new distance (without priority) to find the hunger threshold
             if (bestCandidate != null)
             {
-
                 // outpost check
-                if (lowestDistance > SimVars.VARS.GetMaxVillagerRange() / 2)
+                if (TargetInRange(bestCandidate, SimVars.VARS.GetMaxVillagerRange() / 2f))
                 {
                     // means unreachable target
                     // need to spawn an outpost
@@ -230,18 +225,26 @@ public class Villager : NetworkBehaviour, ISelectable
                     bool succeeded = currentBuildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
                     print("OUTPOST " + succeeded);
                     // and go back to hub
-                    ChangeState(VillagerState.Returning);
-                    SetNewTarget(hub);
+                    ReturnToHub();
                     return;
                 }
-
-
                 float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.2f;
                 vitalityThreshold = (distanceHome / agent.speed) + 5;
             }
             SetNewTarget(bestCandidate);
         }
         ChangeState(VillagerState.Walking);
+    }
+
+    private bool TargetInRange(Targetable target, float distance)
+    {
+        List<Building> hubs = BuildingGenerator.GetHubs();
+        foreach (Building hub in hubs)
+        {
+            if (Vector3.Distance(hub.transform.position, target.transform.position) < distance) return true;
+        }
+        return false;
+        // hello
     }
 
     // Change villager state via hook
@@ -295,16 +298,34 @@ public class Villager : NetworkBehaviour, ISelectable
     // Find opening at new target
     private void SetNewTarget(Targetable newTarget)
     {
-        if (newTarget == null)
+        if (newTarget == null) ReturnToHub();
+        else
         {
-            newTarget = hub;
-            ChangeState(VillagerState.Returning);
+            if (target != null) target.ReturnTargetPosition(this);
+            target = newTarget;
+            if (target != null) agent.SetDestination(target.GetTargetPosition(this));
+            if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
+            else agent.stoppingDistance = 0.1f;
         }
-        if (target != null) target.ReturnTargetPosition(this);
-        target = newTarget;
-        if (target != null) agent.SetDestination(target.GetTargetPosition(this));
-        if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
-        else agent.stoppingDistance = 0.1f;
+    }
+
+    private void ReturnToHub()
+    {
+        Targetable nearestHub = TownCenter.TC.GetComponent<Storage>();
+        float lowestDistance = float.MaxValue;
+        List<Building> hubs = BuildingGenerator.GetHubs();
+        foreach (Building hub in hubs)
+        {
+            float distance = Vector3.Distance(transform.position, hub.transform.position);
+            distance /= hub.priority;
+            if (distance < lowestDistance && hub.HasValidPositions())
+            {
+                lowestDistance = distance;
+                nearestHub = hub;
+            }
+        }
+        SetNewTarget(nearestHub);
+        ChangeState(VillagerState.Returning);
     }
 
     // Change villager job via hook

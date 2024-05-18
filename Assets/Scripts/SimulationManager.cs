@@ -30,6 +30,7 @@ public class SimulationManager : NetworkManager
         resourceGenerator.GenerateBerries();
         resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
         resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 30f, 45f);
+        resourceGenerator.GenerateWolves(townCenter.transform.position, SimVars.VARS.startingWolves, 40f, 60f);
         townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
         if (SimVars.VARS.logSim) simLogs.StartLogging();
     }
@@ -44,5 +45,11 @@ public class SimulationManager : NetworkManager
     {
         base.OnStartClient();
         Time.timeScale = SimVars.VARS.timeScale;
+    }
+
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+        simLogs.StopLogging();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,7 +27,7 @@ public class RandomNavmeshPoint
         {
             if (RandomPointFromCenter(center, distance, out Vector3 point))
             {
-                if (!Physics.CheckBox(point + (Vector3.up * halfExtents.y), halfExtents, Quaternion.identity, ~LayerMask.GetMask("Ground")))
+                if (!Physics.CheckBox(point + (Vector3.up * halfExtents.y), halfExtents, Quaternion.identity, ~LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
                 {
                     result = point;
                     return true;
@@ -46,7 +47,7 @@ public class RandomNavmeshPoint
             {
                 Vector3 start = point + (Vector3.up * radius);
                 Vector3 end = point + (Vector3.up * (height - (radius * 2)));
-                if (!Physics.CheckCapsule(start, end, radius, ~LayerMask.GetMask("Ground")))
+                if (!Physics.CheckCapsule(start, end, radius, ~LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
                 {
                     result = point;
                     return true;
@@ -63,7 +64,7 @@ public class RandomNavmeshPoint
         {
             if (RandomPointFromCenter(center, distance, out Vector3 point))
             {
-                if (!Physics.CheckSphere(point + (Vector3.up * radius), radius, ~LayerMask.GetMask("Ground")))
+                if (!Physics.CheckSphere(point + (Vector3.up * radius), radius, ~LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
                 {
                     result = point;
                     return true;
@@ -79,7 +80,8 @@ public class RandomNavmeshPoint
         center.y = 100f;
         Vector2 offset = Random.insideUnitCircle.normalized * distance;
         Vector3 randomPoint = center + new Vector3(offset.x, 0, offset.y);
-        if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
+        Debug.DrawRay(randomPoint, Vector3.down * 100f, Color.red, 1f);
+        if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
         {
             if (NavMesh.SamplePosition(hitInfo.point, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
             {

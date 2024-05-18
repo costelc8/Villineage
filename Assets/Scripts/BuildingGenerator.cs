@@ -13,7 +13,7 @@ public class BuildingGenerator : MonoBehaviour
     private int spacing = 2;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
     private static List<Building> houses = new List<Building>();
-    private static List<Targetable> hubs = new List<Targetable>();
+    private static List<Building> hubs = new List<Building>();
     private GameObject buildingParent;
   
 
@@ -94,7 +94,7 @@ public class BuildingGenerator : MonoBehaviour
         return houses;
     }
 
-    public static List<Targetable> GetHubs()
+    public static List<Building> GetHubs()
     {
         return hubs;
     }
