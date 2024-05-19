@@ -216,4 +216,12 @@ public class ResourceGenerator : MonoBehaviour
         berries.Remove(resource);
         animals.Remove(resource);
     }
+
+   public static void ReAddBerries(Resource resource) {
+        if (resource.resourceType != ResourceType.Food) {
+            Debug.Log("Wrong food!");
+            return;
+        }
+        berries.Add(resource);
+   }
 }

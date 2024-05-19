@@ -42,7 +42,7 @@ public class Building : Targetable
         else return true;
     }
 
-    public int ContributeWood(int woodAmount)
+    public override int ContributeWood(int woodAmount)
     {
         int neededWood = maxBuildProgress - buildCap;
         int usedWood = Math.Min(neededWood, woodAmount);

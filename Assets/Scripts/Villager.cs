@@ -31,6 +31,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public int totalResources = 0; //Total number of resources across all types
     public Targetable target;  // The object they are targeting for their role
     public int capacity;  // Maximum amount of resources it can carry
+    public float potentialContribution;  // Wood that can be contributed to the building
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
@@ -97,8 +98,25 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (state == VillagerState.Walking) ChangeState(VillagerState.Working); // If walking, start working
                 else if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
-                    bool progress = target.Progress(this, workSpeed * Time.deltaTime);
+                    bool progress = false;
+                    float work = workSpeed * Time.deltaTime;
+                    // If the villager is a builder, they need to drop off some of their wood
+                    if (job == VillagerJob.Builder && potentialContribution < 0) {
+                        int contribution = target.ContributeWood(1);
+                        if (contribution <= 0) potentialContribution = 20.0f;  // Enough resources to finish the job
+                        else potentialContribution = (float) contribution;
+                        inventory[(int) ResourceType.Wood] -= contribution;
+                    // If they already have, tick down their potential progress
+                    } else if (job == VillagerJob.Builder) {
+                        potentialContribution -= work;
+                        progress = target.Progress(this, work);
+                    } else {
+                        progress = target.Progress(this, work);
+                    }
+
+                    // Send home builders without wood, or other jobs at inventory capacity
                     if (progress && (job == VillagerJob.Builder || totalResources >= capacity)) ReturnToHub();
+                    else if (job == VillagerJob.Builder && inventory[(int) ResourceType.Wood] <= 0 && potentialContribution <= 0.0f) ReturnToHub();
                     else if (job == VillagerJob.Hunter)
                     {
                         SetNewTarget(target);
@@ -112,6 +130,10 @@ public class Villager : NetworkBehaviour, ISelectable
                     hub.Deposit(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
+                    if (job == VillagerJob.Builder) {
+                        hub.Collect(this, ResourceType.Wood);
+                        totalResources = capacity;
+                    }
                     ChangeState(VillagerState.Pending);
                 }
             }
@@ -331,6 +353,7 @@ public class Villager : NetworkBehaviour, ISelectable
 
     private void ReturnToHub()
     {
+        if (job == VillagerJob.Builder) potentialContribution = 0.0f;
         Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
         float lowestDistance = float.MaxValue;
         List<Storage> hubs = BuildingGenerator.GetHubs();

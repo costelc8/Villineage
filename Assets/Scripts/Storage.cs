@@ -53,6 +53,13 @@ public class Storage : Targetable, ISelectable
         TownCenter.TC.AssignVillagerJob(villager);
     }
 
+    public void Collect(Villager villager, ResourceType resource)
+    {
+        villager.inventory[(int)resource] += SimVars.VARS.villagerCarryCapacity;
+        resources[(int)resource] -= SimVars.VARS.villagerCarryCapacity;
+        villager.totalResources = SimVars.VARS.villagerCarryCapacity;
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (SimVars.VARS != null) Gizmos.DrawWireSphere(transform.position, SimVars.VARS.GetMaxVillagerRange() / 2f);

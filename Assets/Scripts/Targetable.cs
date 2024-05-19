@@ -21,6 +21,12 @@ public class Targetable : NetworkBehaviour
         return false;
     }
 
+    public virtual int ContributeWood(int woodAmount)
+    {
+        Debug.LogWarning("Call an override please!");
+        return 0;
+    }
+
     private void GenerateValidPositions()
     {
         targetPositions = new List<TargetPosition>();

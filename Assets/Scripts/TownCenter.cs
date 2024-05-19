@@ -97,7 +97,6 @@ public class TownCenter : NetworkBehaviour
             if (storage.resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
             {
                 buildingGenerator.PlaceBuilding(BuildingType.House);
-                storage.resources[(int)ResourceType.Wood] -= SimVars.VARS.houseBuildCost;
             }
         }
     }

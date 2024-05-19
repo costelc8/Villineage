@@ -14,6 +14,9 @@ public class Resource : Targetable, ISelectable
     private float durability;
     public Villager assignedVillager;
     public ResourceType resourceType;
+    public bool respawning;
+    public bool isAnimal = false;
+    public float timer = 0.0f;
 
     void Awake()
     {
@@ -64,14 +67,19 @@ public class Resource : Targetable, ISelectable
         Vector3 endPos = new Vector3(transform.position.x, transform.position.y - 2.5f, transform.position.z);
         float duration = 2f;
 
-        while (elapsedTime < duration)
+        while (elapsedTime < duration && (resourceType != ResourceType.Food || isAnimal))
         {
             transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        Destroy(gameObject);
+        if (resourceType == ResourceType.Food && !isAnimal) {
+            yield return new WaitForSeconds(SimVars.VARS.berryRespawnTime);
+            SetBerriesActive();
+        } else {
+            Destroy(gameObject);
+        }
     }
 
     public void OnSelect()
@@ -84,6 +92,16 @@ public class Resource : Targetable, ISelectable
     public void OnDeselect()
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
+    public void SetBerriesActive()
+    {
+        quantity = SimVars.VARS.foodPerBerry;
+        durability = maxDurability;
+        stage1.SetActive(false);
+        stage0.SetActive(true);
+        ResourceGenerator.ReAddBerries(this);
+        Selection.Selector.AddSelectable(this);   
     }
 
     private void OnDestroy()

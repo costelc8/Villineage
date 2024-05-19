@@ -31,6 +31,7 @@ public class Animal : Resource
         maxWanderCooldown = Mathf.Max(1f, maxWanderCooldown);
         wanderCooldown = Random.Range(1f, maxWanderCooldown);
         health = maxHealth;
+        isAnimal = true;
     }
 
     // Update is called once per frame

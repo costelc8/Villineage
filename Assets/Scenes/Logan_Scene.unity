@@ -1209,6 +1209,7 @@ MonoBehaviour:
   startingWolves: 0
   woodPerTree: 60
   foodPerBerry: 60
+  berryRespawnTime: 30
   foodPerSheep: 60
   foodPerGoat: 60
   houseBuildCost: 60
