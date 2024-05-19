@@ -108,8 +108,10 @@ public class Villager : NetworkBehaviour, ISelectable
                         inventory[(int) ResourceType.Wood] -= contribution;
                     // If they already have, tick down their potential progress
                     } else if (job == VillagerJob.Builder) {
+                        float oldPotential = potentialContribution;
                         potentialContribution -= work;
-                        progress = target.Progress(this, work);
+                        if (potentialContribution > 0) progress = target.Progress(this, work);
+                        else progress = target.Progress(this, oldPotential);
                     } else {
                         progress = target.Progress(this, work);
                     }

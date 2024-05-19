@@ -26,7 +26,7 @@ public class Building : Targetable
             //}
             buildTime += progressValue;
             UpdateStage();
-            if (buildTime >= maxBuildProgress)
+            if (buildTime >= maxBuildProgress || buildCap >= maxBuildProgress)
             {
                 buildTime = maxBuildProgress;
                 switch(buildingType)
