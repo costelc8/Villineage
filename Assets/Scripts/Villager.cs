@@ -28,7 +28,7 @@ public class Villager : NetworkBehaviour, ISelectable
     [SyncVar(hook = nameof(JobHook))]
     public VillagerJob job;  // Their current role
     public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
-    public int totalResources = 0; //Total number of resources across all types
+    public int totalResources = 0; // Total number of resources across all types
     public Targetable target;  // The object they are targeting for their role
     public int capacity;  // Maximum amount of resources it can carry
     public float potentialContribution;  // Wood that can be contributed to the building

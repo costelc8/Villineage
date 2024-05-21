@@ -48,16 +48,20 @@ public class Storage : Targetable, ISelectable
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
-        TownCenter.TC.CheckSpawnHouse();
-        TownCenter.TC.SpawnCheck();
+        TownCenter.TC.HouseSpawnCheck();
+        TownCenter.TC.VillagerSpawnCheck();
         TownCenter.TC.AssignVillagerJob(villager);
     }
 
     public void Collect(Villager villager, ResourceType resource)
     {
-        villager.inventory[(int)resource] += SimVars.VARS.villagerCarryCapacity;
-        resources[(int)resource] -= SimVars.VARS.villagerCarryCapacity;
-        villager.totalResources = SimVars.VARS.villagerCarryCapacity;
+        int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
+        int inStorage = resources[(int)resource];
+        int takes = Mathf.Min(canHold, inStorage);
+
+        villager.inventory[(int)resource] += takes;
+        resources[(int)resource] -= takes;
+        villager.totalResources += takes;
     }
 
     private void OnDrawGizmosSelected()

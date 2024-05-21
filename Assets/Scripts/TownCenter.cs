@@ -59,7 +59,7 @@ public class TownCenter : NetworkBehaviour
         AssignAllVillagerJobs();
     }
 
-    public void SpawnCheck()
+    public void VillagerSpawnCheck()
     {
         bool enoughFood = storage.resources[(int)ResourceType.Food] >= 10 * villagers.Count;
         bool enoughHouses = villagers.Count < SimVars.VARS.startingVillagers + BuildingGenerator.GetHouses().Count;
@@ -90,7 +90,7 @@ public class TownCenter : NetworkBehaviour
         Physics.SyncTransforms();
     }
 
-    public void CheckSpawnHouse()
+    public void HouseSpawnCheck()
     {
         if (BuildingGenerator.GetPendingHouses().Count < BuildingGenerator.GetHubs().Count)
         {

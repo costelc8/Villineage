@@ -374,7 +374,7 @@ MonoBehaviour:
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingSheep: 50
+  startingSheep: 0
   startingGoats: 6
   startingWolves: 0
   woodPerTree: 60
