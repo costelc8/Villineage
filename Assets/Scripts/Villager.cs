@@ -129,12 +129,11 @@ public class Villager : NetworkBehaviour, ISelectable
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
-                    hub.Deposit(this, inventory.ToArray());
-                    for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
-                    totalResources = 0;
+                    hub.VillagerDeposit(this, inventory.ToArray());
+                    
                     if (job == VillagerJob.Builder) {
-                        hub.Collect(this, ResourceType.Wood);
-                        totalResources = capacity;
+                        int[] wants = {0, SimVars.VARS.villagerCarryCapacity, 0, 0}; // wants as much wood as possible
+                        hub.VillagerCollect(this, wants);
                     }
                     ChangeState(VillagerState.Pending);
                 }
