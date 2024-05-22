@@ -49,6 +49,7 @@ public class Building : Targetable
 
     private void ProgressHook(int oldProgress, int newProgress)
     {
+        if (oldProgress == 0) priority *= 1.1f;
         UpdateStage();
     }
 
