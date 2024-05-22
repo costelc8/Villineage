@@ -33,10 +33,9 @@ public class Building : Targetable
         if (buildProgress >= currentWood)
         {
             buildProgress = currentWood;
-            UntargetAll();
             return false;
         }
-        return false;
+        return true;
     }
 
     public void ContributeWood(Villager villager)

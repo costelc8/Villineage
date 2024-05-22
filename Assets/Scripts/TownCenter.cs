@@ -108,7 +108,7 @@ public class TownCenter : NetworkBehaviour
         foreach (Villager villager in villagers)
         {
             villager.ChangeJob(GetMostNeededJob());
-            currentJobs[(int)villager.Job()]++;
+            currentJobs[(int)villager.job]++;
             CalculateNeededJobs();
         }
     }
@@ -167,7 +167,7 @@ public class TownCenter : NetworkBehaviour
             VillagerJob highestWeight = HighestWeightJob();
             jobWeights[(int)highestWeight] -= villagerWeight;
             neededJobs[(int)highestWeight]++;
-            neededJobs[(int)villager.Job()]--;
+            neededJobs[(int)villager.job]--;
         }
         CalculateJobWeights();
     }

@@ -2,6 +2,7 @@ using Mirror;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -99,17 +100,17 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (state == VillagerState.Walking) ChangeState(VillagerState.Working); // If walking, start working
                 if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
-                    if (job == VillagerJob.Builder)
-                    {
-                        ((Building)target).ContributeWood(this);
-                        DisableBackVisuals();
-                    }
                     progressCooldown -= workSpeed * Time.deltaTime;
                     if (progressCooldown <= 0)
                     {
+                        if (job == VillagerJob.Builder && inventory[(int)ResourceType.Wood] > 0)
+                        {
+                            ((Building)target).ContributeWood(this);
+                            DisableBackVisuals();
+                        }
                         progressCooldown++;
                         bool progress = target.Progress(this);
-                        if (progress && (job == VillagerJob.Builder || totalResources >= capacity)) ReturnToHub();
+                        if ((job == VillagerJob.Builder && !progress) || (job != VillagerJob.Builder && totalResources >= capacity)) ReturnToHub();
                         else if (job == VillagerJob.Hunter)
                         {
                             SetNewTarget(target);
@@ -238,19 +239,19 @@ public class Villager : NetworkBehaviour, ISelectable
                     // means unreachable target
                     // need to spawn an outpost
                     Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
-                    if (building != null)
-                    {
-                        TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
-                        SetNewTarget(building);
-                    }
+                    //if (building != null)
+                    //{
+                    //    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
+                    //    SetNewTarget(building);
+                    //}
                 }
-                else if (pendingOutpost != null)
-                {
-                    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
-                    SetNewTarget(pendingOutpost);
-                }
-                else SetNewTarget(bestCandidate);
-                float distanceHome = Vector3.Distance(bestCandidate.transform.position, TownCenter.TC.transform.position) * 1.5f;
+                //else if (pendingOutpost != null)
+                //{
+                //    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
+                //    SetNewTarget(pendingOutpost);
+                //}
+                SetNewTarget(bestCandidate);
+                float distanceHome = Vector3.Distance(bestCandidate.transform.position, GetNearestHub(bestCandidate.transform.position).transform.position) * 1.5f;
                 vitalityThreshold = distanceHome / agent.speed;
             }
             else SetNewTarget(bestCandidate);
@@ -280,6 +281,23 @@ public class Villager : NetworkBehaviour, ISelectable
         }
         pendingOutpost = null;
         return false;
+    }
+
+    private Storage GetNearestHub(Vector3 position)
+    {
+        List<Storage> hubs = BuildingGenerator.GetHubs();
+        Storage nearestHub = null;
+        float lowestDistance = float.MaxValue;
+        foreach (Storage hub in hubs)
+        {
+            float distance = Vector3.Distance(hub.transform.position, position);
+            if (distance < lowestDistance)
+            {
+                nearestHub = hub;
+                lowestDistance = distance;
+            }
+        }
+        return nearestHub;
     }
 
     // Change villager state via hook
@@ -384,12 +402,6 @@ public class Villager : NetworkBehaviour, ISelectable
         hammer.SetActive(job == VillagerJob.Builder);
         bow.SetActive(job == VillagerJob.Hunter);
         quiver.SetActive(job == VillagerJob.Hunter);
-    }
-
-    // Getter for villager's job
-    public VillagerJob Job()
-    {
-        return job;
     }
 
     // When selected, display ui

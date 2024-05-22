@@ -1190,9 +1190,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 2
+  timeScale: 10
   logSim: 0
-  seed: 0
+  seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
   hunterWeight: 1
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   startingWolves: 0
   woodPerTree: 60
   foodPerBerry: 60
-  berryRespawnTime: 30
+  berryRespawnTime: 600
   foodPerSheep: 60
   foodPerGoat: 60
   houseBuildCost: 60

@@ -127,13 +127,13 @@ public class Targetable : NetworkBehaviour
         {
             if (targetPos.assignedVillager != null)
             {
-                targetPos.assignedVillager.ReturnToHub();
+                targetPos.assignedVillager.target = null;
                 targetPos.assignedVillager = null;
             }
         }
     }
 
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         if (targetPositions != null)
         {
