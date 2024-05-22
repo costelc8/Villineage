@@ -9,9 +9,10 @@ public class UnitHUD : MonoBehaviour
     public GameObject storageHUD;
     public GameObject resourceHUD;
 
-    public GameObject resourceSumHUD;
     public Dictionary<GameObject, GameObject> unitHUDs = new Dictionary<GameObject, GameObject>();
     public Dictionary<GameObject, float> hudOffsets = new Dictionary<GameObject, float>();
+
+    private Selection selectionScript;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class UnitHUD : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        selectionScript = FindObjectOfType<Selection>();
         
     }
 
@@ -46,17 +48,33 @@ public class UnitHUD : MonoBehaviour
     /// </returns>
     public GameObject AddUnitHUD(GameObject unit, GameObject hudPrefab, float offset)
     {
-        if (!unitHUDs.ContainsKey(unit))
-        {
-            GameObject hud = Instantiate(hudPrefab, transform);
-            unitHUDs.Add(unit, hud);
-            hudOffsets.Add(unit, offset);
-            return hud;
+        List<ISelectable> selectedResources = selectionScript.selected;
+        if (selectedResources.Count >= 2) {
+            if (!unitHUDs.ContainsKey(unit))
+             {
+                GameObject hud = Instantiate(hudPrefab, transform);
+                return hudPrefab;
+
+             }
+             else{
+                return null;
+             }
         }
-        else
+        else 
         {
-            Debug.LogWarning("Attempted to add a unitHUD that already exists");
-            return null;
+            if (!unitHUDs.ContainsKey(unit))
+            {
+                GameObject hud = Instantiate(hudPrefab, transform);
+                unitHUDs.Add(unit, hud);
+                hudOffsets.Add(unit, offset);
+                return hud;
+            }
+            else
+            {
+                Debug.LogWarning("Attempted to add a unitHUD that already exists");
+                return null;
+            }
+
         }
     }
 

@@ -1,3 +1,7 @@
 [
-{"Resources":{"Wood":0,"Food":0},"Villagers":4,"Houses":0}
+{"Resources":{"Wood":0,"Food":0},"Villagers":4,"Houses":0},
+{"Resources":{"Wood":50,"Food":24},"Villagers":4,"Houses":0},
+{"Resources":{"Wood":60,"Food":65},"Villagers":4,"Houses":0},
+{"Resources":{"Wood":70,"Food":93},"Villagers":4,"Houses":0},
+{"Resources":{"Wood":70,"Food":102},"Villagers":5,"Houses":1}
 ]
