@@ -45,6 +45,7 @@ public class Building : Targetable
         int usedWood = Math.Min(neededWood, villager.inventory[(int)ResourceType.Wood]);
         currentWood += usedWood;
         villager.inventory[(int)ResourceType.Wood] -= usedWood;
+        villager.totalResources -= usedWood;
     }
 
     private void ProgressHook(int oldProgress, int newProgress)

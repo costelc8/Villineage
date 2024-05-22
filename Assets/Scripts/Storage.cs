@@ -1,4 +1,6 @@
 using Mirror;
+using Mono.CecilX;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,17 +32,15 @@ public class Storage : Targetable, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-    public void Store(int[] deposit)
+    public void VillagerDeposit(Villager villager)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            resources[i] += deposit[i];
+            int storing = villager.inventory[i];
+            resources[i] += storing;
+            villager.inventory[i] -= storing;
+            villager.totalResources -= storing;
         }
-    }
-
-    public void Deposit(Villager villager, int[] deposit)
-    {
-        Store(deposit);
         int neededFood = Mathf.Min((int)((villager.maxVitality - villager.vitality) / SimVars.VARS.vitalityPerFood), resources[(int)ResourceType.Food]);
         if (resources[(int)ResourceType.Food] >= neededFood)
         {
@@ -53,14 +53,15 @@ public class Storage : Targetable, ISelectable
         TownCenter.TC.AssignVillagerJob(villager);
     }
 
-    public void Collect(Villager villager, ResourceType resource)
+    public void VillagerCollect(Villager villager, ResourceType resource)
     {
+        int available = resources[(int)resource];
         int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
-        int inStorage = resources[(int)resource];
-        int takes = Mathf.Min(canHold, inStorage);
 
-        villager.inventory[(int)resource] += takes;
+        int takes = Math.Min(available, canHold); 
+            
         resources[(int)resource] -= takes;
+        villager.inventory[(int)resource] += takes;
         villager.totalResources += takes;
     }
 

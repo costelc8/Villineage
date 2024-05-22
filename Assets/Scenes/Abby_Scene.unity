@@ -365,7 +365,7 @@ MonoBehaviour:
   seed: 0
   lumberjackWeight: 2
   gathererWeight: 1
-  hunterWeight: 1
+  hunterWeight: 0
   builderWeight: 1
   startingVillagers: 4
   villagerSpawnTime: 30
