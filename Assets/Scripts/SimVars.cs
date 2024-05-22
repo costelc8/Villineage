@@ -30,6 +30,10 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float villagerHungerRate = 1f;
     [SyncVar] public float vitalityPerFood = 10f;
 
+    [Header("Cart Variables")]
+    [SyncVar] public float cartMoveSpeed = 8f;
+    [SyncVar] public int cartCapacity = 20;
+
     [Header("Resource Variables")]
     [SyncVar] public int startingSheep = 4;
     [SyncVar] public int startingGoats = 6;

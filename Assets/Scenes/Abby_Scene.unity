@@ -367,7 +367,7 @@ MonoBehaviour:
   gathererWeight: 1
   hunterWeight: 0
   builderWeight: 1
-  startingVillagers: 4
+  startingVillagers: 8
   villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
