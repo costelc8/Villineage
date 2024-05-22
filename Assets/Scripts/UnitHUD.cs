@@ -8,6 +8,8 @@ public class UnitHUD : MonoBehaviour
     public GameObject villagerHUD;
     public GameObject storageHUD;
     public GameObject resourceHUD;
+
+    public GameObject resourceSumHUD;
     public Dictionary<GameObject, GameObject> unitHUDs = new Dictionary<GameObject, GameObject>();
     public Dictionary<GameObject, float> hudOffsets = new Dictionary<GameObject, float>();
 

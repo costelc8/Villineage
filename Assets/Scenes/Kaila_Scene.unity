@@ -452,6 +452,7 @@ MonoBehaviour:
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
+  wolfPrefab: {fileID: 8090313371282963140, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   forestPosition: {fileID: 0}
   forestSpacing: 4
   forestDensity: 1
@@ -673,6 +674,7 @@ GameObject:
   - component: {fileID: 1519554149}
   - component: {fileID: 1519554146}
   - component: {fileID: 1519554151}
+  - component: {fileID: 1519554154}
   - component: {fileID: 1519554150}
   - component: {fileID: 1519554152}
   - component: {fileID: 1519554153}
@@ -733,7 +735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 6665341597343912254, guid: 62f2e35b10b294e42b3ea826f257b351, type: 3}
-  outpostPrefab: {fileID: 0}
+  outpostPrefab: {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
   farmPrefab: {fileID: 0}
 --- !u!114 &1519554151
 MonoBehaviour:
@@ -752,6 +754,10 @@ MonoBehaviour:
   syncInterval: 0
   villagerPrefab: {fileID: 2020194912628289861, guid: f331dafee6579b8428b720fedea69647, type: 3}
   villagers: []
+  buildingGenerator: {fileID: 0}
+  villagerParent: {fileID: 0}
+  spawning: 0
+  timer: 0
   jobWeights:
   - 0
   - 0
@@ -792,6 +798,29 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &1519554154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519554144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc419fc6a504d443a37c5dd0e1111a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  enforceMaxVillagers: 0
+  maxAssignedVillagers: 0
+  assignedVillagers: 0
+  priority: 1
+  movingTarget: 0
+  villagers: []
+  neededResources: 
+  requestedResources: 0000000000000000
 --- !u!1 &1874911279
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1874911280}
   - component: {fileID: 1874911284}
+  - component: {fileID: 1874911285}
   - component: {fileID: 1874911282}
   - component: {fileID: 1874911281}
   m_Layer: 0
@@ -926,6 +956,19 @@ MonoBehaviour:
   terrainGenerator: {fileID: 1194879060}
   resourceGenerator: {fileID: 1194879065}
   townCenter: {fileID: 1519554151}
+  simLogs: {fileID: 1874911285}
+--- !u!114 &1874911285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874911279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec9ac581d7450e4f8e0b70e480e709d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1916079618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1115,7 +1158,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
-  storageHUD: {fileID: 0}
+  storageHUD: {fileID: 7220710526218812636, guid: 6dd79cf54942ed543a2d4ceeb24fb583, type: 3}
+  resourceHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  resourceSumHUD: {fileID: 1335294400189591661, guid: a5a866b678995a947a908c0f435a2da4, type: 3}
 --- !u!1 &2127958818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,27 +1194,32 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 1
-  seed: 0
+  timeScale: 5
+  logSim: 1
+  seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
   hunterWeight: 1
+  builderWeight: 1
   startingVillagers: 4
+  villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
-  hungerPerFood: 10
+  vitalityPerFood: 10
   startingSheep: 4
   startingGoats: 6
-  woodPerTree: 20
+  startingWolves: 0
+  woodPerTree: 60
   foodPerBerry: 60
+  berryRespawnTime: 300
   foodPerSheep: 60
   foodPerGoat: 60
-  woodPerHouse: 60
-  houseBuildTime: 30
-  outpostBuildTime: 30
-  terrainScale: 2
+  houseBuildCost: 60
+  outpostBuildCost: 60
+  villagerSpawnCost: 30
+  terrainScale: 3
   terrainSize: 32
   terrainDepth: 8
 --- !u!4 &2127958821
@@ -1218,10 +1268,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   rotationSpeed: 5
-  zoomSpeed: 1
+  zoomSpeed: 5
   zoomDistance: 30
   minZoomDistance: 10
-  maxZoomDistance: 50
+  maxZoomDistance: 100
 --- !u!4 &2284993121416841795
 Transform:
   m_ObjectHideFlags: 0

@@ -13,6 +13,13 @@ public class Selection : MonoBehaviour
     private List<ISelectable> selectables = new List<ISelectable>();
     private List<ISelectable> selected = new List<ISelectable>();
 
+    private ResourceSummaryDisplay resourceSummaryDisplay;
+
+    void Start()
+    {
+        resourceSummaryDisplay = FindObjectOfType<ResourceSummaryDisplay>();
+    }
+
     private void Awake()
     {
         if (Selector == null || Selector == this) Selector = this;
@@ -118,8 +125,25 @@ public class Selection : MonoBehaviour
             {
                 selected.Add(selectable);
                 selectable.OnSelect();
+                resourceSummaryDisplay.DisplaySelectedResources(selected);
             }
+
+
+        //         // Add the resource to the summary display
+        //         if (selectable is Resource resource)
+        //         {
+        //             if (ResourceSummaryDisplay.Instance == null)
+        //             {
+        //                 Debug.LogError("ResourceSummaryDisplay.Instance is null before adding resource.");
+        //             }
+        //             else
+        //             {
+        //                 ResourceSummaryDisplay.Instance.AddResource(resource);
+        //             }
+        //         }
+        //     }
         }
+        // ResourceSummaryDisplay.Instance.UpdateResourceUI();
         SelectSingle((selectionStart + selectionEnd) / 2);
     }
 }
