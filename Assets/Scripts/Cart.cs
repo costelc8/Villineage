@@ -58,7 +58,7 @@ public class Cart : NetworkBehaviour, ISelectable
             else
             {
                 // at TC
-                storage.Request(this, ResourceType.Food, 50);
+                storage.Request(this, hub.requestedResources);
 
                 // go to the outpost
                 target = hub;

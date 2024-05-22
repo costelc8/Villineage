@@ -78,6 +78,7 @@ public class Villager : NetworkBehaviour, ISelectable
             // set default hub to town center
             // if they're reparented to an outpost later, can change this
             hub = TownCenter.TC.GetComponent<Storage>();
+            hub.villagers.Add(this);
             previousPosition = transform.position;
         }
     }
@@ -239,20 +240,8 @@ public class Villager : NetworkBehaviour, ISelectable
                     // means unreachable target
                     // need to spawn an outpost
                     Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
-                    //if (building != null)
-                    //{
-                    //    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
-                    //    SetNewTarget(building);
-                    //}
                 }
-                //else if (pendingOutpost != null)
-                //{
-                //    TownCenter.TC.ChangeVillagerJob(this, VillagerJob.Builder);
-                //    SetNewTarget(pendingOutpost);
-                //}
                 SetNewTarget(bestCandidate);
-                float distanceHome = Vector3.Distance(bestCandidate.transform.position, GetNearestHub(bestCandidate.transform.position).transform.position) * 1.5f;
-                vitalityThreshold = distanceHome / agent.speed;
             }
             else SetNewTarget(bestCandidate);
         }
@@ -366,6 +355,8 @@ public class Villager : NetworkBehaviour, ISelectable
             if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
             else agent.stoppingDistance = 0.1f;
         }
+        float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position) * 1.5f;
+        vitalityThreshold = distanceHome / agent.speed;
     }
 
     public void ReturnToHub()
@@ -383,7 +374,9 @@ public class Villager : NetworkBehaviour, ISelectable
                 nearestHub = storage;
             }
         }
+        hub.villagers.Remove(this);
         hub = nearestHub;
+        hub.villagers.Add(this);
         SetNewTarget(nearestHub);
         ChangeState(VillagerState.Returning);
     }

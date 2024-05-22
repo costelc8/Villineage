@@ -53,6 +53,7 @@ public class Storage : Targetable, ISelectable
             resources[(int)ResourceType.Food] -= neededFood;
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
+        UpdateResourceRequest();
         TownCenter.TC.HouseSpawnCheck();
         TownCenter.TC.VillagerSpawnCheck();
         TownCenter.TC.AssignVillagerJob(villager);
@@ -66,6 +67,7 @@ public class Storage : Targetable, ISelectable
             resources[i] += storing;
             cart.inventory[i] -= storing;
         }
+        UpdateResourceRequest();
         TownCenter.TC.HouseSpawnCheck();
         TownCenter.TC.VillagerSpawnCheck();
     }
@@ -82,22 +84,25 @@ public class Storage : Targetable, ISelectable
         villager.totalResources += takes;
     }
 
-    public void Request(Cart cart, ResourceType resource, int amount)
+    public void Request(Cart cart, int[] resources)
     {
-        int available = resources[(int)resource];
-        int canHold = cart.capacity - cart.inventory[(int)resource];
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        {
+            int available = resources[i];
+            int canHold = cart.capacity - cart.inventory[i];
 
-        int takes = Math.Min(Math.Min(available, canHold), amount);
+            int takes = Math.Min(Math.Min(available, canHold), resources[i]);
 
-        resources[(int)resource] -= takes;
-        cart.inventory[(int)resource] += takes;
+            resources[i] -= takes;
+            cart.inventory[i] += takes;
+        }
     }
 
     public void Collect(Cart cart)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            int available = resources[i];
+            int available = Mathf.Max(resources[i] - neededResources[i], 0);
             int canHold = cart.capacity - cart.inventory[i];
 
             int takes = Math.Min(available, canHold);
