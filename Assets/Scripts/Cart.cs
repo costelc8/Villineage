@@ -10,7 +10,6 @@ public class Cart : NetworkBehaviour, ISelectable
     private NavMeshAgent agent;
     private Animator anim;
     public Storage hub;
-    public Storage townCenter;
 
     public bool selected;  // Have they been selected?
 
@@ -37,8 +36,33 @@ public class Cart : NetworkBehaviour, ISelectable
             agent.acceleration = agent.speed * 2;
             capacity = SimVars.VARS.villagerCarryCapacity * 10;
 
-            
+        }
+    }
 
+    public void Update()
+    {
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            // arrived at hub
+            Storage storage = target.GetComponent<Storage>();
+            storage.Deposit(this);
+            if (storage == hub)
+            {
+                // at outpost
+                storage.Collect(this);
+
+                // go to TC
+                target = TownCenter.TC.GetComponent<Storage>();
+            } 
+            else
+            {
+                // at TC
+                storage.Request(this, ResourceType.Food, 50);
+
+                // go to the outpost
+                target = hub;
+            }
+            agent.SetDestination(target.transform.position);
         }
     }
 
