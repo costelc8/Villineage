@@ -10,44 +10,34 @@ public class Resource : Targetable, ISelectable
     private GameObject stage1;
     [SyncVar(hook = nameof(QuantityHook))]
     public int quantity;
-    public float maxDurability = 1;
-    private float durability;
     public Villager assignedVillager;
     public ResourceType resourceType;
     public bool respawning;
     public bool isAnimal = false;
-    public float timer = 0.0f;
 
     void Awake()
     {
         stage0 = transform.GetChild(0).gameObject;
         stage1 = transform.GetChild(1).gameObject;
-        durability = maxDurability;
     }
 
     // Decrement durability of the resource by the amount of progress made on it.
     // If the durability reaches 0, yield a resource, and reset the durability if
     // there is more resource to be harvested.
-    public override bool Progress(Villager villager, float progressValue)
+    public override bool Progress(Villager villager)
     {
-        durability -= progressValue;
-        while (durability <= 0)
+        quantity--;
+        villager.totalResources++;
+        villager.inventory[(int)resourceType]++;
+        if (quantity <= 0)
         {
-            quantity--;
-            villager.totalResources++;
-            villager.inventory[(int)resourceType]++;
-            durability += maxDurability;
-            if (quantity <= 0)
-            {
-                ResourceGenerator.RemoveResource(this);
-                Selection.Selector.RemoveSelectable(this);
-                UnitHUD.HUD.RemoveUnitHUD(gameObject);
-                UntargetAll();
-                StartCoroutine(DestroyResource());
-            }
-            return true;
+            ResourceGenerator.RemoveResource(this);
+            Selection.Selector.RemoveSelectable(this);
+            UnitHUD.HUD.RemoveUnitHUD(gameObject);
+            UntargetAll();
+            StartCoroutine(DestroyResource());
         }
-        return false;
+        return true;
     }
 
     private void QuantityHook(int oldQuantity, int newQuantity)
@@ -97,7 +87,6 @@ public class Resource : Targetable, ISelectable
     public void SetBerriesActive()
     {
         quantity = SimVars.VARS.foodPerBerry;
-        durability = maxDurability;
         stage1.SetActive(false);
         stage0.SetActive(true);
         ResourceGenerator.ReAddBerries(this);

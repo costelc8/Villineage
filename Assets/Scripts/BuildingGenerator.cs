@@ -77,9 +77,9 @@ public class BuildingGenerator : MonoBehaviour
         {
             // Make the building
             Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
-            building.maxBuildProgress = buildCost;
+            building.requiredWood = buildCost;
             building.buildingType = buildingType;
-            building.buildCap = 0;
+            building.currentWood = 0;
             building.priority = priority;
             switch(buildingType)
             {

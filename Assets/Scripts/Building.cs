@@ -7,57 +7,54 @@ using UnityEngine;
 public class Building : Targetable
 {
     public Villager assignedVillager;
-    public int maxBuildProgress;
-    public int buildCap;
+    public int requiredWood;
+    public int currentWood;
     public int stage;
     public BuildingType buildingType;
 
     [SyncVar(hook = nameof(ProgressHook))]
-    public float buildTime;
+    public int buildProgress;
 
-    public override bool Progress(Villager villager, float progressValue)
+    public override bool Progress(Villager villager)
     {
-        if (buildTime < maxBuildProgress)
+        buildProgress++;
+        UpdateStage();
+        if (buildProgress >= requiredWood)
         {
-            //if (buildTime >= buildCap)
-            //{
-            //    buildTime = buildCap;
-            //    UntargetAll();
-            //}
-            buildTime += progressValue;
-            UpdateStage();
-            if (buildTime >= maxBuildProgress || buildCap >= maxBuildProgress)
+            buildProgress = requiredWood;
+            switch(buildingType)
             {
-                buildTime = maxBuildProgress;
-                switch(buildingType)
-                {
-                    case BuildingType.House: BuildingGenerator.AddHouse(this); break;
-                    case BuildingType.Outpost: BuildingGenerator.AddOutpost(this); break;
-                }
-                UntargetAll();
-                return true;
+                case BuildingType.House: BuildingGenerator.AddHouse(this); break;
+                case BuildingType.Outpost: BuildingGenerator.AddOutpost(this); break;
             }
-            else return false;
+            UntargetAll();
+            return true;
         }
-        else return true;
+        if (buildProgress >= currentWood)
+        {
+            buildProgress = currentWood;
+            UntargetAll();
+            return false;
+        }
+        return false;
     }
 
-    public override int ContributeWood(int woodAmount)
+    public void ContributeWood(Villager villager)
     {
-        int neededWood = maxBuildProgress - buildCap;
-        int usedWood = Math.Min(neededWood, woodAmount);
-        buildCap += usedWood;
-        return usedWood;
+        int neededWood = requiredWood - currentWood;
+        int usedWood = Math.Min(neededWood, villager.inventory[(int)ResourceType.Wood]);
+        currentWood += usedWood;
+        villager.inventory[(int)ResourceType.Wood] -= usedWood;
     }
 
-    private void ProgressHook(float oldProgress, float newProgress)
+    private void ProgressHook(int oldProgress, int newProgress)
     {
         UpdateStage();
     }
 
     private void UpdateStage()
     {
-        int newStage = Mathf.Clamp((int)(buildTime * (transform.childCount - 1) / maxBuildProgress), 0, transform.childCount - 1);
+        int newStage = Mathf.Clamp((buildProgress * (transform.childCount - 1) / requiredWood), 0, transform.childCount - 1);
         if (newStage != stage)
         {
             stage = newStage;

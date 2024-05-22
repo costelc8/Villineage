@@ -15,16 +15,10 @@ public class Targetable : NetworkBehaviour
     public bool movingTarget = false;
     protected NavMeshObstacle obstacle;
 
-    public virtual bool Progress(Villager villager, float progressValue)
+    public virtual bool Progress(Villager villager)
     {
         Debug.LogWarning("This method should be overwritten and never called directly!");
         return false;
-    }
-
-    public virtual int ContributeWood(int woodAmount)
-    {
-        Debug.LogWarning("Call an override please!");
-        return 0;
     }
 
     private void GenerateValidPositions()
@@ -131,7 +125,11 @@ public class Targetable : NetworkBehaviour
     {
         foreach (TargetPosition targetPos in targetPositions)
         {
-            if (targetPos.assignedVillager != null) targetPos.assignedVillager.target = null;
+            if (targetPos.assignedVillager != null)
+            {
+                targetPos.assignedVillager.ReturnToHub();
+                targetPos.assignedVillager = null;
+            }
         }
     }
 

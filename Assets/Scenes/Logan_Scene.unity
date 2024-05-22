@@ -1190,7 +1190,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 10
+  timeScale: 2
   logSim: 0
   seed: 0
   lumberjackWeight: 2

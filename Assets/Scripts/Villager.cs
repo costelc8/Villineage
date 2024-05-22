@@ -31,7 +31,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public int totalResources = 0; // Total number of resources across all types
     public Targetable target;  // The object they are targeting for their role
     public int capacity;  // Maximum amount of resources it can carry
-    public float potentialContribution;  // Wood that can be contributed to the building
+    public float progressCooldown = 1;
 
     [Header("Movement")]
     public float selectionRange = 10.0f;  // Selection range for random movement
@@ -56,6 +56,7 @@ public class Villager : NetworkBehaviour, ISelectable
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         vitality = maxVitality;
+        progressCooldown = 1;
     }
 
     public void Start()
@@ -96,35 +97,26 @@ public class Villager : NetworkBehaviour, ISelectable
             else
             {
                 if (state == VillagerState.Walking) ChangeState(VillagerState.Working); // If walking, start working
-                else if (state == VillagerState.Working) // If working, do appropriate work based on job
+                if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
-                    bool progress = false;
-                    float work = workSpeed * Time.deltaTime;
-                    // If the villager is a builder, they need to drop off some of their wood
-                    if (job == VillagerJob.Builder && potentialContribution < 0) {
-                        int contribution = target.ContributeWood(1);
-                        if (contribution <= 0) potentialContribution = 20.0f;  // Enough resources to finish the job
-                        else potentialContribution = (float) contribution;
-                        inventory[(int) ResourceType.Wood] -= contribution;
-                    // If they already have, tick down their potential progress
-                    } else if (job == VillagerJob.Builder) {
-                        float oldPotential = potentialContribution;
-                        potentialContribution -= work;
-                        if (potentialContribution > 0) progress = target.Progress(this, work);
-                        else progress = target.Progress(this, oldPotential);
-                    } else {
-                        progress = target.Progress(this, work);
-                    }
-
-                    // Send home builders without wood, or other jobs at inventory capacity
-                    if (progress && (job == VillagerJob.Builder || totalResources >= capacity)) ReturnToHub();
-                    else if (job == VillagerJob.Builder && inventory[(int) ResourceType.Wood] <= 0 && potentialContribution <= 0.0f) ReturnToHub();
-                    else if (job == VillagerJob.Hunter)
+                    if (job == VillagerJob.Builder)
                     {
-                        SetNewTarget(target);
-                        Vector3 towards = target.transform.position - transform.position;
-                        towards.y = 0;
-                        transform.rotation = Quaternion.LookRotation(towards);
+                        ((Building)target).ContributeWood(this);
+                        DisableBackVisuals();
+                    }
+                    progressCooldown -= workSpeed * Time.deltaTime;
+                    if (progressCooldown <= 0)
+                    {
+                        progressCooldown++;
+                        bool progress = target.Progress(this);
+                        if (progress && (job == VillagerJob.Builder || totalResources >= capacity)) ReturnToHub();
+                        else if (job == VillagerJob.Hunter)
+                        {
+                            SetNewTarget(target);
+                            Vector3 towards = target.transform.position - transform.position;
+                            towards.y = 0;
+                            transform.rotation = Quaternion.LookRotation(towards);
+                        }
                     }
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
@@ -132,11 +124,13 @@ public class Villager : NetworkBehaviour, ISelectable
                     hub.Deposit(this, inventory.ToArray());
                     for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory[i] = 0;
                     totalResources = 0;
-                    if (job == VillagerJob.Builder) {
+                    if (job == VillagerJob.Builder)
+                    {
                         hub.Collect(this, ResourceType.Wood);
                         totalResources = capacity;
                     }
                     ChangeState(VillagerState.Pending);
+                    DisableBackVisuals();
                 }
             }
         }
@@ -318,12 +312,11 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (job == VillagerJob.Lumberjack) backWood.SetActive(true);
                 else if (job == VillagerJob.Gatherer) backFood.SetActive(true);
             }
-            else
+            else if (state == VillagerState.Walking)
             {
-                backWood.SetActive(false);
-                backFood.SetActive(false);
-                backOther.SetActive(false);
+                if (job == VillagerJob.Builder) backWood.SetActive(true);
             }
+            else DisableBackVisuals();
         }
         else if (newState == VillagerState.Working)
         {
@@ -337,6 +330,13 @@ public class Villager : NetworkBehaviour, ISelectable
             anim.SetBool("Working",true);
             anim.SetFloat("Walking",0);
         }
+    }
+
+    private void DisableBackVisuals()
+    {
+        backWood.SetActive(false);
+        backFood.SetActive(false);
+        backOther.SetActive(false);
     }
 
     // Find opening at new target
@@ -353,9 +353,8 @@ public class Villager : NetworkBehaviour, ISelectable
         }
     }
 
-    private void ReturnToHub()
+    public void ReturnToHub()
     {
-        if (job == VillagerJob.Builder) potentialContribution = 0.0f;
         Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
         float lowestDistance = float.MaxValue;
         List<Storage> hubs = BuildingGenerator.GetHubs();

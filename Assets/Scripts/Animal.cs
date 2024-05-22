@@ -12,8 +12,8 @@ public class Animal : Resource
     public Vector3 wanderOrigin;
     public float originTetherStrength;
     public float maxWanderCooldown;
-    public float maxHealth;
-    public float health;
+    public int maxHealth;
+    public int health;
     private Transform model;
     private NavMeshAgent agent;
     public float wanderCooldown;
@@ -89,11 +89,11 @@ public class Animal : Resource
         }
     }
 
-    public override bool Progress(Villager villager, float progressValue)
+    public override bool Progress(Villager villager)
     {
         if (health > 0)
         {
-            health -= progressValue;
+            health--;
             if (health <= 0)
             {
                 health = 0;
@@ -111,7 +111,7 @@ public class Animal : Resource
             }
             return false;
         }
-        else return base.Progress(villager, progressValue);
+        else return base.Progress(villager);
     }
 
     private void ChangeSpeed(bool run)
