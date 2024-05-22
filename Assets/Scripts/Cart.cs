@@ -20,7 +20,8 @@ public class Cart : NetworkBehaviour, ISelectable
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponentInChildren<Animator>();     
+        anim = GetComponentInChildren<Animator>();
+        target = TownCenter.TC.GetComponent<Storage>();
     }
 
     public void Start()
