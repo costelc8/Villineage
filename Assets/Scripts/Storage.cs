@@ -9,10 +9,14 @@ public class Storage : Targetable, ISelectable
 {
     public readonly SyncList<int> resources = new SyncList<int>();
     public List<Villager> villagers = new List<Villager>();
+    public int[] neededResources;
+    public int[] requestedResources;
 
     public void Start()
     {
         Selection.Selector.AddSelectable(this);
+        neededResources = new int[(int)ResourceType.MAX_VALUE];
+        requestedResources = new int[(int)ResourceType.MAX_VALUE];
     }
 
     public override void OnStartServer()
@@ -100,6 +104,16 @@ public class Storage : Targetable, ISelectable
 
             resources[i] -= takes;
             cart.inventory[i] += takes;
+        }
+    }
+
+    private void UpdateResourceRequest()
+    {
+        neededResources[(int)ResourceType.Food] = (int)(villagers.Count * (100 / SimVars.VARS.vitalityPerFood));
+        neededResources[(int)ResourceType.Wood] = SimVars.VARS.houseBuildCost + SimVars.VARS.outpostBuildCost;
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        {
+            requestedResources[i] = Mathf.Max(resources[i] - neededResources[i], 0);
         }
     }
 
