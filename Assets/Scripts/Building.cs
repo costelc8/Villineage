@@ -32,8 +32,9 @@ public class Building : Targetable
                     BuildingGenerator.AddOutpost(this);
                     // cart for outpost
                     RandomNavmeshPoint.RandomPointFromCenterSphere(transform.position, 1, out Vector3 point, 5, 1, 1000);
-                    Cart cart = Instantiate(cartPrefab, point, Quaternion.identity).GetComponent<Cart>();
-                    cart.hub = GetComponent<Storage>();
+                    GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity);
+                    cart.GetComponent<Cart>().hub = GetComponent<Storage>();
+                    NetworkServer.Spawn(cart);
                     break;
 
             }

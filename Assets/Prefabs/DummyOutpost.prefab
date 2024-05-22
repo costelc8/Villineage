@@ -97,10 +97,12 @@ MonoBehaviour:
   priority: 1
   movingTarget: 0
   assignedVillager: {fileID: 0}
-  maxBuildTime: 30
+  requiredWood: 0
+  currentWood: 0
   stage: 0
   buildingType: 0
-  buildTime: 0
+  cartPrefab: {fileID: 7346878771156752706, guid: bcf35f08f10546e4fa0bd82bafd90bee, type: 3}
+  buildProgress: 0
 --- !u!114 &-710846269306318931
 MonoBehaviour:
   m_ObjectHideFlags: 0

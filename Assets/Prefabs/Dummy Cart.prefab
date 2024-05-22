@@ -5526,6 +5526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3868213387192551201}
+  - component: {fileID: 6561853535787828225}
   - component: {fileID: 8423187894480750868}
   - component: {fileID: 3421995513543576572}
   - component: {fileID: 3322262064065750290}
@@ -5577,6 +5578,27 @@ Transform:
   - {fileID: 2734362449156266684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6561853535787828225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346878771156752706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7104a6cbba62ceb4bac4301052d551d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  hub: {fileID: 0}
+  townCenter: {fileID: 0}
+  selected: 0
+  totalResources: 0
+  target: {fileID: 0}
+  capacity: 0
 --- !u!95 &8423187894480750868
 Animator:
   serializedVersion: 5
