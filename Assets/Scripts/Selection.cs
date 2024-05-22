@@ -11,7 +11,7 @@ public class Selection : MonoBehaviour
     private Vector2 selectionStart;
     private Vector2 selectionEnd;
     private List<ISelectable> selectables = new List<ISelectable>();
-    private List<ISelectable> selected = new List<ISelectable>();
+    public List<ISelectable> selected = new List<ISelectable>();
 
     private ResourceSummaryDisplay resourceSummaryDisplay;
 
@@ -125,7 +125,7 @@ public class Selection : MonoBehaviour
             {
                 selected.Add(selectable);
                 selectable.OnSelect();
-                resourceSummaryDisplay.DisplaySelectedResources(selected);
+                // resourceSummaryDisplay.DisplaySelectedResources(selected);
             }
 
 
@@ -144,6 +144,6 @@ public class Selection : MonoBehaviour
         //     }
         }
         // ResourceSummaryDisplay.Instance.UpdateResourceUI();
-        SelectSingle((selectionStart + selectionEnd) / 2);
+       // SelectSingle((selectionStart + selectionEnd) / 2);
     }
 }
