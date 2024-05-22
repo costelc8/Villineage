@@ -127,7 +127,7 @@ public class Animal : Resource
         movingTarget = false;
         agent.enabled = false;
         obstacle.enabled = true;
-        priority *= 100f;
+        priority *= 10f;
         ChangeState(AnimalState.Dead);
     }
 

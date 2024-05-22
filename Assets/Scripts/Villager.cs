@@ -72,7 +72,7 @@ public class Villager : NetworkBehaviour, ISelectable
             hungerRate = SimVars.VARS.villagerHungerRate;
             workSpeed = SimVars.VARS.villagerWorkSpeed;
             agent.speed = SimVars.VARS.villagerMoveSpeed;
-            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 2;
+            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 4;
             capacity = SimVars.VARS.villagerCarryCapacity;
 
             // set default hub to town center
@@ -148,7 +148,7 @@ public class Villager : NetworkBehaviour, ISelectable
             if (distance < agent.speed * Time.deltaTime * 2) vitality -= hungerRate * distance / agent.speed;
         }
 
-        if (vitality <= vitalityThreshold && state == VillagerState.Working) ReturnToHub();
+        if (vitality <= vitalityThreshold && (state == VillagerState.Working || state == VillagerState.Walking)) ReturnToHub();
 
         // If starved to death
         if (vitality <= 0) 

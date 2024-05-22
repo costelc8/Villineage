@@ -26,9 +26,9 @@ public class SimLogs : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         if (!firstLine) sb.Append(",\n");
         sb.Append("{\"Resources\":{");
-        for (int i = 1; i < (int)ResourceType.MAX_VALUE; i++)
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            if (i != 1) sb.Append(',');
+            if (i != 0) sb.Append(',');
             sb.Append('\"');
             sb.Append((ResourceType)i);
             sb.Append('\"');

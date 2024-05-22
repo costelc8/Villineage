@@ -34,7 +34,7 @@ public class Cart : NetworkBehaviour, ISelectable
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
 
             agent.speed = SimVars.VARS.villagerMoveSpeed * 2;
-            agent.acceleration = agent.speed * 2;
+            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 8;
             capacity = SimVars.VARS.villagerCarryCapacity * 10;
 
         }
@@ -63,7 +63,7 @@ public class Cart : NetworkBehaviour, ISelectable
                 // go to the outpost
                 target = hub;
             }
-            agent.SetDestination(target.transform.position);
+            agent.SetDestination(target.transform.position + (transform.position - target.transform.position).normalized);
         }
     }
 

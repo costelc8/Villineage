@@ -11,7 +11,7 @@ public class BuildingGenerator : MonoBehaviour
     public GameObject farmPrefab;
     private Vector3 spacingSizeSmall;
     private Vector3 spacingSizeLarge;
-    private int spacing = 2;
+    private int spacing = 4;
     private static List<Targetable> pendingBuildings = new List<Targetable>();
     private static List<Targetable> pendingHouses = new List<Targetable>();
     private static List<Targetable> pendingOutposts = new List<Targetable>();
@@ -62,7 +62,7 @@ public class BuildingGenerator : MonoBehaviour
             case BuildingType.House:
                 buildingPrefab = housePrefab;
                 buildCost = SimVars.VARS.houseBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 8f, 3f, starveRange);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 10f, 3f, starveRange);
                 priority = 1;
                 break;
             case BuildingType.Outpost:

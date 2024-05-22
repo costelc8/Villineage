@@ -16,6 +16,7 @@ public class SimulationManager : NetworkManager
 
     public override void Awake()
     {
+        Application.targetFrameRate = 60;
         simVars.Initialize();
         townCenter.Initialize();
         terrainGenerator.Initialize();

@@ -84,14 +84,14 @@ public class Storage : Targetable, ISelectable
         villager.totalResources += takes;
     }
 
-    public void Request(Cart cart, int[] resources)
+    public void Request(Cart cart, int[] request)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            int available = resources[i];
+            int available = Mathf.Max(resources[i] - neededResources[i], 0);
             int canHold = cart.capacity - cart.inventory[i];
 
-            int takes = Math.Min(Math.Min(available, canHold), resources[i]);
+            int takes = Mathf.Min(available, canHold, request[i]);
 
             resources[i] -= takes;
             cart.inventory[i] += takes;
@@ -118,7 +118,7 @@ public class Storage : Targetable, ISelectable
         neededResources[(int)ResourceType.Wood] = SimVars.VARS.houseBuildCost + SimVars.VARS.outpostBuildCost;
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            requestedResources[i] = Mathf.Max(resources[i] - neededResources[i], 0);
+            requestedResources[i] = Mathf.Max(neededResources[i] - resources[i], 0);
         }
     }
 

@@ -818,6 +818,9 @@ MonoBehaviour:
   assignedVillagers: 0
   priority: 1
   movingTarget: 0
+  villagers: []
+  neededResources: 
+  requestedResources: 0000000000000000
 --- !u!1 &1874911279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,8 +1193,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 10
-  logSim: 0
+  timeScale: 5
+  logSim: 1
   seed: 1
   lumberjackWeight: 2
   gathererWeight: 1
@@ -1209,7 +1212,7 @@ MonoBehaviour:
   startingWolves: 0
   woodPerTree: 60
   foodPerBerry: 60
-  berryRespawnTime: 600
+  berryRespawnTime: 300
   foodPerSheep: 60
   foodPerGoat: 60
   houseBuildCost: 60
