@@ -32,7 +32,7 @@ public class SimVars : NetworkBehaviour
 
     [Header("Cart Variables")]
     [SyncVar] public float cartMoveSpeed = 8f;
-    [SyncVar] public int cartCapacity = 20;
+    [SyncVar] public int cartCapacity = 100;
 
     [Header("Resource Variables")]
     [SyncVar] public int startingSheep = 4;

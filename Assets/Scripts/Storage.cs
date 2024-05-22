@@ -56,13 +56,38 @@ public class Storage : Targetable, ISelectable
     public void VillagerCollect(Villager villager, ResourceType resource)
     {
         int available = resources[(int)resource];
-        int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
+        int canHold = villager.capacity - villager.totalResources;
 
         int takes = Math.Min(available, canHold); 
             
         resources[(int)resource] -= takes;
         villager.inventory[(int)resource] += takes;
         villager.totalResources += takes;
+    }
+
+    public void CartDeposit(Cart cart)
+    {
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        {
+            int storing = cart.inventory[i];
+            resources[i] += storing;
+            cart.inventory[i] -= storing;
+            cart.totalResources -= storing;
+        }
+        TownCenter.TC.HouseSpawnCheck();
+        TownCenter.TC.VillagerSpawnCheck();
+    }
+
+    public void CartCollect(Cart cart, ResourceType resource, int amount)
+    {
+        int available = resources[(int)resource];
+        int canHold = cart.capacity - cart.totalResources;
+
+        int takes = Math.Min(Math.Min(available, canHold), amount);
+
+        resources[(int)resource] -= takes;
+        cart.inventory[(int)resource] += takes;
+        cart.totalResources += takes;
     }
 
     protected override void OnDrawGizmosSelected()

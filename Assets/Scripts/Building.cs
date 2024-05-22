@@ -11,6 +11,7 @@ public class Building : Targetable
     public int currentWood;
     public int stage;
     public BuildingType buildingType;
+    public GameObject cartPrefab;
 
     [SyncVar(hook = nameof(ProgressHook))]
     public int buildProgress;
@@ -24,8 +25,17 @@ public class Building : Targetable
             buildProgress = requiredWood;
             switch(buildingType)
             {
-                case BuildingType.House: BuildingGenerator.AddHouse(this); break;
-                case BuildingType.Outpost: BuildingGenerator.AddOutpost(this); break;
+                case BuildingType.House: 
+                    BuildingGenerator.AddHouse(this); 
+                    break;
+                case BuildingType.Outpost:
+                    BuildingGenerator.AddOutpost(this);
+                    // cart for outpost
+                    RandomNavmeshPoint.RandomPointFromCenterSphere(transform.position, 1, out Vector3 point, 5, 1, 1000);
+                    Cart cart = Instantiate(cartPrefab, point, Quaternion.identity).GetComponent<Cart>();
+                    cart.hub = GetComponent<Storage>();
+                    break;
+
             }
             UntargetAll();
             return true;

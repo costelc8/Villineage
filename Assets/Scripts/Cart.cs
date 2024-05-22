@@ -9,7 +9,6 @@ public class Cart : NetworkBehaviour, ISelectable
 {
     private NavMeshAgent agent;
     private Animator anim;
-    public List<Storage> hubs;
     public Storage hub;
     public Storage townCenter;
 
@@ -35,11 +34,10 @@ public class Cart : NetworkBehaviour, ISelectable
             agent.enabled = true;
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
 
-            agent.speed = SimVars.VARS.cartMoveSpeed;
-            agent.acceleration = SimVars.VARS.cartMoveSpeed * 2;
-            capacity = SimVars.VARS.cartCapacity;
+            agent.speed = SimVars.VARS.villagerMoveSpeed * 2;
+            agent.acceleration = agent.speed * 2;
+            capacity = SimVars.VARS.villagerCarryCapacity * 10;
 
-            // hub is which outpost spawned them
             
 
         }

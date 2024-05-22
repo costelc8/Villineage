@@ -9,6 +9,7 @@ public class BuildingGenerator : MonoBehaviour
     public GameObject housePrefab;
     public GameObject outpostPrefab;
     public GameObject farmPrefab;
+    public GameObject cartPrefab;
     private Vector3 spacingSizeSmall;
     private Vector3 spacingSizeLarge;
     private int spacing = 2;
@@ -19,6 +20,7 @@ public class BuildingGenerator : MonoBehaviour
     private static List<Building> outposts = new List<Building>();
     private static List<Storage> hubs = new List<Storage>();
     private GameObject buildingParent;
+    private GameObject cartParent;
   
 
     // Start is called before the first frame update
@@ -137,6 +139,10 @@ public class BuildingGenerator : MonoBehaviour
         pendingOutposts.Remove(outpost);
         outposts.Add(outpost);
         hubs.Add(outpost.GetComponent<Storage>());
+
+        // cart for outpost
+        RandomNavmeshPoint.RandomPointFromCenterSphere(outpost.transform.position, 1, out Vector3 point, 5, 1, 1000);
+        Cart cart = Instantiate(cartPrefab, point, 0);
     }
 
     public static void AddHub(Storage hub)
