@@ -32,11 +32,11 @@ public class Storage : Targetable, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-    public void VillagerDeposit(Villager villager, int[] items)
+    public void VillagerDeposit(Villager villager)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
-            int storing = (int)items[i];
+            int storing = villager.inventory[i];
             resources[i] += storing;
             villager.inventory[i] -= storing;
             villager.totalResources -= storing;
@@ -53,20 +53,18 @@ public class Storage : Targetable, ISelectable
         TownCenter.TC.AssignVillagerJob(villager);
     }
 
-    public void VillagerCollect(Villager villager, int[] items)
+    public void VillagerCollect(Villager villager, ResourceType resource)
     {
-        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
-        {
-            int wants = items[i];
-            int available = resources[i];
-            int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
 
-            int takes = Math.Min(canHold, Math.Min(wants, available)); 
+        int available = resources[(int)resource];
+        int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
+
+        int takes = Math.Min(available, canHold); 
             
-            resources[i] -= takes;
-            villager.inventory[i] += takes;
-            villager.totalResources += takes;
-        }
+        resources[(int)resource] -= takes;
+        villager.inventory[(int)resource] += takes;
+        villager.totalResources += takes;
+        
         
     }
 
