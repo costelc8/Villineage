@@ -8,6 +8,7 @@ using UnityEngine;
 public class Storage : Targetable, ISelectable
 {
     public readonly SyncList<int> resources = new SyncList<int>();
+    public List<Villager> villagers = new List<Villager>();
 
     public void Start()
     {
@@ -32,7 +33,7 @@ public class Storage : Targetable, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-    public void VillagerDeposit(Villager villager)
+    public void Deposit(Villager villager)
     {
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
@@ -53,7 +54,19 @@ public class Storage : Targetable, ISelectable
         TownCenter.TC.AssignVillagerJob(villager);
     }
 
-    public void VillagerCollect(Villager villager, ResourceType resource)
+    public void Deposit(Cart cart)
+    {
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        {
+            int storing = cart.inventory[i];
+            resources[i] += storing;
+            cart.inventory[i] -= storing;
+        }
+        TownCenter.TC.HouseSpawnCheck();
+        TownCenter.TC.VillagerSpawnCheck();
+    }
+
+    public void Request(Villager villager, ResourceType resource)
     {
         int available = resources[(int)resource];
         int canHold = villager.capacity - villager.totalResources;
@@ -65,29 +78,29 @@ public class Storage : Targetable, ISelectable
         villager.totalResources += takes;
     }
 
-    public void CartDeposit(Cart cart)
-    {
-        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
-        {
-            int storing = cart.inventory[i];
-            resources[i] += storing;
-            cart.inventory[i] -= storing;
-            cart.totalResources -= storing;
-        }
-        TownCenter.TC.HouseSpawnCheck();
-        TownCenter.TC.VillagerSpawnCheck();
-    }
-
-    public void CartCollect(Cart cart, ResourceType resource, int amount)
+    public void Request(Cart cart, ResourceType resource, int amount)
     {
         int available = resources[(int)resource];
-        int canHold = cart.capacity - cart.totalResources;
+        int canHold = cart.capacity - cart.inventory[(int)resource];
 
         int takes = Math.Min(Math.Min(available, canHold), amount);
 
         resources[(int)resource] -= takes;
         cart.inventory[(int)resource] += takes;
-        cart.totalResources += takes;
+    }
+
+    public void Collect(Cart cart)
+    {
+        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        {
+            int available = resources[i];
+            int canHold = cart.capacity - cart.inventory[i];
+
+            int takes = Math.Min(available, canHold);
+
+            resources[i] -= takes;
+            cart.inventory[i] += takes;
+        }
     }
 
     protected override void OnDrawGizmosSelected()

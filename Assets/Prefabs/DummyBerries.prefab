@@ -58,9 +58,10 @@ MonoBehaviour:
   priority: 1
   movingTarget: 0
   quantity: 0
-  maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 2
+  resourceType: 1
+  respawning: 0
+  isAnimal: 0
 --- !u!208 &5875162629577221074
 NavMeshObstacle:
   m_ObjectHideFlags: 0

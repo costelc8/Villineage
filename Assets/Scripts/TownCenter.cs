@@ -244,7 +244,6 @@ public class TownCenter : NetworkBehaviour
 
 public enum ResourceType
 {
-    None,
     Wood,
     Food,
     MAX_VALUE,

@@ -168,9 +168,10 @@ MonoBehaviour:
   priority: 0.5
   movingTarget: 1
   quantity: 0
-  maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 2
+  resourceType: 1
+  respawning: 0
+  isAnimal: 0
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 0.25
   maxWanderCooldown: 10

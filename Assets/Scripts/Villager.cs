@@ -122,10 +122,10 @@ public class Villager : NetworkBehaviour, ISelectable
                 }
                 else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
-                    hub.VillagerDeposit(this);
+                    hub.Deposit(this);
                     if (job == VillagerJob.Builder)
                     {
-                        hub.VillagerCollect(this, ResourceType.Wood);
+                        hub.Request(this, ResourceType.Wood);
                     }
                     ChangeState(VillagerState.Pending);
                     DisableBackVisuals();

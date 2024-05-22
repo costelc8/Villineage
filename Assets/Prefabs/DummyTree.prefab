@@ -58,9 +58,10 @@ MonoBehaviour:
   priority: 1
   movingTarget: 0
   quantity: 0
-  maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 1
+  resourceType: 0
+  respawning: 0
+  isAnimal: 0
 --- !u!136 &9206137994431540352
 CapsuleCollider:
   m_ObjectHideFlags: 0

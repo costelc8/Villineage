@@ -1470,16 +1470,18 @@ MonoBehaviour:
   priority: 1
   movingTarget: 1
   quantity: 0
-  maxDurability: 1
   assignedVillager: {fileID: 0}
-  resourceType: 2
+  resourceType: 1
+  respawning: 0
+  isAnimal: 0
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 1
   maxWanderCooldown: 10
   maxHealth: 2
   health: 0
+  wanderCooldown: 0
   state: 0
-  hostile: 0
+  type: 0
 --- !u!114 &8047246721949191282
 MonoBehaviour:
   m_ObjectHideFlags: 0
