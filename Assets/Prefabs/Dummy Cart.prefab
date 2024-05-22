@@ -5594,9 +5594,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   hub: {fileID: 0}
-  townCenter: {fileID: 0}
   selected: 0
-  totalResources: 0
   target: {fileID: 0}
   capacity: 0
 --- !u!95 &8423187894480750868
@@ -5609,7 +5607,7 @@ Animator:
   m_GameObject: {fileID: 7346878771156752706}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 883d216e6f21bc6469c84867c3deea7c, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f57efe2d310b06648ba746c8602319bf, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
