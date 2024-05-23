@@ -93,56 +93,6 @@ public class SimVars : NetworkBehaviour
         Time.timeScale = timeScale;
     }
 
-    public void AddResources(int sheepIncrement, int goatsIncrement, int woodIncrement, int berryIncrement)
-    {
-        startingSheep += sheepIncrement;
-        startingGoats += goatsIncrement;
-        woodPerTree += woodIncrement;
-        foodPerBerry += berryIncrement;
-    }
-
-    public void DecResources(int sheepIncrement, int goatsIncrement, int woodIncrement, int berryIncrement)
-    {
-        startingSheep -= sheepIncrement;
-        startingGoats -= goatsIncrement;
-        woodPerTree -= woodIncrement;
-        foodPerBerry -= berryIncrement;
-    }
-
-    public void AddHunger(float rate)
-    {
-        villagerHungerRate+=rate;
-    }
-
-    public void DecHunger(float rate)
-    {
-        villagerHungerRate-=rate;
-    }
-
-    // void OnStartingSheepChanged(int oldValue, int newValue)
-    // {
-    //     startingSheep = newValue;
-    //     // Update logic when startingSheep changes
-    // }
-
-    // void OnStartingGoatsChanged(int oldValue, int newValue)
-    // {
-    //     startingGoats = newValue;
-    //     // Update logic when startingGoats changes
-    // }
-
-    // void OnWoodPerTreeChanged(int oldValue, int newValue)
-    // {
-    //     woodPerTree = newValue;
-    //     // Update logic when woodPerTree changes
-    // }
-
-    // void OnFoodPerBerryChanged(int oldValue, int newValue)
-    // {
-    //     foodPerBerry = newValue;
-    //     // Update logic when foodPerBerry changes
-    // }
-
     void VillagerMoveSpeedHook(float oldSpeed, float newSpeed)
     {
         foreach(Villager v in TownCenter.TC.villagers)
