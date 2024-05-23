@@ -121,13 +121,14 @@ public class Targetable : NetworkBehaviour
         assignedVillagers--;
     }
 
-    public void UntargetAll()
+    public void UntargetAll(bool forceReturn)
     {
         foreach (TargetPosition targetPos in targetPositions)
         {
             if (targetPos.assignedVillager != null)
             {
-                targetPos.assignedVillager.ReturnToHub();
+                if (forceReturn) targetPos.assignedVillager.ReturnToHub();
+                else targetPos.assignedVillager.target = null;
                 targetPos.assignedVillager = null;
             }
         }

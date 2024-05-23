@@ -34,7 +34,7 @@ public class Resource : Targetable, ISelectable
             ResourceGenerator.RemoveResource(this);
             Selection.Selector.RemoveSelectable(this);
             UnitHUD.HUD.RemoveUnitHUD(gameObject);
-            UntargetAll();
+            UntargetAll(false);
             StartCoroutine(DestroyResource());
         }
         return true;

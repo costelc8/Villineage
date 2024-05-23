@@ -40,7 +40,7 @@ public class Building : Targetable
                     NetworkServer.Spawn(cart);
                     break;
             }
-            UntargetAll();
+            UntargetAll(true);
             return true;
         }
         if (buildProgress >= currentWood)
