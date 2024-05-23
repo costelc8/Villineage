@@ -12,8 +12,9 @@ public class Villager : NetworkBehaviour, ISelectable
     private NavMeshAgent agent;  // Navigates the villager
     private Animator anim;  // Animates the villager
     public List<Storage> hubs;  // The different outposts/alternatives to town center
-    public Storage hub; // Current parent hub 
+    public Storage hub; // Current parent hub
     public bool selected;  // Have they been selected?
+	public Outline outlineS;
 
     [Header("Stats")]
     public bool alive = true;  // Are they alive?
@@ -58,6 +59,7 @@ public class Villager : NetworkBehaviour, ISelectable
         anim = GetComponentInChildren<Animator>();
         vitality = maxVitality;
         progressCooldown = 1;
+		outlineS = gameObject.GetComponent<Outline>();
     }
 
     public void Start()
@@ -151,7 +153,7 @@ public class Villager : NetworkBehaviour, ISelectable
         if (vitality <= vitalityThreshold && (state == VillagerState.Working || state == VillagerState.Walking)) ReturnToHub();
 
         // If starved to death
-        if (vitality <= 0) 
+        if (vitality <= 0)
         {
             if (inventory[(int)ResourceType.Food] > 0)
             {
@@ -395,12 +397,31 @@ public class Villager : NetworkBehaviour, ISelectable
         hammer.SetActive(job == VillagerJob.Builder);
         bow.SetActive(job == VillagerJob.Hunter);
         quiver.SetActive(job == VillagerJob.Hunter);
+		JobColor(job);
     }
+
+	// change villager outline color
+	public void JobColor(VillagerJob job) {
+		//this.job = job;
+        if(job == VillagerJob.Lumberjack) {
+			outlineS.OutlineColor = Color.green;
+		}
+        if(job == VillagerJob.Builder) {
+			outlineS.OutlineColor = Color.cyan;
+		}
+        if(job == VillagerJob.Hunter) {
+			outlineS.OutlineColor = Color.red;
+		}
+		if(job == VillagerJob.Gatherer) {
+			outlineS.OutlineColor = Color.yellow;
+		}
+	}
 
     // When selected, display ui
     public void OnSelect()
     {
         selected = true;
+		outlineS.enabled = selected;
         GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.villagerHUD, 1f);
         HUD.GetComponent<DisplayController>().villager = this;
     }
@@ -409,6 +430,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public void OnDeselect()
     {
         selected = false;
+		outlineS.enabled = selected;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
