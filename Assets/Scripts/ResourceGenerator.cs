@@ -1,10 +1,11 @@
 using Mirror;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using Debug = UnityEngine.Debug;
 
 public class ResourceGenerator : MonoBehaviour
 {
@@ -21,28 +22,11 @@ public class ResourceGenerator : MonoBehaviour
     private static List<Targetable> berries = new List<Targetable>();
     private static List<Targetable> animals = new List<Targetable>();
     public Transform forestPosition;
-    public int forestSpacing;
-    [Range(0f, 1f)]
-    public float forestDensity;
-    [Range(0f, 1f)]
-    public float forestVariation;
-
-    public float scale;
 
     public bool generateForest;
     public bool destroyTrees;
     public bool generateBerries;
     public bool destroyBerries;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (generateForest)
-        {
-            generateForest = false;
-            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, SimVars.VARS.terrainSize, forestSpacing, forestDensity, forestVariation);
-        }
-    }
 
     public void Initialize()
     {
@@ -58,15 +42,13 @@ public class ResourceGenerator : MonoBehaviour
         if (generateForest)
         {
             generateForest = false;
-            foreach (Resource tree in trees) Destroy(tree.gameObject);
-            trees.Clear();
-            GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, SimVars.VARS.terrainSize, forestSpacing, forestDensity, forestVariation);
+            ClearAllTrees();
+            GeneratePerlinForest();
         }
         if (destroyTrees)
         {
             destroyTrees = false;
-            foreach (Resource tree in trees) Destroy(tree.gameObject);
-            trees.Clear();
+            ClearAllTrees();
         }
         if (generateBerries)
         {
@@ -83,37 +65,38 @@ public class ResourceGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateDefaultForest()
+    public void ClearAllTrees()
     {
-        GenerateForest(forestPosition == null ? Vector3.zero : forestPosition.position, SimVars.VARS.terrainSize, forestSpacing, forestDensity, forestVariation);
+        foreach (Resource tree in trees) Destroy(tree.gameObject);
+        trees.Clear();
     }
 
     // This method generates a forest with the given parameters
-    public void GenerateForest(Vector3 position, int size, int spacing, float density, float variation)
+    public void GeneratePerlinForest()
     {
         Debug.Log("Generating Forest");
+        Stopwatch timer = Stopwatch.StartNew();
         // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
 
         // Clamp the input values to their allowed ranges
-        spacing = Mathf.Max(1, spacing);
-        density = Mathf.Clamp01(density);
-        variation = Mathf.Clamp01(variation) * (spacing/2f - 1f);
-        size = (size / spacing) * spacing;
-        Vector2 center = new Vector2(size / 2f, size / 2f);
-
-        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, scale, SimVars.VARS.GetSeed());
+        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
+        float density = Mathf.Clamp01(SimVars.VARS.forestDensity);
+        float variation = spacing/2f - 1f;
+        int size = SimVars.VARS.terrainSize;
+        Vector2 center = new Vector2(size / 2, size / 2);
+        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());
 
         // Just generate trees in a square for now
         for (int x = spacing; x < size; x += spacing)
         {
             for (int y = spacing; y < size; y += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 16f)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 20f)
                 {
                     // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
-                    Vector2 offset = new Vector2(Random.Range(-1f, 1f) * variation, Random.Range(-1f, 1f) * variation);
-                    Vector3 treePos = position + new Vector3(x + offset.x, 0, y + offset.y);
-                    if (Mathf.Pow(perlin[x, y], 2) < Random.Range(0.1f, 0.2f))
+                    Vector3 treePos = new Vector3(x + Random.Range(-1f, 1f) * variation, 0, y + Random.Range(-1f, 1f) * variation);
+                    //if (Mathf.Pow(perlin[x, y], 2) < Random.Range(0.1f, 0.2f))
+                    if (perlin[x, y] < SimVars.VARS.perlinForestThreshold + Random.Range(-0.1f, 0.1f))
                     {
                         // Generate new tree
                         treePos.y = terrainGenerator.GetTerrainHeight(treePos);
@@ -125,7 +108,8 @@ public class ResourceGenerator : MonoBehaviour
                 }
             }
         }
-        Debug.Log(trees.Count + " Trees Generated");
+        timer.Stop();
+        Debug.Log(trees.Count + " Trees Generated in " + timer.ElapsedMilliseconds + "ms");
     }
 
 
@@ -178,21 +162,59 @@ public class ResourceGenerator : MonoBehaviour
     public void GenerateBerries()
     {
         // Temporary Berry bush generation
-        Debug.Log("Generating Berry Bushes");
+        //Debug.Log("Generating Berry Bushes");
 
-        for (int x = Random.Range(20, 40); x < SimVars.VARS.terrainSize; x += Random.Range(20, 40))
+        //for (int x = Random.Range(20, 40); x < SimVars.VARS.terrainSize; x += Random.Range(20, 40))
+        //{
+        //    for (int z = Random.Range(20, 40); z < SimVars.VARS.terrainSize; z += Random.Range(20, 40))
+        //    {
+        //        if (RandomNavmeshPoint.RandomPointFromCenterSphere(new Vector3(x, 10, z), 1.5f, out Vector3 position, 0, 0.1f, 1))
+        //        {
+        //            GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), berryParent.transform);
+        //            bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
+        //            NetworkServer.Spawn(bush);
+        //            berries.Add(bush.GetComponent<Resource>());
+        //        }
+        //    }
+        //}
+
+        Debug.Log("Generating Berry Bushes");
+        Stopwatch timer = Stopwatch.StartNew();
+        // Make new empty "Forest" gameobject, will parent all the trees as to not clutter the inspector
+
+        // Clamp the input values to their allowed ranges
+        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
+        float density = Mathf.Clamp01(SimVars.VARS.forestDensity);
+        float variation = spacing / 2f - 1f;
+        int size = SimVars.VARS.terrainSize;
+        Vector2 center = new Vector2(size / 2, size / 2);
+        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());
+
+        // Just generate trees in a square for now
+        for (int x = spacing; x < size; x += spacing)
         {
-            for (int z = Random.Range(20, 40); z < SimVars.VARS.terrainSize; z += Random.Range(20, 40))
+            for (int z = spacing; z < size; z += spacing)
             {
-                if (RandomNavmeshPoint.RandomPointFromCenterSphere(new Vector3(x, 10, z), 1.5f, out Vector3 position, 0, 0.1f, 1))
+                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 20f)
                 {
-                    GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), berryParent.transform);
-                    bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
-                    NetworkServer.Spawn(bush);
-                    berries.Add(bush.GetComponent<Resource>());
+                    // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
+                    Vector3 berryPos = new Vector3(x + Random.Range(-1f, 1f) * variation, 10, z + Random.Range(-1f, 1f) * variation);
+                    float lowerThreshold = SimVars.VARS.perlinForestThreshold - 0.1f;
+                    float upperThreshold = SimVars.VARS.perlinForestThreshold + 0.1f;
+                    if (perlin[x, z] > lowerThreshold && perlin[x, z] < upperThreshold && Random.value < 0.1f)
+                    {
+                        if (RandomNavmeshPoint.RandomPointFromCenterSphere(berryPos, 1.5f, out Vector3 position, 0, 0.5f, 1))
+                        {
+                            GameObject bush = Instantiate(berryPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), berryParent.transform);
+                            bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
+                            NetworkServer.Spawn(bush);
+                            berries.Add(bush.GetComponent<Resource>());
+                        }
+                    }
                 }
             }
         }
+        timer.Stop();
     }
 
     public static List<Targetable> GetTrees()

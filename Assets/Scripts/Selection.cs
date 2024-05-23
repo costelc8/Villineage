@@ -151,7 +151,6 @@ public class Selection : MonoBehaviour
             }
         }
         if (selectedResources.Count == 1) selectedResources[0].OnSelect();
-        if (selectedStorages.Count == 1) selectedStorages[0].OnSelect();
         //SelectSingle((selectionStart + selectionEnd) / 2);
     }
 

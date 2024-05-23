@@ -60,7 +60,7 @@ public class Targetable : NetworkBehaviour
 
     public bool HasValidPositions()
     {
-        if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
+        if (targetPositions == null || targetPositions.Count == 0) return true;
         if (targetPositions.Count == 0)
         {
             if (enforceMaxVillagers) return assignedVillagers < maxAssignedVillagers;

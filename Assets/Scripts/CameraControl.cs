@@ -51,5 +51,9 @@ public class CameraControl : MonoBehaviour
             zoomDistance = Mathf.Clamp(zoomDistance, minZoomDistance, maxZoomDistance);
             Camera.main.transform.localPosition = new Vector3(0f, 0f, -zoomDistance);
         }
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, 0, SimVars.VARS.terrainSize);
+        pos.z = Mathf.Clamp(pos.z, 0, SimVars.VARS.terrainSize);
+        transform.position = pos;
     }
 }

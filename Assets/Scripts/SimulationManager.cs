@@ -27,7 +27,7 @@ public class SimulationManager : NetworkManager
     {
         terrainGenerator.GenerateTerrain();
         townCenter.PlaceOnGround();
-        resourceGenerator.GenerateDefaultForest();
+        resourceGenerator.GeneratePerlinForest();
         resourceGenerator.GenerateBerries();
         resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
         resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 30f, 45f);

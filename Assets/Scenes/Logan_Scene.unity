@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -571,10 +571,6 @@ MonoBehaviour:
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   wolfPrefab: {fileID: 8090313371282963140, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   forestPosition: {fileID: 0}
-  forestSpacing: 4
-  forestDensity: 1
-  forestVariation: 1
-  scale: 2
   generateForest: 0
   destroyTrees: 0
   generateBerries: 0
@@ -1319,21 +1315,24 @@ MonoBehaviour:
   gathererWeight: 1
   hunterWeight: 1
   builderWeight: 1
-  startingVillagers: 8
   villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
+  startingVillagers: 8
   startingSheep: 4
   startingGoats: 6
   startingWolves: 0
+  forestDensity: 1
+  forestSpacing: 4
+  perlinForestThreshold: 0.5
   woodPerTree: 60
   foodPerBerry: 60
-  berryRespawnTime: 300
   foodPerSheep: 60
   foodPerGoat: 60
+  berryRespawnTime: 300
   houseBuildCost: 60
   outpostBuildCost: 60
   villagerSpawnCost: 30
@@ -1487,8 +1486,8 @@ Camera:
   m_GameObject: {fileID: 7019139082425468462}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

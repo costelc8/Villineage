@@ -23,7 +23,6 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int builderWeight = 1;
 
     [Header("Villager Variables")]
-    [SyncVar] public int startingVillagers = 4;
     [SyncVar] public float villagerSpawnTime = 30f;
     [SyncVar] public int villagerCarryCapacity = 10;
     [SyncVar(hook = nameof(VillagerMoveSpeedHook))] public float villagerMoveSpeed = 4f;
@@ -31,15 +30,23 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float villagerHungerRate = 1f;
     [SyncVar] public float vitalityPerFood = 10f;
 
-    [Header("Resource Variables")]
+    [Header("Starting Variables")]
+    [SyncVar] public int startingVillagers = 4;
     [SyncVar] public int startingSheep = 4;
     [SyncVar] public int startingGoats = 6;
     [SyncVar] public int startingWolves = 2;
+
+    [Header("Resource Variables")]
+    [Range(0f, 1f)]
+    [SyncVar] public float forestDensity = 1f;
+    [SyncVar] public int forestSpacing = 4;
+    [Range(0f, 1f)]
+    [SyncVar] public float perlinForestThreshold = 0.5f;
     [SyncVar] public int woodPerTree = 60;
     [SyncVar] public int foodPerBerry = 60;
-    [SyncVar] public float berryRespawnTime = 300f;
     [SyncVar] public int foodPerSheep = 60;
     [SyncVar] public int foodPerGoat = 60;
+    [SyncVar] public float berryRespawnTime = 300f;
 
     [Header("Building Variables")]
     [SyncVar] public int houseBuildCost = 60;
