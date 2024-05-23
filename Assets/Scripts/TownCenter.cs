@@ -39,12 +39,12 @@ public class TownCenter : NetworkBehaviour
     {
         Debug.Log("Placing Town Center");
         transform.position = new Vector3(SimVars.VARS.terrainSize / 2, SimVars.VARS.terrainDepth, SimVars.VARS.terrainSize / 2);
-        Physics.SyncTransforms();
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
             transform.position = hitInfo.point;
         }
         CenterCamera();
+        Physics.SyncTransforms();
     }
 
     public void CenterCamera()

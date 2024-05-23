@@ -69,6 +69,16 @@ public class Selection : MonoBehaviour
             if (selectionStart == selectionEnd) SelectSingle(Input.mousePosition);     
             else SelectMany();
         }
+        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        //{
+            if (Input.GetKeyDown(KeyCode.V)) SelectAllVillagers();
+            if (Input.GetKeyDown(KeyCode.R)) SelectAllResources();
+            if (Input.GetKeyDown(KeyCode.S)) SelectAllStorages();
+            if (Input.GetKeyDown(KeyCode.L)) SelectAllVillagers(VillagerJob.Lumberjack);
+            if (Input.GetKeyDown(KeyCode.B)) SelectAllVillagers(VillagerJob.Builder);
+            if (Input.GetKeyDown(KeyCode.G)) SelectAllVillagers(VillagerJob.Gatherer);
+            if (Input.GetKeyDown(KeyCode.H)) SelectAllVillagers(VillagerJob.Hunter);
+        //}
     }
 
     private void DeselectAll()
@@ -133,11 +143,76 @@ public class Selection : MonoBehaviour
                     selectable.OnSelect();
                 }
                 else if (selectable is Resource) selectedResources.Add(selectable);
-                else if (selectable is Storage) selectedStorages.Add(selectable);
+                else if (selectable is Storage)
+                {
+                    selectedStorages.Add(selectable);
+                    selectable.OnSelect();
+                }
             }
         }
         if (selectedResources.Count == 1) selectedResources[0].OnSelect();
         if (selectedStorages.Count == 1) selectedStorages[0].OnSelect();
         //SelectSingle((selectionStart + selectionEnd) / 2);
+    }
+
+    public void SelectAllVillagers()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Villager)
+            {
+                selected.Add(selectable);
+                selectedVillagers.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
+    public void SelectAllResources()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Resource)
+            {
+                selected.Add(selectable);
+                selectedResources.Add(selectable);
+            }
+        }
+    }
+
+    public void SelectAllStorages()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Storage)
+            {
+                selected.Add(selectable);
+                selectedResources.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
+    public void SelectAllVillagers(VillagerJob job)
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Villager villager && villager.job == job)
+            {
+                selected.Add(selectable);
+                selectedVillagers.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
+    public void SelectEverything()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables) selectable.OnSelect();
     }
 }
