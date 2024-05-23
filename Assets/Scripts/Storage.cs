@@ -75,7 +75,7 @@ public class Storage : Targetable, ISelectable
     public void Request(Villager villager, ResourceType resource)
     {
         int available = resources[(int)resource];
-        int canHold = villager.capacity - villager.totalResources;
+        int canHold = SimVars.VARS.villagerCarryCapacity - villager.totalResources;
 
         int takes = Math.Min(available, canHold); 
             
@@ -89,7 +89,7 @@ public class Storage : Targetable, ISelectable
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
             int available = Mathf.Max(resources[i] - neededResources[i], 0);
-            int canHold = cart.capacity - cart.inventory[i];
+            int canHold = (SimVars.VARS.villagerCarryCapacity * 10) - cart.inventory[i];
 
             int takes = Mathf.Min(available, canHold, request[i]);
 
@@ -103,7 +103,7 @@ public class Storage : Targetable, ISelectable
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {
             int available = Mathf.Max(resources[i] - neededResources[i], 0);
-            int canHold = cart.capacity - cart.inventory[i];
+            int canHold = (SimVars.VARS.villagerCarryCapacity * 10) - cart.inventory[i];
 
             int takes = Math.Min(available, canHold);
 

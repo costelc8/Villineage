@@ -22,8 +22,6 @@ public class Villager : NetworkBehaviour, ISelectable
     public float maxVitality = 100f;  // The highest their hunger value can be (full)
     public float vitalityThreshold;
     public float huntingRange = 10f;
-    private float workSpeed;  // Speed of resource extraction
-    private float hungerRate;  // How fast they lose hunger (hungerRate points a second)
     public string causeOfDeath;
 
     [Header("Jobs")]
@@ -32,7 +30,6 @@ public class Villager : NetworkBehaviour, ISelectable
     public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
     public int totalResources = 0; // Total number of resources across all types
     public Targetable target;  // The object they are targeting for their role
-    public int capacity;  // Maximum amount of resources it can carry
     public float progressCooldown = 1;
 
     [Header("Movement")]
@@ -71,11 +68,8 @@ public class Villager : NetworkBehaviour, ISelectable
             // If this is the server, initialize the agents.
             agent.enabled = true;
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
-            hungerRate = SimVars.VARS.villagerHungerRate;
-            workSpeed = SimVars.VARS.villagerWorkSpeed;
             agent.speed = SimVars.VARS.villagerMoveSpeed;
             agent.acceleration = SimVars.VARS.villagerMoveSpeed * 4;
-            capacity = SimVars.VARS.villagerCarryCapacity;
 
             // set default hub to town center
             // if they're reparented to an outpost later, can change this
@@ -103,7 +97,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 if (state == VillagerState.Walking) ChangeState(VillagerState.Working); // If walking, start working
                 if (state == VillagerState.Working) // If working, do appropriate work based on job
                 {
-                    progressCooldown -= workSpeed * Time.deltaTime;
+                    progressCooldown -= SimVars.VARS.villagerWorkSpeed * Time.deltaTime;
                     if (progressCooldown <= 0)
                     {
                         if (job == VillagerJob.Builder && inventory[(int)ResourceType.Wood] > 0)
@@ -113,7 +107,7 @@ public class Villager : NetworkBehaviour, ISelectable
                         }
                         progressCooldown++;
                         bool progress = target.Progress(this);
-                        if ((job == VillagerJob.Builder && !progress) || (job != VillagerJob.Builder && totalResources >= capacity)) ReturnToHub();
+                        if ((job == VillagerJob.Builder && !progress) || (job != VillagerJob.Builder && totalResources >= SimVars.VARS.villagerCarryCapacity)) ReturnToHub();
                         else if (job == VillagerJob.Hunter)
                         {
                             SetNewTarget(target);
@@ -142,12 +136,12 @@ public class Villager : NetworkBehaviour, ISelectable
         }
 
         // Decrease hunger:
-        if (state == VillagerState.Working) vitality -= hungerRate * Time.deltaTime;
+        if (state == VillagerState.Working) vitality -= SimVars.VARS.villagerHungerRate * Time.deltaTime;
         else
         {
             float distance = Vector3.Distance(previousPosition, transform.position);
             previousPosition = transform.position;
-            if (distance < agent.speed * Time.deltaTime * 2) vitality -= hungerRate * distance / agent.speed;
+            if (distance < agent.speed * Time.deltaTime * 2) vitality -= SimVars.VARS.villagerHungerRate * distance / agent.speed;
         }
 
         if (vitality <= vitalityThreshold && (state == VillagerState.Working || state == VillagerState.Walking)) ReturnToHub();

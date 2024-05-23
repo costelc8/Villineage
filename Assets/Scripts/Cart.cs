@@ -15,7 +15,6 @@ public class Cart : NetworkBehaviour, ISelectable
 
     public readonly SyncList<int> inventory = new SyncList<int>();  // Their resources inventory
     public Targetable target;  // The object they are targeting for their role
-    public int capacity;  // Maximum amount of resources it can carry
 
     private void Awake()
     {
@@ -35,8 +34,6 @@ public class Cart : NetworkBehaviour, ISelectable
 
             agent.speed = SimVars.VARS.villagerMoveSpeed * 2;
             agent.acceleration = SimVars.VARS.villagerMoveSpeed * 8;
-            capacity = SimVars.VARS.villagerCarryCapacity * 10;
-
         }
     }
 

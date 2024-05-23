@@ -127,7 +127,7 @@ public class Targetable : NetworkBehaviour
         {
             if (targetPos.assignedVillager != null)
             {
-                targetPos.assignedVillager.target = null;
+                targetPos.assignedVillager.ReturnToHub();
                 targetPos.assignedVillager = null;
             }
         }

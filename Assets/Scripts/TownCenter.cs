@@ -83,7 +83,7 @@ public class TownCenter : NetworkBehaviour
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity, villagerParent.transform).GetComponent<Villager>();
             NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
-            villager.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 50);
+            villager.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(20, 50);
             currentJobs[(int)VillagerJob.Nitwit]++;
             if (assignJob) AssignVillagerJob(villager);
         }

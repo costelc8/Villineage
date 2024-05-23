@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Building : Targetable
 {
@@ -33,10 +35,10 @@ public class Building : Targetable
                     // cart for outpost
                     RandomNavmeshPoint.RandomPointFromCenterSphere(transform.position, 1, out Vector3 point, 5, 1, 1000);
                     GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity);
+                    cart.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 20);
                     cart.GetComponent<Cart>().hub = GetComponent<Storage>();
                     NetworkServer.Spawn(cart);
                     break;
-
             }
             UntargetAll();
             return true;

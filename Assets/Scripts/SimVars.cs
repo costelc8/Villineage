@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SimVars : NetworkBehaviour
 {
@@ -23,9 +24,9 @@ public class SimVars : NetworkBehaviour
 
     [Header("Villager Variables")]
     [SyncVar] public int startingVillagers = 4;
-    [SyncVar] public float villagerSpawnTime = 30.0f;
+    [SyncVar] public float villagerSpawnTime = 30f;
     [SyncVar] public int villagerCarryCapacity = 10;
-    [SyncVar] public float villagerMoveSpeed = 4f;
+    [SyncVar(hook = nameof(VillagerMoveSpeedHook))] public float villagerMoveSpeed = 4f;
     [SyncVar] public float villagerWorkSpeed = 1f;
     [SyncVar] public float villagerHungerRate = 1f;
     [SyncVar] public float vitalityPerFood = 10f;
@@ -134,4 +135,17 @@ public class SimVars : NetworkBehaviour
     //     foodPerBerry = newValue;
     //     // Update logic when foodPerBerry changes
     // }
+
+    void VillagerMoveSpeedHook(float oldSpeed, float newSpeed)
+    {
+        foreach(Villager v in TownCenter.TC.villagers)
+        {
+            NavMeshAgent agent = v.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.speed = newSpeed;
+                agent.acceleration = newSpeed;
+            }
+        }
+    }
 }
