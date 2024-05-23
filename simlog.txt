@@ -1,4 +1,0 @@
-[
-{"Resources":{"Wood":0,"Food":0},"Villagers":4,"Houses":0},
-{"Resources":{"Wood":40,"Food":28},"Villagers":4,"Houses":0}
-]

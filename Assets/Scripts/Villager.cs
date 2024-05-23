@@ -216,13 +216,13 @@ public class Villager : NetworkBehaviour, ISelectable
             // For each candidate, if they exist:
             foreach (Targetable candidate in candidates)
             {
-                if (candidate != null)
+                if (candidate != null && candidate.priority > 0 && candidate.HasValidPositions())
                 {
                     // Find their distance and store the lowest
                     // With high priority objects appearing closer
                     float distance = Vector3.Distance(transform.position, candidate.transform.position);
                     distance /= candidate.priority;
-                    if (distance < lowestDistance && candidate.HasValidPositions())
+                    if (distance < lowestDistance)
                     {
                         lowestDistance = distance;
                         bestCandidate = candidate;

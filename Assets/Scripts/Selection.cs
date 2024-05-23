@@ -7,11 +7,15 @@ public class Selection : MonoBehaviour
     public static Selection Selector;
 
     public GameObject selectionBox;
+    public ManyResourceDisplay manyResourceDisplay;
 
     private Vector2 selectionStart;
     private Vector2 selectionEnd;
     private List<ISelectable> selectables = new List<ISelectable>();
     public List<ISelectable> selected = new List<ISelectable>();
+    public List<ISelectable> selectedVillagers = new List<ISelectable>();
+    public List<ISelectable> selectedResources = new List<ISelectable>();
+    public List<ISelectable> selectedStorages = new List<ISelectable>();
 
     private void Awake()
     {
@@ -31,8 +35,11 @@ public class Selection : MonoBehaviour
 
     public void RemoveSelectable(ISelectable selectable)
     {
-        if (selectables.Contains(selectable)) selectables.Remove(selectable);
-        if (selected.Contains(selectable)) selected.Remove(selectable);
+        selectables.Remove(selectable);
+        selected.Remove(selectable);
+        selectedVillagers.Remove(selectable);
+        selectedResources.Remove(selectable);
+        selectedStorages.Remove(selectable);
     }
 
     // Update is called once per frame
@@ -68,6 +75,9 @@ public class Selection : MonoBehaviour
     {
         foreach (ISelectable selectable in selected) selectable.OnDeselect();
         selected.Clear();
+        selectedVillagers.Clear();
+        selectedResources.Clear();
+        selectedStorages.Clear();
     }
 
     // Single-click selection, perform raycast
@@ -117,9 +127,17 @@ public class Selection : MonoBehaviour
             if (screenPosition.x > lowerX && screenPosition.x < upperX && screenPosition.y > lowerY && screenPosition.y < upperY)
             {
                 selected.Add(selectable);
-                selectable.OnSelect();
+                if (selectable is Villager)
+                {
+                    selectedVillagers.Add(selectable);
+                    selectable.OnSelect();
+                }
+                else if (selectable is Resource) selectedResources.Add(selectable);
+                else if (selectable is Storage) selectedStorages.Add(selectable);
             }
         }
-       SelectSingle((selectionStart + selectionEnd) / 2);
+        if (selectedResources.Count == 1) selectedResources[0].OnSelect();
+        if (selectedStorages.Count == 1) selectedStorages[0].OnSelect();
+        //SelectSingle((selectionStart + selectionEnd) / 2);
     }
 }

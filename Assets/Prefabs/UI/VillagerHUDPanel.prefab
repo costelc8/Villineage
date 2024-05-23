@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 779366218782408890}
   - component: {fileID: -2549991701201592268}
   m_Layer: 0
-  m_Name: HUDPanel
+  m_Name: VillagerHUDPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
