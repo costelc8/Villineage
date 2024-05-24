@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SimulationManager : NetworkManager
 {
@@ -29,9 +30,9 @@ public class SimulationManager : NetworkManager
         townCenter.PlaceOnGround();
         resourceGenerator.GeneratePerlinTrees();
         resourceGenerator.GeneratePerlinBerries();
-        resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 20f, 30f);
-        resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 30f, 45f);
-        resourceGenerator.GenerateWolves(townCenter.transform.position, SimVars.VARS.startingWolves, 40f, 60f);
+        resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 6f * SimVars.VARS.terrainScale, 9f * SimVars.VARS.terrainScale);
+        resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 12f * SimVars.VARS.terrainScale, 18f * SimVars.VARS.terrainScale);
+        resourceGenerator.GenerateWolves(townCenter.transform.position, SimVars.VARS.startingWolves, 18f * SimVars.VARS.terrainScale, 24f * SimVars.VARS.terrainScale);
         townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
         if (SimVars.VARS.logSim) simLogs.StartLogging();
     }

@@ -134,7 +134,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int y = spacing; y < size; y += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 40f)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > 10f * SimVars.VARS.terrainScale)
                 {
                     if (perlin[x, y] < SimVars.VARS.perlinForestThreshold + Random.Range(-0.1f, 0.1f))
                     {
@@ -174,7 +174,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int z = spacing; z < size; z += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 40f)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 10f * SimVars.VARS.terrainScale)
                 {
                     float upperThreshold = SimVars.VARS.perlinForestThreshold + 0.1f;
                     if (perlin[x, z] > SimVars.VARS.perlinForestThreshold && perlin[x, z] < upperThreshold && Random.value <= 0.01f)
@@ -225,7 +225,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
             {
                 GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 sheep.GetComponent<Animal>().wanderOrigin = center;
@@ -241,7 +241,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
             {
                 GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 goat.GetComponent<Animal>().wanderOrigin = center;
@@ -257,7 +257,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
             {
                 GameObject wolf = Instantiate(wolfPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 wolf.GetComponent<Animal>().wanderOrigin = center;
