@@ -125,6 +125,7 @@ public class Storage : Targetable, ISelectable
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
+        Gizmos.color = Color.cyan;
         if (SimVars.VARS != null) Gizmos.DrawWireSphere(transform.position, SimVars.VARS.GetMaxVillagerRange() / 2f);
     }
 }

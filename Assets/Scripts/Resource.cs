@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Resource : Targetable, ISelectable
@@ -8,8 +9,10 @@ public class Resource : Targetable, ISelectable
     [Header("Resource Settings")]
     private GameObject stage0;
     private GameObject stage1;
+    private int stage;
     [SyncVar(hook = nameof(QuantityHook))]
     public int quantity;
+    public int maxQuantity;
     public Villager assignedVillager;
     public ResourceType resourceType;
     public bool respawning;
@@ -42,15 +45,26 @@ public class Resource : Targetable, ISelectable
 
     private void QuantityHook(int oldQuantity, int newQuantity)
     {
-        if (newQuantity < oldQuantity && stage1 != null && !stage1.activeInHierarchy)
+        if (newQuantity < oldQuantity && oldQuantity == maxQuantity)
         {
-            stage0.SetActive(false);
-            stage1.SetActive(true);
-            priority *= 1.1f;
+            priority *= 1.5f;
+        }
+        if (stage0 != null && stage1 != null)
+        {
+            if (resourceType == ResourceType.Wood && newQuantity < oldQuantity && oldQuantity == maxQuantity)
+            {
+                stage0.SetActive(false);
+                stage1.SetActive(true);
+            }
+            else if (resourceType == ResourceType.Food && newQuantity < oldQuantity && newQuantity == 0)
+            {
+                stage0.SetActive(false);
+                stage1.SetActive(true);
+            }
         }
     }
 
-	IEnumerator DestroyResource()
+    IEnumerator DestroyResource()
     {
         float elapsedTime = 0f;
         Vector3 startPos = transform.position;
@@ -64,12 +78,12 @@ public class Resource : Targetable, ISelectable
             yield return null;
         }
 
-        if (resourceType == ResourceType.Food && !isAnimal) {
+        if (resourceType == ResourceType.Food && !isAnimal)
+        {
             yield return new WaitForSeconds(SimVars.VARS.berryRespawnTime);
             SetBerriesActive();
-        } else {
-            Destroy(gameObject);
         }
+        else Destroy(gameObject);
     }
 
     public void OnSelect()
@@ -87,6 +101,8 @@ public class Resource : Targetable, ISelectable
     public void SetBerriesActive()
     {
         quantity = SimVars.VARS.foodPerBerry;
+        maxQuantity = SimVars.VARS.foodPerBerry;
+        priority = 0;
         stage1.SetActive(false);
         stage0.SetActive(true);
         ResourceGenerator.ReAddBerries(this);
@@ -103,5 +119,6 @@ public class Resource : Targetable, ISelectable
     public void Start()
     {
         Selection.Selector.AddSelectable(this);
+        maxQuantity = quantity;
     }
 }

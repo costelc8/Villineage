@@ -39,14 +39,15 @@ public class BuildingGenerator : MonoBehaviour
 
     public Building PlaceBuilding(BuildingType buildingType, Vector3 center = new Vector3())
     {
-        float starveRange = SimVars.VARS.GetMaxVillagerRange();
+        float starveRange = SimVars.VARS.GetMaxVillagerRange() / 4;
         GameObject buildingPrefab = null;
         Vector3 spawnCenter;
         if (center == Vector3.zero)
         {
             // spawn @ current position
             spawnCenter = transform.position;
-        } else
+        }
+        else
         {
             // spawn @ given position
             spawnCenter = center;
@@ -62,13 +63,13 @@ public class BuildingGenerator : MonoBehaviour
             case BuildingType.House:
                 buildingPrefab = housePrefab;
                 buildCost = SimVars.VARS.houseBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 10f, 3f, starveRange);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 6f, 1f, starveRange);
                 priority = 1;
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
                 buildCost = SimVars.VARS.outpostBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 3f, 3f, starveRange);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 6f, 1f, starveRange);
                 priority = 100;
                 break;
         }

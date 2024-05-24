@@ -64,7 +64,7 @@ public class RandomNavmeshPoint
         {
             if (RandomPointFromCenter(center, distance, out Vector3 point))
             {
-                if (!Physics.CheckSphere(point + (Vector3.up * radius), radius, ~LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
+                if (!Physics.CheckSphere(point, radius, ~LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
                 {
                     result = point;
                     return true;
@@ -77,11 +77,12 @@ public class RandomNavmeshPoint
 
     public static bool RandomPointFromCenter(Vector3 center, float distance, out Vector3 point)
     {
-        center.y = 100f;
+        float depth = SimVars.VARS.terrainDepth + 10f;
+        center.y = depth;
         Vector2 offset = Random.insideUnitCircle.normalized * distance;
         Vector3 randomPoint = center + new Vector3(offset.x, 0, offset.y);
-        Debug.DrawRay(randomPoint, Vector3.down * 100f, Color.red, 1f);
-        if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, 100f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
+        Debug.DrawRay(randomPoint, Vector3.down * depth, Color.red, 1f * Time.timeScale);
+        if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, depth, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
         {
             if (NavMesh.SamplePosition(hitInfo.point, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
             {

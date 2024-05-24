@@ -42,9 +42,9 @@ public class TerrainGenerator : NetworkBehaviour
         Debug.Log("Generating Terrain");
         int size = SimVars.VARS.terrainSize;
         int depth = SimVars.VARS.terrainDepth;
-        terrainData.heightmapResolution = size;
-        terrainData.size = new Vector3(size - 1, depth, size - 1);
-        perlin = PerlinGenerator.GeneratePerlin(size, size, perlinScale, SimVars.VARS.GetSeed());
+        terrainData.heightmapResolution = size + 1;
+        terrainData.size = new Vector3(size, depth, size);
+        perlin = PerlinGenerator.GeneratePerlin(size + 1, size + 1, perlinScale, SimVars.VARS.GetSeed());
         terrainData.SetHeights(0, 0, perlin);
         gameObject.SetActive(true);
         navMesh.BuildNavMesh();

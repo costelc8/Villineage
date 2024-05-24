@@ -41,12 +41,12 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float forestDensity = 1f;
     [SyncVar] public int forestSpacing = 4;
     [Range(0f, 1f)]
-    [SyncVar] public float perlinForestThreshold = 0.5f;
+    [SyncVar] public float perlinForestThreshold = 0.4f;
     [SyncVar] public int woodPerTree = 60;
     [SyncVar] public int foodPerBerry = 60;
     [SyncVar] public int foodPerSheep = 60;
     [SyncVar] public int foodPerGoat = 60;
-    [SyncVar] public float berryRespawnTime = 300f;
+    [SyncVar] public float berryRespawnTime = 600f;
 
     [Header("Building Variables")]
     [SyncVar] public int houseBuildCost = 60;
@@ -68,7 +68,6 @@ public class SimVars : NetworkBehaviour
         else Destroy(this);
         terrainSize = 128;
         for (int i = 1; i < terrainScale; i++) terrainSize *= 2;
-        terrainSize++;
     }
 
     public int GetSeed()

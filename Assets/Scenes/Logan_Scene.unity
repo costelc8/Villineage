@@ -1310,9 +1310,9 @@ MonoBehaviour:
   syncInterval: 0
   timeScale: 5
   logSim: 0
-  seed: 1
-  lumberjackWeight: 2
-  gathererWeight: 1
+  seed: 0
+  lumberjackWeight: 1
+  gathererWeight: 2
   hunterWeight: 1
   builderWeight: 1
   villagerSpawnTime: 30
@@ -1327,12 +1327,12 @@ MonoBehaviour:
   startingWolves: 0
   forestDensity: 1
   forestSpacing: 4
-  perlinForestThreshold: 0.5
+  perlinForestThreshold: 0.4
   woodPerTree: 60
   foodPerBerry: 60
   foodPerSheep: 60
   foodPerGoat: 60
-  berryRespawnTime: 300
+  berryRespawnTime: 600
   houseBuildCost: 60
   outpostBuildCost: 60
   villagerSpawnCost: 30
