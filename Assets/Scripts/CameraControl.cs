@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Transactions;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ public class CameraControl : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(1)) Cursor.lockState = CursorLockMode.None;
 
+        // Camera Movement
         if (Input.GetMouseButton(2))
         {
             float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -10f, 10f);

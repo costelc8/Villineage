@@ -17,10 +17,13 @@ public class Selection : MonoBehaviour
     public List<ISelectable> selectedResources = new List<ISelectable>();
     public List<ISelectable> selectedStorages = new List<ISelectable>();
 
+    public MouseMode mouseMode;
+
     private void Awake()
     {
         if (Selector == null || Selector == this) Selector = this;
         else Destroy(this);
+        mouseMode = MouseMode.Selecting;
     }
 
     // The following two functions are currently how selectable objects are tracked.
@@ -45,40 +48,50 @@ public class Selection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (mouseMode == MouseMode.Selecting)
         {
-            // On mouse down, track selection start position, and enable selection box
-            selectionStart = Input.mousePosition;
-            selectionBox.SetActive(true);
-        }
-        if (Input.GetMouseButton(0))
-        {
-            // On mouse hold, move and resize selection box accordingly
-            selectionEnd = Input.mousePosition;
-            selectionBox.GetComponent<RectTransform>().anchoredPosition = (selectionStart + selectionEnd) / 2f;
-            selectionBox.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(selectionEnd.x - selectionStart.x), Mathf.Abs(selectionEnd.y - selectionStart.y));
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            // On mouse up, track selection end position and disable selection box
-            selectionEnd = Input.mousePosition;
-            selectionBox.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                // On mouse down, track selection start position, and enable selection box
+                selectionStart = Input.mousePosition;
+                selectionBox.SetActive(true);
+            }
+            if (Input.GetMouseButton(0))
+            {
+                // On mouse hold, move and resize selection box accordingly
+                selectionEnd = Input.mousePosition;
+                selectionBox.GetComponent<RectTransform>().anchoredPosition = (selectionStart + selectionEnd) / 2f;
+                selectionBox.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(selectionEnd.x - selectionStart.x), Mathf.Abs(selectionEnd.y - selectionStart.y));
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                // On mouse up, track selection end position and disable selection box
+                selectionEnd = Input.mousePosition;
+                selectionBox.SetActive(false);
 
-            // Clear the previously selected units, then make new selection
-            DeselectAll();
-            if (selectionStart == selectionEnd) SelectSingle(Input.mousePosition);     
-            else SelectMany();
+                // Clear the previously selected units, then make new selection
+                DeselectAll();
+                if (selectionStart == selectionEnd) SelectSingle(Input.mousePosition);
+                else SelectMany();
+            }
         }
-        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         //{
-            if (Input.GetKeyDown(KeyCode.V)) SelectAllVillagers();
-            if (Input.GetKeyDown(KeyCode.R)) SelectAllResources();
-            if (Input.GetKeyDown(KeyCode.S)) SelectAllStorages();
-            if (Input.GetKeyDown(KeyCode.L)) SelectAllVillagers(VillagerJob.Lumberjack);
-            if (Input.GetKeyDown(KeyCode.B)) SelectAllVillagers(VillagerJob.Builder);
-            if (Input.GetKeyDown(KeyCode.G)) SelectAllVillagers(VillagerJob.Gatherer);
-            if (Input.GetKeyDown(KeyCode.H)) SelectAllVillagers(VillagerJob.Hunter);
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SelectAllVillagers(VillagerJob.Lumberjack);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) SelectAllVillagers(VillagerJob.Gatherer);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) SelectAllVillagers(VillagerJob.Hunter);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) SelectAllVillagers(VillagerJob.Builder);
+            if (Input.GetKeyDown(KeyCode.Alpha7)) SelectAllVillagers();
+            if (Input.GetKeyDown(KeyCode.Alpha8)) SelectAllResources();
+            if (Input.GetKeyDown(KeyCode.Alpha9)) SelectAllStorages();
+            if (Input.GetKeyDown(KeyCode.Alpha0)) SelectEverything();
         //}
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            selectionBox.SetActive(false);
+            DeselectAll();
+            mouseMode = MouseMode.Selecting;
+        }
     }
 
     private void DeselectAll()
@@ -214,4 +227,11 @@ public class Selection : MonoBehaviour
         DeselectAll();
         foreach (ISelectable selectable in selectables) selectable.OnSelect();
     }
+}
+
+public enum MouseMode
+{
+    None,
+    Selecting,
+    Drawing,
 }

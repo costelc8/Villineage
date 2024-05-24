@@ -266,4 +266,17 @@ public enum BuildingType
 {
     House,
     Outpost,
+    MAX_VALUE,
+}
+
+public enum ResourceSourceType
+{
+    None,
+    Tree,
+    Berry,
+    Sheep,
+    Goat,
+    Wolf,
+    Farm,
+    MAX_VALUE,
 }
