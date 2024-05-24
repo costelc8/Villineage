@@ -131,6 +131,19 @@ public class Animal : Resource
         ChangeState(AnimalState.Dead);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (type == AnimalType.Hostile)
+        {
+            Villager villager = other.GetComponent<Villager>();
+            if (villager != null)
+            {
+                this.priority += 10.0f;
+                if (villager.job != VillagerJob.Hunter && villager.alive) villager.ReturnToHub();
+            }
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (type == AnimalType.Hostile)

@@ -571,6 +571,7 @@ MonoBehaviour:
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   wolfPrefab: {fileID: 8090313371282963140, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   forestPosition: {fileID: 0}
+  previousMousePos: {x: 0, y: 0, z: 0}
   generateForest: 0
   destroyTrees: 0
   generateBerries: 0
@@ -778,6 +779,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 600929218}
   manyResourceDisplay: {fileID: 994468490}
+  mouseMode: 0
 --- !u!1 &1519554144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,7 +1326,7 @@ MonoBehaviour:
   startingVillagers: 8
   startingSheep: 4
   startingGoats: 6
-  startingWolves: 0
+  startingWolves: 5
   forestDensity: 1
   forestSpacing: 4
   perlinForestThreshold: 0.4
@@ -1419,6 +1421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 600929218}
   manyResourceDisplay: {fileID: 0}
+  mouseMode: 0
 --- !u!1 &4494731862126058169
 GameObject:
   m_ObjectHideFlags: 0
