@@ -60,7 +60,7 @@ public class Cart : NetworkBehaviour, ISelectable
                 // go to the outpost
                 target = hub;
             }
-            agent.SetDestination(target.transform.position + (transform.position - target.transform.position).normalized);
+            agent.SetDestination(target.transform.position + ((transform.position - target.transform.position).normalized * 2f));
         }
     }
 

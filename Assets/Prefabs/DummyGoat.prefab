@@ -1154,6 +1154,7 @@ MonoBehaviour:
   priority: 0.5
   movingTarget: 1
   quantity: 0
+  maxQuantity: 0
   assignedVillager: {fileID: 0}
   resourceType: 1
   respawning: 0
@@ -1161,7 +1162,7 @@ MonoBehaviour:
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 0.5
   maxWanderCooldown: 10
-  maxHealth: 4
+  maxHealth: 3
   health: 0
   wanderCooldown: 0
   state: 0

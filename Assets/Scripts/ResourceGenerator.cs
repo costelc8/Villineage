@@ -262,6 +262,7 @@ public class ResourceGenerator : MonoBehaviour
                 GameObject wolf = Instantiate(wolfPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
                 wolf.GetComponent<Animal>().wanderOrigin = center;
                 NetworkServer.Spawn(wolf);
+                animals.Add(wolf.GetComponent<Animal>());
                 wolf.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(71, 80);
             }
         }

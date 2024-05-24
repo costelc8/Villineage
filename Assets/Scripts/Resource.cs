@@ -64,7 +64,7 @@ public class Resource : Targetable, ISelectable
         }
     }
 
-    IEnumerator DestroyResource()
+    protected IEnumerator DestroyResource()
     {
         float elapsedTime = 0f;
         Vector3 startPos = transform.position;

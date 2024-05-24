@@ -178,8 +178,8 @@ public class TownCenter : NetworkBehaviour
         float woodWeight, foodWeight, averageWeight;
         if (storage.resources.Count > 0)
         {
-            woodWeight = 100f / (100f + storage.resources[(int)ResourceType.Wood]);
-            foodWeight = 100f / (100f + storage.resources[(int)ResourceType.Food]);
+            woodWeight = 1000f / (1000f + storage.resources[(int)ResourceType.Wood]);
+            foodWeight = 1000f / (1000f + storage.resources[(int)ResourceType.Food]);
             averageWeight = (woodWeight + foodWeight) / 2f;
         }
         else
