@@ -1470,6 +1470,7 @@ MonoBehaviour:
   priority: 1
   movingTarget: 1
   quantity: 0
+  maxQuantity: 0
   assignedVillager: {fileID: 0}
   resourceType: 1
   respawning: 0

@@ -1,4 +1,5 @@
 [
-{"Resources":{"Wood":0,"Food":0},"Villagers":4,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":4,"Houses":0}
+{"Resources":{"Wood":0,"Food":0},"Villagers":8,"Houses":0},
+{"Resources":{"Wood":40,"Food":97},"Villagers":8,"Houses":0},
+{"Resources":{"Wood":50,"Food":136},"Villagers":8,"Houses":1}
 ]

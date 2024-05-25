@@ -1,7 +1,5 @@
 using Mirror;
-using Mono.CecilX;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -114,7 +112,8 @@ public class Storage : Targetable, ISelectable
 
     private void UpdateResourceRequest()
     {
-        neededResources[(int)ResourceType.Food] = (int)(villagers.Count * (100 / SimVars.VARS.vitalityPerFood));
+        float dist = Vector3.Distance(transform.position, TownCenter.TC.transform.position);
+        neededResources[(int)ResourceType.Food] = (int)((1 + villagers.Count) * (100 / SimVars.VARS.vitalityPerFood) * SimVars.VARS.villagerHungerRate * dist * 2f / SimVars.VARS.GetMaxVillagerRange());
         neededResources[(int)ResourceType.Wood] = SimVars.VARS.houseBuildCost + SimVars.VARS.outpostBuildCost;
         for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
         {

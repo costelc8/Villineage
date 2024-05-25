@@ -9,7 +9,9 @@ using Random = UnityEngine.Random;
 public class Building : Targetable
 {
     public Villager assignedVillager;
+    [SyncVar]
     public int requiredWood;
+    [SyncVar]
     public int currentWood;
     public int stage;
     public BuildingType buildingType;

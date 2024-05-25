@@ -146,6 +146,7 @@ public class Animal : Resource
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isServer) return;
         if (type == AnimalType.Hostile)
         {
             Villager villager = other.GetComponent<Villager>();

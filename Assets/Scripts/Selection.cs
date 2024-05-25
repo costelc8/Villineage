@@ -225,7 +225,24 @@ public class Selection : MonoBehaviour
     public void SelectEverything()
     {
         DeselectAll();
-        foreach (ISelectable selectable in selectables) selectable.OnSelect();
+        foreach (ISelectable selectable in selectables)
+        {
+            selected.Add(selectable);
+            if (selectable is Villager)
+            {
+                selectedVillagers.Add(selectable);
+                selectable.OnSelect();
+            }
+            if (selectable is Resource)
+            {
+                selectedResources.Add(selectable);
+            }
+            if (selectable is Storage)
+            {
+                selectedStorages.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
     }
 }
 

@@ -472,8 +472,8 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 1
-  m_TileSize: 32
+  m_OverrideTileSize: 0
+  m_TileSize: 256
   m_OverrideVoxelSize: 1
   m_VoxelSize: 0.25
   m_MinRegionArea: 2
@@ -1054,6 +1054,8 @@ MonoBehaviour:
   - {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   - {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   - {fileID: 4633771708107926460, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
+  - {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
+  - {fileID: 7346878771156752706, guid: bcf35f08f10546e4fa0bd82bafd90bee, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -1311,11 +1313,11 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 2
+  timeScale: 5
   logSim: 0
   seed: 0
   lumberjackWeight: 1
-  gathererWeight: 2
+  gathererWeight: 1
   hunterWeight: 1
   builderWeight: 1
   villagerSpawnTime: 30

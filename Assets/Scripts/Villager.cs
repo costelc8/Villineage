@@ -17,6 +17,7 @@ public class Villager : NetworkBehaviour, ISelectable
 	public Outline outlineS;
 
     [Header("Stats")]
+    [SyncVar(hook = nameof(AliveHook))]
     public bool alive = true;  // Are they alive?
     public float vitality;  // How much hunger do they have left
     public float maxVitality = 100f;  // The highest their hunger value can be (full)
@@ -144,7 +145,11 @@ public class Villager : NetworkBehaviour, ISelectable
             if (distance < agent.speed * Time.deltaTime * 2) vitality -= SimVars.VARS.villagerHungerRate * distance / agent.speed;
         }
 
-        if (vitality <= vitalityThreshold && (state == VillagerState.Working || state == VillagerState.Walking)) ReturnToHub();
+        if (vitality <= vitalityThreshold && (state == VillagerState.Working || state == VillagerState.Walking))
+        {
+            GetClosestHub();
+            if (hub.resources[(int)ResourceType.Food] > 0) ReturnToHub();
+        }
 
         // If starved to death
         if (vitality <= 0)
@@ -182,6 +187,7 @@ public class Villager : NetworkBehaviour, ISelectable
         // Set alive to false and trigger the death animation.
         alive = false;
         TownCenter.TC.RemoveVillager(this);
+        if (target != null) target.ReturnTargetPosition(this);
         agent.isStopped = true;
         agent.enabled = false;
         anim.SetBool("Working",false);
@@ -189,6 +195,11 @@ public class Villager : NetworkBehaviour, ISelectable
         anim.SetBool("Dead",true);
         float deathValue = UnityEngine.Random.Range(-1f, 1f);
         anim.SetFloat("Death anim", deathValue);
+    }
+
+    public void AliveHook(bool oldValue, bool newValue)
+    {
+        if (!alive) Die();
     }
 
     public void FindNewDestination()
@@ -353,11 +364,11 @@ public class Villager : NetworkBehaviour, ISelectable
             if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
             else agent.stoppingDistance = 0.1f;
         }
-        float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position) * 1.5f;
-        vitalityThreshold = distanceHome / agent.speed;
+        float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position);
+        vitalityThreshold = 5 + distanceHome / agent.speed;
     }
 
-    public void ReturnToHub()
+    private void GetClosestHub()
     {
         Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
         float lowestDistance = float.MaxValue;
@@ -375,7 +386,12 @@ public class Villager : NetworkBehaviour, ISelectable
         hub.villagers.Remove(this);
         hub = nearestHub;
         hub.villagers.Add(this);
-        SetNewTarget(nearestHub);
+    }
+
+    public void ReturnToHub()
+    {
+        GetClosestHub();
+        SetNewTarget(hub);
         ChangeState(VillagerState.Returning);
     }
 

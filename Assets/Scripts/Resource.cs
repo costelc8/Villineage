@@ -1,7 +1,5 @@
 using Mirror;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Resource : Targetable, ISelectable
@@ -102,7 +100,7 @@ public class Resource : Targetable, ISelectable
     {
         quantity = SimVars.VARS.foodPerBerry;
         maxQuantity = SimVars.VARS.foodPerBerry;
-        priority = 0;
+        priority = 1;
         stage1.SetActive(false);
         stage0.SetActive(true);
         ResourceGenerator.ReAddBerries(this);
