@@ -174,7 +174,7 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int z = spacing; z < size; z += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 10f * SimVars.VARS.terrainScale)
+                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 5f * SimVars.VARS.terrainScale)
                 {
                     float upperThreshold = SimVars.VARS.perlinForestThreshold + 0.1f;
                     if (perlin[x, z] > SimVars.VARS.perlinForestThreshold && perlin[x, z] < upperThreshold && Random.value <= 0.01f)
