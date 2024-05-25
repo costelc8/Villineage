@@ -72,9 +72,14 @@ public class Animal : Resource
                 if (attackCooldown <= 0)
                 {
                     attackCooldown = 1f;
+					anim.SetBool("Attack",true);
                     targetVillager.TakeDamage(Random.Range(20f, 40f));
                     if (!targetVillager.alive) targetVillager = null;
-                }
+                } else {
+					anim.SetBool("Attack",false);
+				}
+
+
             }
             else
             {
@@ -184,6 +189,12 @@ public class Animal : Resource
         else
         {
             // Wolf animations
+			if (state == AnimalState.Idle) {
+				anim.SetFloat("Speed",0);
+				anim.SetBool("Attack",false);
+			}
+			if (state == AnimalState.Wandering) anim.SetFloat("Speed",0.5f);
+			if (state == AnimalState.Running) anim.SetFloat("Speed",1f);
         }
     }
 }

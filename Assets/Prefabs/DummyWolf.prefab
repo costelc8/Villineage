@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -48,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2985374647327280367, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
       propertyPath: m_LocalScale.x
       value: 50
@@ -59,6 +75,10 @@ PrefabInstance:
     - target: {fileID: -2985374647327280367, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
       propertyPath: m_LocalScale.z
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2985374647327280367, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
       propertyPath: m_Name
@@ -98,6 +118,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2248785735278524100}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8459881809131988919}
   m_SourcePrefab: {fileID: 100100000, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
 --- !u!1 &8090313371282963140 stripped
 GameObject:
@@ -168,6 +191,7 @@ MonoBehaviour:
   priority: 0.5
   movingTarget: 1
   quantity: 0
+  maxQuantity: 0
   assignedVillager: {fileID: 0}
   resourceType: 1
   respawning: 0
@@ -250,8 +274,29 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 10
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &8459881809131988919
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090313371282963140}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: edc1230dacf1b88448ec5366460e3270, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &8866815298068127870 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 63510e7c41cae6d408409b1940e6b94b, type: 3}
