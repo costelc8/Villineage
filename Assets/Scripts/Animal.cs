@@ -37,7 +37,7 @@ public class Animal : Resource
     // Update is called once per frame
     void Update()
     {
-        if (state == AnimalState.Dead && model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime)); // Rotate on its side to "die"
+        if (state == AnimalState.Dead && type != AnimalType.Hostile && model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime)); // Rotate on its side to "die"
         if (!isServer) return;
         if (targetVillager != null && !targetVillager.alive) targetVillager = null;
         if (state != AnimalState.Dead) Wander();
@@ -73,7 +73,7 @@ public class Animal : Resource
                 {
                     attackCooldown = 1f;
 					anim.SetBool("Attack",true);
-                    targetVillager.TakeDamage(Random.Range(20f, 40f));
+                    if (targetVillager.TakeDamage(Random.Range(20f, 40f))) priority += 100f;
                     if (!targetVillager.alive) targetVillager = null;
                 } else {
 					anim.SetBool("Attack",false);
@@ -131,9 +131,15 @@ public class Animal : Resource
         agent.enabled = false;
         movingTarget = false;
         agent.enabled = false;
-        obstacle.enabled = true;
+        if (obstacle != null) obstacle.enabled = true;
         priority *= 10f;
         ChangeState(AnimalState.Dead);
+        if (type == AnimalType.Hostile)
+        {
+            ResourceGenerator.RemoveResource(this);
+            UntargetAll(false);
+            StartCoroutine(DestroyResource());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -141,17 +147,21 @@ public class Animal : Resource
         if (type == AnimalType.Hostile)
         {
             Villager villager = other.GetComponent<Villager>();
-            if (villager != null)
+            if (villager != null && villager.alive)
             {
-                this.priority += 10.0f;
-                if (villager.job != VillagerJob.Hunter && villager.alive) villager.ReturnToHub();
+                priority += 10f;
+                if (villager.job == VillagerJob.Hunter)
+                {
+                    villager.SetNewTarget(this);
+                }
+                else villager.ReturnToHub();
             }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (type == AnimalType.Hostile)
+        if (type == AnimalType.Hostile && state != AnimalState.Dead)
         {
             Villager villager = other.GetComponent<Villager>();
             if (villager != null && (targetVillager == null || targetVillager == villager) && villager.alive)

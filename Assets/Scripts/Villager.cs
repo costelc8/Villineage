@@ -163,7 +163,7 @@ public class Villager : NetworkBehaviour, ISelectable
         }
     }
 
-    public void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
         vitality -= damage;
         if (vitality <= 0)
@@ -171,7 +171,9 @@ public class Villager : NetworkBehaviour, ISelectable
             vitality = 0;
             Die();
             causeOfDeath = "Wild Animal";
+            return true;
         }
+        return false;
     }
 
     // Like it says on the tin.
@@ -292,7 +294,7 @@ public class Villager : NetworkBehaviour, ISelectable
     }
 
     // Update the villager's state to newState
-    private void ChangeState(VillagerState newState)
+    public void ChangeState(VillagerState newState)
     {
         state = newState;
         // Can update the Animator here
@@ -340,7 +342,7 @@ public class Villager : NetworkBehaviour, ISelectable
     }
 
     // Find opening at new target
-    private void SetNewTarget(Targetable newTarget)
+    public void SetNewTarget(Targetable newTarget)
     {
         if (newTarget == null) ReturnToHub();
         else

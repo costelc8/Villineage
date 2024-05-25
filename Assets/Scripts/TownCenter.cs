@@ -178,8 +178,8 @@ public class TownCenter : NetworkBehaviour
         float woodWeight, foodWeight, averageWeight;
         if (storage.resources.Count > 0)
         {
-            woodWeight = 100f / (100f + storage.resources[(int)ResourceType.Wood]);
-            foodWeight = 100f / (100f + storage.resources[(int)ResourceType.Food]);
+            woodWeight = 1000f / (1000f + storage.resources[(int)ResourceType.Wood]);
+            foodWeight = 1000f / (1000f + storage.resources[(int)ResourceType.Food]);
             averageWeight = (woodWeight + foodWeight) / 2f;
         }
         else
@@ -192,6 +192,14 @@ public class TownCenter : NetworkBehaviour
         bool treesExist = ResourceGenerator.GetTrees().Count > 0;
         bool berriesExist = ResourceGenerator.GetBerries().Count > 0;
         bool animalsExist = ResourceGenerator.GetAnimals().Count > 0;
+        if (animalsExist)
+        {
+            animalsExist = false;
+            foreach (var animal in ResourceGenerator.GetAnimals())
+            {
+                if (animal.priority > 0) animalsExist = true;
+            }
+        }
         bool buildingsExist = BuildingGenerator.GetPendingBuildings().Count > 0;
         foodWeight *= (1 + (berriesExist ? 0 : 1) + (animalsExist ? 0 : 1));
         jobWeights[(int)VillagerJob.Lumberjack] = treesExist ? SimVars.VARS.lumberjackWeight * woodWeight : 0;

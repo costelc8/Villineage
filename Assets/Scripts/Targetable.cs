@@ -8,6 +8,7 @@ public class Targetable : NetworkBehaviour
 {
     [Header("Targetable Settings")]
     private List<TargetPosition> targetPositions;
+    private List<Villager> unassignedVillagers;
     public bool enforceMaxVillagers;
     public int maxAssignedVillagers;
     public int assignedVillagers;
@@ -24,8 +25,9 @@ public class Targetable : NetworkBehaviour
     private void GenerateValidPositions()
     {
         targetPositions = new List<TargetPosition>();
+        unassignedVillagers = new List<Villager>();
         obstacle = GetComponent<NavMeshObstacle>();
-        if (obstacle.enabled == false) return;
+        if (obstacle == null || obstacle.enabled == false) return;
         if (obstacle.shape == NavMeshObstacleShape.Capsule)
         {
             float radius = obstacle.radius + 0.5f;
@@ -77,7 +79,11 @@ public class Targetable : NetworkBehaviour
     {
         if (targetPositions == null || targetPositions.Count == 0) GenerateValidPositions();
         assignedVillagers++;
-        if (targetPositions.Count == 0) return transform.position;
+        if (targetPositions.Count == 0)
+        {
+            unassignedVillagers.Add(villager);
+            return transform.position;
+        }
         TargetPosition nearest = null;
         float minMag = float.MaxValue;
         foreach (TargetPosition targetPos in targetPositions)
@@ -93,7 +99,7 @@ public class Targetable : NetworkBehaviour
             }
         }
         if (nearest != null) return nearest.position;
-        else if(!enforceMaxVillagers) // Do the check again, allowing already-reserved spots
+        else if (!enforceMaxVillagers) // Do the check again, allowing already-reserved spots
         {
             foreach (TargetPosition targetPos in targetPositions)
             {
@@ -106,7 +112,11 @@ public class Targetable : NetworkBehaviour
             }
             return nearest.position;
         }
-        else return transform.position;
+        else
+        {
+            unassignedVillagers.Add(villager);
+            return transform.position;
+        }
     }
 
     public void ReturnTargetPosition(Villager villager)
@@ -131,6 +141,11 @@ public class Targetable : NetworkBehaviour
                 else targetPos.assignedVillager.target = null;
                 targetPos.assignedVillager = null;
             }
+        }
+        foreach (Villager villager in unassignedVillagers)
+        {
+            if (forceReturn) villager.ReturnToHub();
+            else villager.target = null;
         }
     }
 
