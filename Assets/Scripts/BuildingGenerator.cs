@@ -18,14 +18,16 @@ public class BuildingGenerator : MonoBehaviour
     private static List<Building> houses = new List<Building>();
     private static List<Building> outposts = new List<Building>();
     private static List<Storage> hubs = new List<Storage>();
-    private GameObject buildingParent;
+    private GameObject buildingInspectorParent;
+    private GameObject cartInspectorParent;
   
 
     // Start is called before the first frame update
     private void Awake()
     {
         spacingSizeSmall = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
-        buildingParent = new GameObject("Buildings");
+        buildingInspectorParent = new GameObject("Buildings");
+        cartInspectorParent = new GameObject("Carts");
     }
 
     // Update is called once per frame
@@ -66,8 +68,9 @@ public class BuildingGenerator : MonoBehaviour
         if (buildingPrefab != null && gotPoint) 
         {
             // Make the building
-            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingInspectorParent.transform).GetComponent<Building>();
             building.storageParent = storage;
+            building.cartInspectorParent = cartInspectorParent;
             building.requiredWood = buildCost;
             building.buildingType = buildingType;
             building.currentWood = 0;
