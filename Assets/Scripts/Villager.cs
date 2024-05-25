@@ -185,16 +185,16 @@ public class Villager : NetworkBehaviour, ISelectable
     private void Die()
     {
         // Set alive to false and trigger the death animation.
-        alive = false;
-        TownCenter.TC.RemoveVillager(this);
-        if (target != null) target.ReturnTargetPosition(this);
-        agent.isStopped = true;
-        agent.enabled = false;
         anim.SetBool("Working",false);
         anim.SetFloat("Walking",0);
         anim.SetBool("Dead",true);
         float deathValue = UnityEngine.Random.Range(-1f, 1f);
         anim.SetFloat("Death anim", deathValue);
+        alive = false;
+        TownCenter.TC.RemoveVillager(this);
+        if (target != null) target.ReturnTargetPosition(this);
+        if (!isServer) return;
+        agent.enabled = false;
     }
 
     public void AliveHook(bool oldValue, bool newValue)
