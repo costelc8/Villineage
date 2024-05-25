@@ -1056,6 +1056,7 @@ MonoBehaviour:
   villagers: []
   neededResources: 
   requestedResources: 
+  hasHouseInProgress: 0
 --- !u!1 &1010161099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 546754387}
-  manyResourceDisplay: {fileID: 0}
+  manyResourceDisplay: {fileID: 5212546271029172252, guid: a5a866b678995a947a908c0f435a2da4, type: 3}
   mouseMode: 0
 --- !u!114 &1021135305
 MonoBehaviour:
