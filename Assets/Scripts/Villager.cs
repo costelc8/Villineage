@@ -194,6 +194,7 @@ public class Villager : NetworkBehaviour, ISelectable
         TownCenter.TC.RemoveVillager(this);
         if (target != null) target.ReturnTargetPosition(this);
         if (!isServer) return;
+        hub.villagers.Remove(this);
         agent.enabled = false;
     }
 

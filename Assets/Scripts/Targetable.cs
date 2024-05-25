@@ -147,6 +147,7 @@ public class Targetable : NetworkBehaviour
             if (forceReturn) villager.ReturnToHub();
             else villager.target = null;
         }
+        assignedVillagers = 0;
     }
 
     protected virtual void OnDrawGizmosSelected()
