@@ -178,12 +178,9 @@ MonoBehaviour:
   berryPrefab: {fileID: 2109751779286136617, guid: b04b51fd0792cf54484dd3550ebd91b0, type: 3}
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
-  wolfPrefab: {fileID: 8090313371282963140, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
+  wolfPrefab: {fileID: 4633771708107926460, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   forestPosition: {fileID: 0}
-  forestSpacing: 4
-  forestDensity: 1
-  forestVariation: 1
-  scale: 2
+  previousMousePos: {x: 0, y: 0, z: 0}
   generateForest: 0
   destroyTrees: 0
   generateBerries: 0
@@ -367,21 +364,24 @@ MonoBehaviour:
   gathererWeight: 1
   hunterWeight: 0
   builderWeight: 1
-  startingVillagers: 8
   villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
+  startingVillagers: 8
   startingSheep: 0
   startingGoats: 6
   startingWolves: 0
+  forestDensity: 1
+  forestSpacing: 4
+  perlinForestThreshold: 0.4
   woodPerTree: 60
   foodPerBerry: 60
-  berryRespawnTime: 30
   foodPerSheep: 60
   foodPerGoat: 60
+  berryRespawnTime: 30
   houseBuildCost: 60
   outpostBuildCost: 60
   villagerSpawnCost: 30
@@ -450,6 +450,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 546754387}
+  manyResourceDisplay: {fileID: 0}
+  mouseMode: 0
 --- !u!114 &201739744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,6 +1235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionBox: {fileID: 546754387}
+  manyResourceDisplay: {fileID: 0}
+  mouseMode: 0
 --- !u!114 &1021135305
 MonoBehaviour:
   m_ObjectHideFlags: 0
