@@ -361,8 +361,14 @@ public class Villager : NetworkBehaviour, ISelectable
             if (target != null) target.ReturnTargetPosition(this);
             target = newTarget;
             if (target != null) agent.SetDestination(target.GetTargetPosition(this));
-            if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
-            else agent.stoppingDistance = 0.1f;
+            if (target != null && target.movingTarget) {
+				agent.stoppingDistance = huntingRange;
+				anim.SetBool("Archer",true);
+			}
+            else {
+				agent.stoppingDistance = 0.1f;
+				anim.SetBool("Archer",false);
+			}
         }
         float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position);
         vitalityThreshold = 5 + distanceHome / agent.speed;
