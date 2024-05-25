@@ -21,6 +21,7 @@ public class Animal : Resource
     public AnimalState state;
     public AnimalType type;
     private float attackCooldown;
+    private float deathTimer;
     private Villager targetVillager;
 
     private void Awake()
@@ -37,7 +38,12 @@ public class Animal : Resource
     // Update is called once per frame
     void Update()
     {
-        if (state == AnimalState.Dead && type != AnimalType.Hostile && model.localRotation.eulerAngles.z < 90) model.Rotate(new Vector3(0f, 0f, 180f * Time.deltaTime)); // Rotate on its side to "die"
+        if (state == AnimalState.Dead && deathTimer < 1f)
+        {
+            deathTimer += Time.deltaTime;
+            if (type != AnimalType.Hostile) model.Rotate(new Vector3(0f, 0f, 90f * Time.deltaTime)); // Rotate on its side to "die"
+            else if (deathTimer >= 1f) StartCoroutine(DestroyResource());
+        }
         if (!isServer) return;
         if (targetVillager != null && !targetVillager.alive) targetVillager = null;
         if (state != AnimalState.Dead) Wander();
@@ -75,11 +81,8 @@ public class Animal : Resource
 					anim.SetBool("Attack",true);
                     if (targetVillager.TakeDamage(Random.Range(20f, 40f))) priority += 100f;
                     if (!targetVillager.alive) targetVillager = null;
-                } else {
-					anim.SetBool("Attack",false);
-				}
-
-
+                }
+                else anim.SetBool("Attack",false);
             }
             else
             {
@@ -138,7 +141,6 @@ public class Animal : Resource
         {
             ResourceGenerator.RemoveResource(this);
             UntargetAll(false);
-            StartCoroutine(DestroyResource());
         }
     }
 
@@ -199,12 +201,14 @@ public class Animal : Resource
         else
         {
             // Wolf animations
-			if (state == AnimalState.Idle) {
+			if (state == AnimalState.Idle)
+            {
 				anim.SetFloat("Speed",0);
 				anim.SetBool("Attack",false);
 			}
 			if (state == AnimalState.Wandering) anim.SetFloat("Speed",0.5f);
 			if (state == AnimalState.Running) anim.SetFloat("Speed",1f);
+            if (state == AnimalState.Dead) anim.SetBool("Dead", true);
         }
     }
 }
