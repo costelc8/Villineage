@@ -9,6 +9,7 @@ public class Storage : Targetable, ISelectable
     public List<Villager> villagers = new List<Villager>();
     public int[] neededResources;
     public int[] requestedResources;
+    public bool hasHouseInProgress = false;
 
     public void Start()
     {
@@ -52,7 +53,7 @@ public class Storage : Targetable, ISelectable
             villager.vitality += neededFood * SimVars.VARS.vitalityPerFood;
         }
         UpdateResourceRequest();
-        TownCenter.TC.HouseSpawnCheck();
+        TownCenter.TC.HouseSpawnCheck(this);
         TownCenter.TC.VillagerSpawnCheck();
         TownCenter.TC.AssignVillagerJob(villager);
     }
@@ -66,7 +67,7 @@ public class Storage : Targetable, ISelectable
             cart.inventory[i] -= storing;
         }
         UpdateResourceRequest();
-        TownCenter.TC.HouseSpawnCheck();
+        TownCenter.TC.HouseSpawnCheck(this);
         TownCenter.TC.VillagerSpawnCheck();
     }
 

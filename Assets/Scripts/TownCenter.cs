@@ -90,13 +90,13 @@ public class TownCenter : NetworkBehaviour
         Physics.SyncTransforms();
     }
 
-    public void HouseSpawnCheck()
+    public void HouseSpawnCheck(Storage storage)
     {
-        if (BuildingGenerator.GetPendingHouses().Count < BuildingGenerator.GetHubs().Count)
+        if (!storage.hasHouseInProgress)
         {
             if (storage.resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
             {
-                buildingGenerator.PlaceBuilding(BuildingType.House);
+                buildingGenerator.PlaceBuilding(BuildingType.House, storage.transform.position, storage);
             }
         }
     }

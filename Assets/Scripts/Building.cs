@@ -16,6 +16,7 @@ public class Building : Targetable
     public int stage;
     public BuildingType buildingType;
     public GameObject cartPrefab;
+    public Storage storageParent;
 
     [SyncVar(hook = nameof(ProgressHook))]
     public int buildProgress;

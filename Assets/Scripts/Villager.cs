@@ -248,7 +248,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 {
                     // means unreachable target
                     // need to spawn an outpost
-                    Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position);
+                    Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position, TownCenter.TC.GetComponent<Storage>());
                 }
                 SetNewTarget(bestCandidate);
             }

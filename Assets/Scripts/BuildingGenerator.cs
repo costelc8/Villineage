@@ -33,25 +33,14 @@ public class BuildingGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            PlaceBuilding(BuildingType.Outpost);
+            PlaceBuilding(BuildingType.Outpost, TownCenter.TC.transform.position, TownCenter.TC.GetComponent<Storage>());
         }
     }
 
-    public Building PlaceBuilding(BuildingType buildingType, Vector3 center = new Vector3())
+    public Building PlaceBuilding(BuildingType buildingType, Vector3 center, Storage storage)
     {
         float starveRange = SimVars.VARS.GetMaxVillagerRange();
         GameObject buildingPrefab = null;
-        Vector3 spawnCenter;
-        if (center == Vector3.zero)
-        {
-            // spawn @ current position
-            spawnCenter = transform.position;
-        }
-        else
-        {
-            // spawn @ given position
-            spawnCenter = center;
-        }
         Vector3 point = new Vector3();
         bool gotPoint = false;
         Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
@@ -63,13 +52,13 @@ public class BuildingGenerator : MonoBehaviour
             case BuildingType.House:
                 buildingPrefab = housePrefab;
                 buildCost = SimVars.VARS.houseBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 6f, 1f, starveRange / 2);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSizeSmall, out point, 6f, 1f, starveRange / 2);
                 priority = 1;
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
                 buildCost = SimVars.VARS.outpostBuildCost;
-                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(spawnCenter, spacingSizeSmall, out point, 6f, 1f, starveRange / 4);
+                gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSizeSmall, out point, 6f, 1f, starveRange / 4);
                 priority = 100;
                 break;
         }
@@ -78,14 +67,20 @@ public class BuildingGenerator : MonoBehaviour
         {
             // Make the building
             Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingParent.transform).GetComponent<Building>();
+            building.storageParent = storage;
             building.requiredWood = buildCost;
             building.buildingType = buildingType;
             building.currentWood = 0;
             building.priority = priority;
             switch(buildingType)
             {
-                case BuildingType.House: pendingHouses.Add(building); break;
-                case BuildingType.Outpost: pendingOutposts.Add(building); break;
+                case BuildingType.House: 
+                    pendingHouses.Add(building);
+                    storage.hasHouseInProgress = true;
+                    break;
+                case BuildingType.Outpost: 
+                    pendingOutposts.Add(building); 
+                    break;
             }
             NetworkServer.Spawn(building.gameObject);
             pendingBuildings.Add(building);
@@ -130,6 +125,7 @@ public class BuildingGenerator : MonoBehaviour
         pendingBuildings.Remove(house);
         pendingHouses.Remove(house);
         houses.Add(house);
+        house.storageParent.hasHouseInProgress = false;
     }
 
     public static void AddOutpost(Building outpost)
