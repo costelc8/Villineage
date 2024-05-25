@@ -106,7 +106,7 @@ public class Resource : Targetable, ISelectable
         stage1.SetActive(false);
         stage0.SetActive(true);
         ResourceGenerator.ReAddBerries(this);
-        Selection.Selector.AddSelectable(this);   
+        Selection.Selector.AddSelectable(this);
     }
 
     private void OnDestroy()
