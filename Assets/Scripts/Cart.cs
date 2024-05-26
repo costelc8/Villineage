@@ -77,5 +77,12 @@ public class Cart : NetworkBehaviour, ISelectable
         //UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
-
+    public void OnTriggerEnter(Collider other)
+    {
+        Resource resource = other.GetComponent<Resource>();
+        if (resource != null && resource.resourceType == ResourceType.Wood)
+        {
+            resource.priority++;
+        }
+    }
 }

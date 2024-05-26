@@ -5532,6 +5532,8 @@ GameObject:
   - component: {fileID: 3322262064065750290}
   - component: {fileID: 444625601840769715}
   - component: {fileID: 109748787865512507}
+  - component: {fileID: 3728457336210798951}
+  - component: {fileID: 693197341757341159}
   m_Layer: 0
   m_Name: Dummy Cart
   m_TagString: Untagged
@@ -5596,7 +5598,6 @@ MonoBehaviour:
   hub: {fileID: 0}
   selected: 0
   target: {fileID: 0}
-  capacity: 0
 --- !u!95 &8423187894480750868
 Animator:
   serializedVersion: 5
@@ -5714,6 +5715,54 @@ CapsuleCollider:
   m_Height: 5.28
   m_Direction: 2
   m_Center: {x: 0, y: 1.05, z: 0}
+--- !u!135 &3728457336210798951
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346878771156752706}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 4
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &693197341757341159
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346878771156752706}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7401229913089375793
 GameObject:
   m_ObjectHideFlags: 0

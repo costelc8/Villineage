@@ -938,6 +938,7 @@ MonoBehaviour:
   villagers: []
   neededResources: 
   requestedResources: 0000000000000000
+  hasHouseInProgress: 0
 --- !u!1 &1874911279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1314,7 +1315,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeScale: 5
-  logSim: 0
+  logSim: 1
   seed: 0
   lumberjackWeight: 1
   gathererWeight: 1
