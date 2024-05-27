@@ -21,8 +21,8 @@ public class ResourceGenerator : MonoBehaviour
     private static List<Targetable> trees = new List<Targetable>();
     private static List<Targetable> berries = new List<Targetable>();
     private static List<Targetable> animals = new List<Targetable>();
-    public Transform forestPosition;
     public Vector3 previousMousePos;
+    public float animalRespawnTimer;
 
     public bool generateForest;
     public bool destroyTrees;
@@ -98,6 +98,28 @@ public class ResourceGenerator : MonoBehaviour
         {
             destroyBerries = false;
             ClearAllBerries();
+        }
+        animalRespawnTimer += Time.deltaTime;
+        if (animalRespawnTimer > 20f)
+        {
+            animalRespawnTimer -= 20f;
+            if (animals.Count < Mathf.Pow(2, SimVars.VARS.terrainScale + 1))
+            {
+                Vector3 position = Vector3.zero;
+                switch (Random.Range(0, 4))
+                {
+                    case 0: position = new Vector3(8, 10, Random.Range(8, SimVars.VARS.terrainSize - 8)); break;
+                    case 1: position = new Vector3(SimVars.VARS.terrainSize, 10, Random.Range(8, SimVars.VARS.terrainSize - 8)); break;
+                    case 2: position = new Vector3(Random.Range(8, SimVars.VARS.terrainSize - 8), 10, 8); break;
+                    case 3: position = new Vector3(Random.Range(8, SimVars.VARS.terrainSize - 8), 10, SimVars.VARS.terrainSize - 8); break;
+                }
+                switch (Random.Range(0, 3))
+                {
+                    case 0: GenerateSheep(position, Random.Range(2, 4), 0, 6, new Vector3(SimVars.VARS.terrainSize / 2, 0, SimVars.VARS.terrainSize / 2)); break;
+                    case 1: GenerateGoats(position, Random.Range(2, 4), 0, 6, new Vector3(SimVars.VARS.terrainSize / 2, 0, SimVars.VARS.terrainSize / 2)); break;
+                    case 2: GenerateWolves(position, Random.Range(2, 4), 0, 6, new Vector3(SimVars.VARS.terrainSize / 2, 0, SimVars.VARS.terrainSize / 2)); break;
+                }
+            }
         }
     }
 
@@ -190,11 +212,60 @@ public class ResourceGenerator : MonoBehaviour
         Debug.Log(numGroves + " Berry Bush Clusters (" + berries.Count + " Bushes) Generated in " + timer.ElapsedMilliseconds + "ms");
     }
 
+    public void GeneratePerlinAnimals()
+    {
+        Debug.Log("Generating Animals");
+        Stopwatch timer = Stopwatch.StartNew();
+
+        Random.State state = Random.state; // Save Random's state
+        Random.InitState(SimVars.VARS.GetSeed()); // Seed Random's state
+
+        // Clamp the input values to their allowed ranges
+        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
+        float density = 0.5f;
+        int size = SimVars.VARS.terrainSize;
+        Vector2 center = new Vector2(size / 2, size / 2);
+        float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());
+        int sheepPacks = 0;
+        int goatPacks = 0;
+        int wolfPacks = 0;
+        for (int x = spacing; x < size; x += spacing)
+        {
+            for (int z = spacing; z < size; z += spacing)
+            {
+                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > 5f * SimVars.VARS.terrainScale)
+                {
+                    if (perlin[x, z] > 0.6f && Random.value <= 0.01f)
+                    {
+                        if (perlin[x, z] < 0.7f - 0.01 * sheepPacks)
+                        {
+                            GenerateSheep(new Vector3(x, 10, z), Random.Range(2, 5));
+                            sheepPacks++;
+                        }
+                        else if (perlin[x, z] < 0.8f - 0.01 * goatPacks)
+                        {
+                            GenerateGoats(new Vector3(x, 10, z), Random.Range(2, 5));
+                            goatPacks++;
+                        }
+                        else if (perlin[x, z] < 0.9f - 0.01 * wolfPacks)
+                        {
+                            GenerateWolves(new Vector3(x, 10, z), Random.Range(2, 5));
+                            wolfPacks++;
+                        }
+                    }
+                }
+            }
+        }
+        Random.state = state;
+        timer.Stop();
+        Debug.Log(sheepPacks + " Sheep Packs, " + goatPacks + " Goat Packs, and " + wolfPacks + " Wolf Packs Generated in " + timer.ElapsedMilliseconds + "ms");
+    }
+
     public void GenerateBerries(Vector3 position, int count, float minRange = 0f, float maxRange = 6f)
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterSphere(position, 2.5f, out Vector3 pos, minRange, 1, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterSphere(position, 2.5f, out Vector3 pos, minRange, 1f, maxRange))
             {
                 GameObject bush = Instantiate(berryPrefab, pos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), berryParent.transform);
                 bush.GetComponent<Resource>().quantity = SimVars.VARS.foodPerBerry;
@@ -209,7 +280,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterSphere(position, 2.5f, out Vector3 pos, minRange, 1, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterSphere(position, 2.5f, out Vector3 pos, minRange, 1f, maxRange))
             {
                 GameObject tree = Instantiate(treePrefab, pos, Quaternion.Euler(0, Random.Range(0f, 360f), 0), treeParent.transform);
                 tree.GetComponent<Resource>().quantity = SimVars.VARS.woodPerTree;
@@ -221,14 +292,14 @@ public class ResourceGenerator : MonoBehaviour
     }
 
 
-    public void GenerateSheep(Vector3 center, int count, float minRange = 0f, float maxRange = 3f)
+    public void GenerateSheep(Vector3 center, int count, float minRange = 0f, float maxRange = 6f, Vector3 origin = new Vector3())
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
             {
                 GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
-                sheep.GetComponent<Animal>().wanderOrigin = center;
+                sheep.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
                 sheep.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
                 NetworkServer.Spawn(sheep);
                 animals.Add(sheep.GetComponent<Animal>());
@@ -237,14 +308,14 @@ public class ResourceGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateGoats(Vector3 center, int count, float minRange = 0f, float maxRange = 3f)
+    public void GenerateGoats(Vector3 center, int count, float minRange = 0f, float maxRange = 6f, Vector3 origin = new Vector3())
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
             {
                 GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
-                goat.GetComponent<Animal>().wanderOrigin = center;
+                goat.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
                 goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerGoat;
                 NetworkServer.Spawn(goat);
                 animals.Add(goat.GetComponent<Animal>());
@@ -253,14 +324,14 @@ public class ResourceGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateWolves(Vector3 center, int count, float minRange = 0f, float maxRange = 3f)
+    public void GenerateWolves(Vector3 center, int count, float minRange = 0f, float maxRange = 6f, Vector3 origin = new Vector3())
     {
         for (int i = 0; i < count; i++)
         {
-            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, Random.Range(minRange, maxRange), 1f, maxRange))
+            if (RandomNavmeshPoint.RandomPointFromCenterCapsule(center, 2.5f, 1f, out Vector3 position, minRange, 1f, maxRange))
             {
                 GameObject wolf = Instantiate(wolfPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), animalParent.transform);
-                wolf.GetComponent<Animal>().wanderOrigin = center;
+                wolf.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
                 NetworkServer.Spawn(wolf);
                 animals.Add(wolf.GetComponent<Animal>());
                 wolf.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(71, 80);

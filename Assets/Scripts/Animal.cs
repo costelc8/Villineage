@@ -57,7 +57,7 @@ public class Animal : Resource
             if (wanderCooldown <= 0)
             {
                 wanderCooldown = Random.Range(1f, maxWanderCooldown);
-                Vector3 randomDirection = (Random.onUnitSphere * 100 + ((wanderOrigin - transform.position) * originTetherStrength)).normalized;
+                Vector3 randomDirection = (Random.onUnitSphere * SimVars.VARS.terrainSize + ((wanderOrigin - transform.position) * originTetherStrength)).normalized;
                 Vector3 targetPos = transform.position + (randomDirection * (Random.Range(4f, 8f) * agent.speed));
                 targetPos.y = transform.position.y;
                 if (RandomNavmeshPoint.RandomPointFromCenterCapsule(targetPos, 1.5f, 1f, out Vector3 target, 0, 1f, 10f))
@@ -94,6 +94,19 @@ public class Animal : Resource
         {
             Vector3 towardsSource = targetVillager.transform.position - transform.position;
             agent.SetDestination(transform.position + towardsSource);
+        }
+    }
+
+    public void Damage(int damage)
+    {
+        if (health > 0)
+        {
+            health--;
+            if (health <= 0)
+            {
+                health = 0;
+                Die();
+            }
         }
     }
 
@@ -142,6 +155,7 @@ public class Animal : Resource
             ResourceGenerator.RemoveResource(this);
             UntargetAll(false);
         }
+        else RetargetAll();
     }
 
     private void OnTriggerEnter(Collider other)

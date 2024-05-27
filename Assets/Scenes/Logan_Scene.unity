@@ -1057,6 +1057,7 @@ MonoBehaviour:
   - {fileID: 4633771708107926460, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
   - {fileID: 6665341597343912254, guid: 2051798df57fd87408f71e1748efbe39, type: 3}
   - {fileID: 7346878771156752706, guid: bcf35f08f10546e4fa0bd82bafd90bee, type: 3}
+  - {fileID: 2417734275838737936, guid: a02a04b46176f234684a307ce1554950, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -1314,23 +1315,23 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 5
+  timeScale: 1
   logSim: 1
   seed: 0
-  lumberjackWeight: 1
-  gathererWeight: 1
+  lumberjackWeight: 0
+  gathererWeight: 0
   hunterWeight: 1
-  builderWeight: 1
-  villagerSpawnTime: 30
+  builderWeight: 0
+  villagerSpawnTime: 60
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingVillagers: 8
-  startingSheep: 4
-  startingGoats: 6
-  startingWolves: 5
+  startingVillagers: 10
+  startingSheep: 1
+  startingGoats: 0
+  startingWolves: 0
   forestDensity: 1
   forestSpacing: 4
   perlinForestThreshold: 0.4

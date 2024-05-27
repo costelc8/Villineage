@@ -92,7 +92,7 @@ public class TownCenter : NetworkBehaviour
 
     public void HouseSpawnCheck(Storage storage)
     {
-        if (!storage.hasHouseInProgress)
+        if (!storage.hasHouseInProgress && BuildingGenerator.GetHouses().Count < villagers.Count + BuildingGenerator.GetHubs().Count)
         {
             if (storage.resources[(int)ResourceType.Wood] >= SimVars.VARS.houseBuildCost)
             {
@@ -240,7 +240,7 @@ public class TownCenter : NetworkBehaviour
         if (spawning)
         {
             timer += Time.deltaTime;
-            if (timer > SimVars.VARS.villagerSpawnTime)
+            if (timer > SimVars.VARS.villagerSpawnTime / BuildingGenerator.GetHubs().Count)
             {
                 spawning = false;
                 timer = 0.0f;

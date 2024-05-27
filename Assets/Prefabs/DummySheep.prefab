@@ -1476,7 +1476,7 @@ MonoBehaviour:
   respawning: 0
   isAnimal: 0
   wanderOrigin: {x: 250, y: 0, z: 250}
-  originTetherStrength: 1
+  originTetherStrength: 4
   maxWanderCooldown: 10
   maxHealth: 2
   health: 0

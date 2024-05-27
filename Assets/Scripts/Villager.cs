@@ -15,6 +15,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public Storage hub; // Current parent hub
     public bool selected;  // Have they been selected?
 	public Outline outlineS;
+    public GameObject arrowPrefab;
 
     [Header("Stats")]
     [SyncVar(hook = nameof(AliveHook))]
@@ -107,7 +108,15 @@ public class Villager : NetworkBehaviour, ISelectable
                             DisableBackVisuals();
                         }
                         progressCooldown++;
-                        bool progress = target.Progress(this);
+                        bool progress = false;
+                        if (job == VillagerJob.Hunter && target.movingTarget)
+                        {
+                            Arrow arrow = Instantiate(arrowPrefab).GetComponent<Arrow>();
+                            NetworkServer.Spawn(arrow.gameObject);
+                            arrow.hunter = this;
+                            arrow.target = (Animal)target;
+                        }
+                        else progress = target.Progress(this);
                         if ((job == VillagerJob.Builder && !progress) || (job != VillagerJob.Builder && totalResources >= SimVars.VARS.villagerCarryCapacity)) ReturnToHub();
                         else if (job == VillagerJob.Hunter)
                         {
@@ -244,12 +253,13 @@ public class Villager : NetworkBehaviour, ISelectable
             if (bestCandidate != null)
             {
                 // outpost check
-                bool inRange = TargetInRange(bestCandidate, SimVars.VARS.GetMaxVillagerRange() / 2f, out Targetable pendingOutpost);
+                bool inRange = TargetInRange(bestCandidate, SimVars.VARS.GetMaxVillagerRange() / 2f, out Targetable nearestHub);
                 if (!inRange)
                 {
                     // means unreachable target
                     // need to spawn an outpost
-                    Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, bestCandidate.transform.position, TownCenter.TC.GetComponent<Storage>());
+                    Vector3 outpostPos = nearestHub.transform.position + ((bestCandidate.transform.position - nearestHub.transform.position).normalized * (SimVars.VARS.GetMaxVillagerRange() / 2f));
+                    Building building = TownCenter.TC.buildingGenerator.PlaceBuilding(BuildingType.Outpost, outpostPos, TownCenter.TC.GetComponent<Storage>());
                 }
                 SetNewTarget(bestCandidate);
             }
@@ -258,28 +268,31 @@ public class Villager : NetworkBehaviour, ISelectable
         ChangeState(VillagerState.Walking);
     }
 
-    private bool TargetInRange(Targetable target, float distance, out Targetable pendingOutpost)
+    private bool TargetInRange(Targetable target, float distance, out Targetable nearestHub)
     {
         List<Storage> hubs = BuildingGenerator.GetHubs();
+        float nearestDistance = float.MaxValue;
+        nearestHub = null;
         foreach (Storage hub in hubs)
         {
-            if (Vector3.Distance(hub.transform.position, target.transform.position) < distance)
+            float hubDistance = Vector3.Distance(hub.transform.position, target.transform.position);
+            if (hubDistance < nearestDistance)
             {
-                pendingOutpost = null;
-                return true;
+                nearestDistance = hubDistance;
+                nearestHub = hub;
             }
         }
         List<Targetable> pendingOutposts = BuildingGenerator.GetPendingOutposts();
         foreach (Targetable outpost in pendingOutposts)
         {
-            if (Vector3.Distance(outpost.transform.position, target.transform.position) < distance)
+            float hubDistance = Vector3.Distance(outpost.transform.position, target.transform.position);
+            if (hubDistance < nearestDistance)
             {
-                pendingOutpost = outpost;
-                return true;
+                nearestDistance = hubDistance;
+                nearestHub = outpost;
             }
         }
-        pendingOutpost = null;
-        return false;
+        return nearestDistance <= distance;
     }
 
     private Storage GetNearestHub(Vector3 position)
@@ -313,14 +326,16 @@ public class Villager : NetworkBehaviour, ISelectable
         if (newState == VillagerState.Pending)
         {
             agent.updateRotation = true;
-            anim.SetBool("Working",false);
+            anim.SetBool("Working", false);
+            anim.SetBool("Archer", false);
             anim.SetFloat("Walking",0);
         }
         else if (newState == VillagerState.Walking || newState == VillagerState.Returning)
         {
             agent.updateRotation = true;
-            anim.SetBool("Working",false);
-            anim.SetFloat("Walking",1);
+            anim.SetBool("Working", false);
+            anim.SetBool("Archer", false);
+            anim.SetFloat("Walking", 1);
             if (state == VillagerState.Returning)
             {
                 if (job == VillagerJob.Lumberjack) backWood.SetActive(true);
@@ -341,8 +356,15 @@ public class Villager : NetworkBehaviour, ISelectable
                 towards.y = 0;
                 transform.rotation = Quaternion.LookRotation(towards);
             }
-            anim.SetBool("Working",true);
-            anim.SetFloat("Walking",0);
+            if (job == VillagerJob.Hunter && target.movingTarget)
+            {
+                anim.SetBool("Archer", true);
+            }
+            else
+            {
+                anim.SetBool("Working", true);
+            }
+            anim.SetFloat("Walking", 0);
         }
     }
 
@@ -361,15 +383,9 @@ public class Villager : NetworkBehaviour, ISelectable
         {
             if (target != null) target.ReturnTargetPosition(this);
             target = newTarget;
+            if (target != null && target.movingTarget) agent.stoppingDistance = huntingRange;
+            else agent.stoppingDistance = 0.1f;
             if (target != null) agent.SetDestination(target.GetTargetPosition(this));
-            if (target != null && target.movingTarget) {
-				agent.stoppingDistance = huntingRange;
-				anim.SetBool("Archer",true);
-			}
-            else {
-				agent.stoppingDistance = 0.1f;
-				anim.SetBool("Archer",false);
-			}
         }
         float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position);
         vitalityThreshold = 5 + distanceHome / agent.speed;

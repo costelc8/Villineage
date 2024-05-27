@@ -7,8 +7,8 @@ using UnityEngine.AI;
 public class Targetable : NetworkBehaviour
 {
     [Header("Targetable Settings")]
-    private List<TargetPosition> targetPositions;
-    private List<Villager> unassignedVillagers;
+    private List<TargetPosition> targetPositions = new List<TargetPosition>();
+    private List<Villager> unassignedVillagers = new List<Villager>();
     public bool enforceMaxVillagers;
     public int maxAssignedVillagers;
     public int assignedVillagers;
@@ -24,8 +24,6 @@ public class Targetable : NetworkBehaviour
 
     private void GenerateValidPositions()
     {
-        targetPositions = new List<TargetPosition>();
-        unassignedVillagers = new List<Villager>();
         obstacle = GetComponent<NavMeshObstacle>();
         if (obstacle == null || obstacle.enabled == false) return;
         if (obstacle.shape == NavMeshObstacleShape.Capsule)
@@ -62,7 +60,7 @@ public class Targetable : NetworkBehaviour
 
     public bool HasValidPositions()
     {
-        if (targetPositions == null || targetPositions.Count == 0) return true;
+        if (targetPositions == null) return true;
         if (targetPositions.Count == 0)
         {
             if (enforceMaxVillagers) return assignedVillagers < maxAssignedVillagers;
@@ -148,6 +146,14 @@ public class Targetable : NetworkBehaviour
             else villager.target = null;
         }
         assignedVillagers = 0;
+    }
+
+    public void RetargetAll()
+    {
+        foreach (Villager villager in unassignedVillagers)
+        {
+            villager.SetNewTarget(this);
+        }
     }
 
     protected virtual void OnDrawGizmosSelected()

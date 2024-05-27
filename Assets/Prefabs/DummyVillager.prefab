@@ -3859,6 +3859,7 @@ MonoBehaviour:
   hub: {fileID: 0}
   selected: 0
   outlineS: {fileID: 7560133297312245150}
+  arrowPrefab: {fileID: 2417734275838737936, guid: a02a04b46176f234684a307ce1554950, type: 3}
   alive: 1
   vitality: 0
   maxVitality: 100
@@ -3868,7 +3869,6 @@ MonoBehaviour:
   job: 0
   totalResources: 0
   target: {fileID: 0}
-  capacity: 0
   progressCooldown: 1
   selectionRange: 10
   state: 0
