@@ -8,23 +8,16 @@ public class UnitHUD : MonoBehaviour
     public GameObject villagerHUD;
     public GameObject storageHUD;
     public GameObject resourceHUD;
+    public GameObject buildingHUD;
+    public GameObject cartHUD;
 
     public Dictionary<GameObject, GameObject> unitHUDs = new Dictionary<GameObject, GameObject>();
     public Dictionary<GameObject, float> hudOffsets = new Dictionary<GameObject, float>();
-
-    private Selection selectionScript;
 
     private void Awake()
     {
         if (HUD == null || HUD == this) HUD = this;
         else Destroy(this);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        selectionScript = FindObjectOfType<Selection>();
-        
     }
 
     // Update is called once per frame

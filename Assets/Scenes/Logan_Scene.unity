@@ -570,8 +570,8 @@ MonoBehaviour:
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   wolfPrefab: {fileID: 4633771708107926460, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
-  forestPosition: {fileID: 0}
   previousMousePos: {x: 0, y: 0, z: 0}
+  animalRespawnTimer: 0
   generateForest: 0
   destroyTrees: 0
   generateBerries: 0
@@ -1282,6 +1282,8 @@ MonoBehaviour:
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
   storageHUD: {fileID: 7220710526218812636, guid: 6dd79cf54942ed543a2d4ceeb24fb583, type: 3}
   resourceHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  buildingHUD: {fileID: 7220710526218812636, guid: 294ef47d80b5efc42b84edd9819fd79c, type: 3}
+  cartHUD: {fileID: 7220710526218812636, guid: fbc05af09ef19d24ea63b6b773cf2d22, type: 3}
 --- !u!1 &2127958818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,23 +1317,23 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 1
-  logSim: 1
+  timeScale: 5
+  logSim: 0
   seed: 0
-  lumberjackWeight: 0
-  gathererWeight: 0
+  lumberjackWeight: 1
+  gathererWeight: 1
   hunterWeight: 1
-  builderWeight: 0
+  builderWeight: 1
   villagerSpawnTime: 60
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingVillagers: 10
-  startingSheep: 1
-  startingGoats: 0
-  startingWolves: 0
+  startingVillagers: 4
+  startingSheep: 4
+  startingGoats: 6
+  startingWolves: 2
   forestDensity: 1
   forestSpacing: 4
   perlinForestThreshold: 0.4

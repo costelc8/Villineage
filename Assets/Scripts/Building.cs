@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class Building : Targetable
+public class Building : Targetable, ISelectable
 {
     public Villager assignedVillager;
     [SyncVar]
@@ -39,8 +39,10 @@ public class Building : Targetable
                     // cart for outpost
                     RandomNavmeshPoint.RandomPointFromCenterSphere(transform.position, 1, out Vector3 point, 5, 1, 1000);
                     GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity, cartInspectorParent.transform);
+                    Storage storage = GetComponent<Storage>();
+                    storage.enabled = true;
                     cart.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 20);
-                    cart.GetComponent<Cart>().hub = GetComponent<Storage>();
+                    cart.GetComponent<Cart>().hub = storage;
                     NetworkServer.Spawn(cart);
                     break;
             }
@@ -83,8 +85,29 @@ public class Building : Targetable
         }
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         BuildingGenerator.RemoveBuilding(this);
+        Selection.Selector.RemoveSelectable(this);
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
+    public void Start()
+    {
+        Selection.Selector.AddSelectable(this);
+    }
+
+    public void OnSelect()
+    {
+        if (buildProgress < requiredWood)
+        {
+            GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.buildingHUD, 4f);
+            HUD.GetComponent<BuildingDisplay>().building = this;
+        }
+    }
+
+    public void OnDeselect()
+    {
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 }

@@ -27,8 +27,11 @@ public class Storage : Targetable, ISelectable
 
     public void OnSelect()
     {
-        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.storageHUD, 1f);
-        HUD.GetComponent<StorageDisplay>().storage = this;
+        if (enabled)
+        {
+            GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.storageHUD, 4f);
+            HUD.GetComponent<StorageDisplay>().storage = this;
+        }
     }
 
     public void OnDeselect()
@@ -120,6 +123,12 @@ public class Storage : Targetable, ISelectable
         {
             requestedResources[i] = Mathf.Max(neededResources[i] - resources[i], 0);
         }
+    }
+
+    public void OnDestroy()
+    {
+        Selection.Selector.RemoveSelectable(this);
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
     protected override void OnDrawGizmosSelected()

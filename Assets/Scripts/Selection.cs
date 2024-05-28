@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Selection : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class Selection : MonoBehaviour
     public List<ISelectable> selectedVillagers = new List<ISelectable>();
     public List<ISelectable> selectedResources = new List<ISelectable>();
     public List<ISelectable> selectedStorages = new List<ISelectable>();
+    public List<ISelectable> selectedBuildings = new List<ISelectable>();
+    public List<ISelectable> selectedCarts = new List<ISelectable>();
 
     public MouseMode mouseMode;
 
@@ -43,6 +47,8 @@ public class Selection : MonoBehaviour
         selectedVillagers.Remove(selectable);
         selectedResources.Remove(selectable);
         selectedStorages.Remove(selectable);
+        selectedBuildings.Remove(selectable);
+        selectedCarts.Remove(selectable);
     }
 
     // Update is called once per frame
@@ -81,9 +87,11 @@ public class Selection : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha2)) SelectAllVillagers(VillagerJob.Gatherer);
             if (Input.GetKeyDown(KeyCode.Alpha3)) SelectAllVillagers(VillagerJob.Hunter);
             if (Input.GetKeyDown(KeyCode.Alpha4)) SelectAllVillagers(VillagerJob.Builder);
-            if (Input.GetKeyDown(KeyCode.Alpha7)) SelectAllVillagers();
-            if (Input.GetKeyDown(KeyCode.Alpha8)) SelectAllResources();
-            if (Input.GetKeyDown(KeyCode.Alpha9)) SelectAllStorages();
+            if (Input.GetKeyDown(KeyCode.Alpha5)) SelectAllVillagers();
+            if (Input.GetKeyDown(KeyCode.Alpha6)) SelectAllCarts();
+            if (Input.GetKeyDown(KeyCode.Alpha7)) SelectAllStorages();
+            if (Input.GetKeyDown(KeyCode.Alpha8)) SelectAllBuildings();
+            if (Input.GetKeyDown(KeyCode.Alpha9)) SelectAllResources();
             if (Input.GetKeyDown(KeyCode.Alpha0)) SelectEverything();
         //}
         if (Input.GetKey(KeyCode.Escape))
@@ -101,6 +109,8 @@ public class Selection : MonoBehaviour
         selectedVillagers.Clear();
         selectedResources.Clear();
         selectedStorages.Clear();
+        selectedBuildings.Clear();
+        selectedCarts.Clear();
     }
 
     // Single-click selection, perform raycast
@@ -110,13 +120,18 @@ public class Selection : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore);
         foreach (RaycastHit hit in hits)
         {
-            ISelectable selectable = hit.collider.GetComponent<ISelectable>();
-            if (selectable != null && !selected.Contains(selectable))
+            ISelectable[] select = hit.collider.GetComponents<ISelectable>();
+            bool foundSelectable = false;
+            foreach (ISelectable selectable in select)
             {
-                selected.Add(selectable);
-                selectable.OnSelect();
-                break;
+                if (!selected.Contains(selectable))
+                {
+                    selected.Add(selectable);
+                    selectable.OnSelect();
+                    foundSelectable = true;
+                }
             }
+            if (foundSelectable) break;
         }
     }
 
@@ -159,6 +174,16 @@ public class Selection : MonoBehaviour
                 else if (selectable is Storage)
                 {
                     selectedStorages.Add(selectable);
+                    selectable.OnSelect();
+                }
+                else if (selectable is Building)
+                {
+                    selectedBuildings.Add(selectable);
+                    selectable.OnSelect();
+                }
+                else if (selectable is Cart)
+                {
+                    selectedCarts.Add(selectable);
                     selectable.OnSelect();
                 }
             }
@@ -208,6 +233,34 @@ public class Selection : MonoBehaviour
         }
     }
 
+    public void SelectAllBuildings()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Building)
+            {
+                selected.Add(selectable);
+                selectedBuildings.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
+    public void SelectAllCarts()
+    {
+        DeselectAll();
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Cart)
+            {
+                selected.Add(selectable);
+                selectedCarts.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
     public void SelectAllVillagers(VillagerJob job)
     {
         DeselectAll();
@@ -240,6 +293,16 @@ public class Selection : MonoBehaviour
             if (selectable is Storage)
             {
                 selectedStorages.Add(selectable);
+                selectable.OnSelect();
+            }
+            else if (selectable is Building)
+            {
+                selectedBuildings.Add(selectable);
+                selectable.OnSelect();
+            }
+            else if (selectable is Cart)
+            {
+                selectedCarts.Add(selectable);
                 selectable.OnSelect();
             }
         }

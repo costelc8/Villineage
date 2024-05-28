@@ -1,13 +1,3 @@
 [
-{"Resources":{"Wood":0,"Food":0},"Villagers":10,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":10,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":10,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0},
-{"Resources":{"Wood":0,"Food":0},"Villagers":2,"Houses":0}
+{"Resources":{"Wood":0,"Food":0},"Villagers":10,"Houses":0}
 ]

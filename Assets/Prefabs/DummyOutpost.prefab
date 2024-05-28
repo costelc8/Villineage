@@ -102,6 +102,8 @@ MonoBehaviour:
   stage: 0
   buildingType: 0
   cartPrefab: {fileID: 7346878771156752706, guid: bcf35f08f10546e4fa0bd82bafd90bee, type: 3}
+  cartInspectorParent: {fileID: 0}
+  storageParent: {fileID: 0}
   buildProgress: 0
 --- !u!114 &-710846269306318931
 MonoBehaviour:
@@ -127,7 +129,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6665341597343912254}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fc419fc6a504d443a37c5dd0e1111a9, type: 3}
   m_Name: 
@@ -140,6 +142,10 @@ MonoBehaviour:
   assignedVillagers: 0
   priority: 1
   movingTarget: 0
+  villagers: []
+  neededResources: 
+  requestedResources: 
+  hasHouseInProgress: 0
 --- !u!1001 &430455909299506176
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -126,6 +126,7 @@ public class Targetable : NetworkBehaviour
                 targetPos.assignedVillager = null;
             }
         }
+        unassignedVillagers.Remove(villager);
         assignedVillagers--;
     }
 
@@ -150,7 +151,8 @@ public class Targetable : NetworkBehaviour
 
     public void RetargetAll()
     {
-        foreach (Villager villager in unassignedVillagers)
+        List<Villager> villagers = new List<Villager>(unassignedVillagers);
+        foreach (Villager villager in villagers)
         {
             villager.SetNewTarget(this);
         }
