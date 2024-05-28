@@ -27,8 +27,9 @@ public class RoadPainter : MonoBehaviour
     {
         int x = (int)transform.position.x;
         int y = (int)transform.position.y;
-        map[x, y, 0] = 0f;
-        map[x, y, 1] = 1f;
-        terrainData.SetAlphamaps(0, 0, map);
+        map[0, 0, 0] = 0f;
+        map[0, 0, 1] = 1f;
+        print(x + " " + y);
+        terrainData.SetAlphamaps(x, y, map);
     }
 }
