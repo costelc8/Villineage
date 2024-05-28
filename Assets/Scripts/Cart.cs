@@ -66,15 +66,21 @@ public class Cart : NetworkBehaviour, ISelectable
     public void OnSelect()
     {
         selected = true;
-        //GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.villagerHUD, 1f);
-        //HUD.GetComponent<DisplayController>().villager = this;
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.cartHUD, 2f);
+        HUD.GetComponent<CartDisplay>().cart = this;
     }
 
     // When deselected, stop displaying ui
     public void OnDeselect()
     {
         selected = false;
-        //UnitHUD.HUD.RemoveUnitHUD(gameObject);
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
+    }
+
+    public void OnDestroy()
+    {
+        Selection.Selector.RemoveSelectable(this);
+        UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
     public void OnTriggerEnter(Collider other)

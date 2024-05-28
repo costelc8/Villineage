@@ -107,7 +107,7 @@ public class Resource : Targetable, ISelectable
         Selection.Selector.AddSelectable(this);
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         ResourceGenerator.RemoveResource(this);
         Selection.Selector.RemoveSelectable(this);

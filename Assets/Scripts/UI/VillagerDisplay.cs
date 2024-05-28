@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class DisplayController : MonoBehaviour
+public class VillagerDisplay : MonoBehaviour
 {
     // Reference to the Villager script
     public Villager villager; // This needs an object with the villager script attached to it

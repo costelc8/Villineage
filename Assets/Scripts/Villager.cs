@@ -458,7 +458,7 @@ public class Villager : NetworkBehaviour, ISelectable
         selected = true;
 		outlineS.enabled = selected;
         GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.villagerHUD, 1f);
-        HUD.GetComponent<DisplayController>().villager = this;
+        HUD.GetComponent<VillagerDisplay>().villager = this;
     }
 
     // When deselected, stop displaying ui
@@ -470,7 +470,7 @@ public class Villager : NetworkBehaviour, ISelectable
     }
 
     // When destroyed, remove villager from other objects
-    private void OnDestroy()
+    public void OnDestroy()
     {
         if (TownCenter.TC != null) TownCenter.TC.RemoveVillager(this);
         Selection.Selector.RemoveSelectable(this);
