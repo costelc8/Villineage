@@ -9,7 +9,7 @@ using UnityEngine;
 [RequireComponent(typeof(NavMeshSurface))]
 public class TerrainGenerator : NetworkBehaviour
 {
-    private Terrain terrain;
+    public static Terrain terrain;
     private TerrainData terrainData;
     private NavMeshSurface navMesh;
     public bool generateTerrainOnStart;

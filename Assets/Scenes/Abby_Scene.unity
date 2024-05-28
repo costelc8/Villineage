@@ -179,8 +179,8 @@ MonoBehaviour:
   sheepPrefab: {fileID: 2947801369939053811, guid: 4bfc1cab072eacc489962e7437e5cf69, type: 3}
   goatPrefab: {fileID: 2200828977413073489, guid: 6079caa1e2f9b594184c9a0b1cdcccb6, type: 3}
   wolfPrefab: {fileID: 4633771708107926460, guid: b0c5f4a0a9a6e75418a104ee5700c175, type: 3}
-  forestPosition: {fileID: 0}
   previousMousePos: {x: 0, y: 0, z: 0}
+  animalRespawnTimer: 0
   generateForest: 0
   destroyTrees: 0
   generateBerries: 0
