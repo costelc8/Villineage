@@ -9,6 +9,7 @@ public class VillagerDisplay : MonoBehaviour
     public TextMeshProUGUI jobTextMesh;
     public TextMeshProUGUI inventoryTextMesh;
     public TextMeshProUGUI hungerTextMesh;
+    public TextMeshProUGUI causeOfDeathTextMesh;
 
     // Start is called before the first frame update
     void Update()
@@ -28,6 +29,9 @@ public class VillagerDisplay : MonoBehaviour
 
         // Display hunger
         DisplayHunger();
+
+        // Display cause of death
+        DisplayCauseOfDeath();
     }
 
     void DisplayJob()
@@ -94,5 +98,16 @@ public class VillagerDisplay : MonoBehaviour
 
         // Display the hunger of the villager
         hungerTextMesh.text = "Vitality: " + ((int)villager.vitality).ToString();
+    }
+
+    void DisplayCauseOfDeath()
+    {
+        if (hungerTextMesh == null)
+        {
+            Debug.LogWarning("CauseOfDeath TextMeshPro reference is not assigned.");
+            return;
+        }
+
+        if (villager.causeOfDeath != "") causeOfDeathTextMesh.text = "Cause of Death: " + villager.causeOfDeath;
     }
 }

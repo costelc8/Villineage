@@ -30,7 +30,7 @@ public class Cart : NetworkBehaviour, ISelectable
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
 
             agent.speed = SimVars.VARS.villagerMoveSpeed * 3;
-            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 16;
+            agent.acceleration = SimVars.VARS.villagerMoveSpeed * 12;
         }
     }
 

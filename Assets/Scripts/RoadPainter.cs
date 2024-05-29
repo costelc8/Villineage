@@ -8,6 +8,7 @@ public class RoadPainter : MonoBehaviour
     [Tooltip("How much % of the terrain color becomes path per path draw")]
     [Range(0f, 1f)]
     public float pathAmount = 0.05f;
+    public bool isCart;
     private Terrain terrain;
     private TerrainData terrainData;
     private Vector3 terrainPos;
@@ -38,8 +39,7 @@ public class RoadPainter : MonoBehaviour
         {
             // moving
             drawing = true;
-            InvokeRepeating("DrawPath", 0, 4);
-
+            InvokeRepeating("DrawPath", 0, isCart ? 1f / 3f : 1f);
         } 
         else if (agent.speed == 0 && drawing)
         {
