@@ -295,20 +295,29 @@ public class Villager : NetworkBehaviour, ISelectable
         return nearestDistance <= distance;
     }
 
-    private Storage GetNearestHub(Vector3 position)
+    private Storage GetClosestHub()
     {
-        List<Storage> hubs = BuildingGenerator.GetHubs();
-        Storage nearestHub = null;
+        return GetClosestHub(transform.position);
+    }
+
+    private Storage GetClosestHub(Vector3 position)
+    {
+        Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
         float lowestDistance = float.MaxValue;
-        foreach (Storage hub in hubs)
+        List<Storage> hubs = BuildingGenerator.GetHubs();
+        foreach (Storage storage in hubs)
         {
-            float distance = Vector3.Distance(hub.transform.position, position);
-            if (distance < lowestDistance)
+            float distance = Vector3.Distance(position, storage.transform.position);
+            distance /= storage.priority;
+            if (distance < lowestDistance && storage.HasValidPositions())
             {
-                nearestHub = hub;
                 lowestDistance = distance;
+                nearestHub = storage;
             }
         }
+        hub.villagers.Remove(this);
+        hub = nearestHub;
+        hub.villagers.Add(this);
         return nearestHub;
     }
 
@@ -387,29 +396,11 @@ public class Villager : NetworkBehaviour, ISelectable
             else agent.stoppingDistance = 0.1f;
             if (target != null) agent.SetDestination(target.GetTargetPosition(this));
         }
-        float distanceHome = Vector3.Distance(target.transform.position, GetNearestHub(target.transform.position).transform.position);
-        vitalityThreshold = 5 + distanceHome / agent.speed;
+        float distanceHome = Vector3.Distance(target.transform.position, GetClosestHub(target.transform.position).transform.position);
+        vitalityThreshold = SimVars.VARS.vitalityPerFood + distanceHome / agent.speed;
     }
 
-    private void GetClosestHub()
-    {
-        Storage nearestHub = TownCenter.TC.GetComponent<Storage>();
-        float lowestDistance = float.MaxValue;
-        List<Storage> hubs = BuildingGenerator.GetHubs();
-        foreach (Storage storage in hubs)
-        {
-            float distance = Vector3.Distance(transform.position, storage.transform.position);
-            distance /= storage.priority;
-            if (distance < lowestDistance && storage.HasValidPositions())
-            {
-                lowestDistance = distance;
-                nearestHub = storage;
-            }
-        }
-        hub.villagers.Remove(this);
-        hub = nearestHub;
-        hub.villagers.Add(this);
-    }
+    
 
     public void ReturnToHub()
     {
