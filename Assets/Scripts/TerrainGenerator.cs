@@ -48,6 +48,19 @@ public class TerrainGenerator : NetworkBehaviour
         terrainData.SetHeights(0, 0, perlin);
         gameObject.SetActive(true);
         navMesh.BuildNavMesh();
+
+        // reset terrain paint
+        float[,,] map = new float[size, size, terrainData.alphamapLayers];
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                map[i, j, 0] = 1f;
+                map[i, j, 1] = 0f;
+            }
+        }
+        terrainData.SetAlphamaps(0, 0, map);
+
         generated = true;
     }
 

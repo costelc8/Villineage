@@ -4005,13 +4005,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020194912628289861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bc6bcab1760109489acfad0f020114c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 0}
-  entity: {fileID: 0}
 --- !u!1 &2045088464112562668
 GameObject:
   m_ObjectHideFlags: 0

@@ -816,6 +816,8 @@ MonoBehaviour:
   villagerHUD: {fileID: 7220710526218812636, guid: a97f1511a56dbfe4cb659d2876ee814f, type: 3}
   storageHUD: {fileID: 7220710526218812636, guid: 6dd79cf54942ed543a2d4ceeb24fb583, type: 3}
   resourceHUD: {fileID: 7220710526218812636, guid: 5487ebed44270da4bbf017cced295340, type: 3}
+  buildingHUD: {fileID: 7220710526218812636, guid: 294ef47d80b5efc42b84edd9819fd79c, type: 3}
+  cartHUD: {fileID: 7220710526218812636, guid: fbc05af09ef19d24ea63b6b773cf2d22, type: 3}
 --- !u!114 &605153522
 MonoBehaviour:
   m_ObjectHideFlags: 0
