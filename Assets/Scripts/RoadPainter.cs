@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class RoadPainter : MonoBehaviour
 {
+    [Tooltip("How much % of the terrain color becomes path per path draw")]
+    [Range(0f, 1f)]
+    public float pathAmount = 0.05f;
     private Terrain terrain;
     private TerrainData terrainData;
     private Vector3 terrainPos;
@@ -63,7 +66,7 @@ public class RoadPainter : MonoBehaviour
             if (grass > 0f)
             {
                 // not fully sand
-                grass -= 0.05f;
+                grass -= pathAmount;
                 map[0, 0, 0] = grass;
                 map[0, 0, 1] = 1 - grass;
                 terrainData.SetAlphamaps((int)position.x, (int)position.z, map);
