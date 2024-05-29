@@ -43,6 +43,7 @@ public class TerrainGenerator : NetworkBehaviour
         int size = SimVars.VARS.terrainSize;
         int depth = SimVars.VARS.terrainDepth;
         terrainData.heightmapResolution = size + 1;
+        terrainData.alphamapResolution = size + 1;
         terrainData.size = new Vector3(size, depth, size);
         perlin = PerlinGenerator.GeneratePerlin(size + 1, size + 1, perlinScale, SimVars.VARS.GetSeed());
         terrainData.SetHeights(0, 0, perlin);

@@ -385,7 +385,7 @@ MonoBehaviour:
   houseBuildCost: 60
   outpostBuildCost: 60
   villagerSpawnCost: 30
-  terrainScale: 3
+  terrainScale: 2
   terrainSize: 32
   terrainDepth: 8
 --- !u!4 &161751724
