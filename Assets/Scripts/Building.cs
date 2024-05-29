@@ -41,6 +41,7 @@ public class Building : Targetable, ISelectable
                     GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity, cartInspectorParent.transform);
                     Storage storage = GetComponent<Storage>();
                     storage.enabled = true;
+                    storage.Initialize();
                     cart.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 20);
                     cart.GetComponent<Cart>().hub = storage;
                     NetworkServer.Spawn(cart);

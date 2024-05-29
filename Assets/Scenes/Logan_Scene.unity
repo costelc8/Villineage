@@ -1317,7 +1317,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 5
+  timeScale: 10
   logSim: 0
   seed: 0
   lumberjackWeight: 1
@@ -1330,7 +1330,7 @@ MonoBehaviour:
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingVillagers: 4
+  startingVillagers: 40
   startingSheep: 4
   startingGoats: 6
   startingWolves: 2

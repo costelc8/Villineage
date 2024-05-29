@@ -14,6 +14,11 @@ public class Storage : Targetable, ISelectable
     public void Start()
     {
         Selection.Selector.AddSelectable(this);
+        Initialize();
+    }
+
+    public void Initialize()
+    {
         neededResources = new int[(int)ResourceType.MAX_VALUE];
         requestedResources = new int[(int)ResourceType.MAX_VALUE];
     }
