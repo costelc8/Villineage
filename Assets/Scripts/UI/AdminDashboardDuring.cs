@@ -41,6 +41,9 @@ public class AdminDashboardDuring : MonoBehaviour
         LumberW.onEndEdit.AddListener((value) => AddJob("LumberW", value));
         HunterW.onEndEdit.AddListener((value) => AddJob("HunterW", value));
         BuilderW.onEndEdit.AddListener((value) => AddJob("BuilderW", value));
+
+        // TimeScale
+        timeScale.onEndEdit.AddListener(AddTimeScale);
         
         // Separate so hunger rate can be a float
         hungerRate.onEndEdit.AddListener(AddHunger);
@@ -102,19 +105,11 @@ public class AdminDashboardDuring : MonoBehaviour
         }
     }
 
-    public void AddTandS(string otherType, string value)
+    public void AddTimeScale(string value)
     {
         if (int.TryParse(value, out int intValue))
         {
-            switch (otherType)
-            {
-                case "timeScale":
-                    simVars.timeScale = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
+            simVars.timeScale = intValue;
         }
     }
     
