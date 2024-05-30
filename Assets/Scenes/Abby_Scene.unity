@@ -364,16 +364,13 @@ MonoBehaviour:
   gathererWeight: 1
   hunterWeight: 1
   builderWeight: 1
+  startingVillagers: 4
   villagerSpawnTime: 30
   villagerCarryCapacity: 10
   villagerMoveSpeed: 4
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
-  startingVillagers: 4
-  startingSheep: 4
-  startingGoats: 6
-  startingWolves: 2
   forestDensity: 1
   forestSpacing: 4
   perlinForestThreshold: 0.4
@@ -385,7 +382,7 @@ MonoBehaviour:
   houseBuildCost: 60
   outpostBuildCost: 60
   villagerSpawnCost: 30
-  terrainScale: 2
+  terrainScale: 3
   terrainSize: 32
   terrainDepth: 8
 --- !u!4 &161751724
@@ -1028,7 +1025,7 @@ Transform:
   m_GameObject: {fileID: 709847942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256, y: 10, z: 256}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1178,6 +1175,7 @@ MonoBehaviour:
   resourceGenerator: {fileID: 38443236}
   townCenter: {fileID: 709847946}
   simLogs: {fileID: 1010161104}
+  clock: {fileID: 0}
 --- !u!4 &1010161103
 Transform:
   m_ObjectHideFlags: 0

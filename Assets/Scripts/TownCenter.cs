@@ -14,6 +14,7 @@ public class TownCenter : NetworkBehaviour
     public List<Villager> villagers;
     public BuildingGenerator buildingGenerator;
     public GameObject villagerParent;
+    public GameObject deadVillagerParent;
 
     public bool spawning = false;
     public float timer = 0.0f;
@@ -30,6 +31,7 @@ public class TownCenter : NetworkBehaviour
         storage = GetComponent<Storage>();
         BuildingGenerator.AddHub(storage);
         villagerParent = new GameObject("Villagers");
+        deadVillagerParent = new GameObject("Dead");
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];

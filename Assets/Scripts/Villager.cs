@@ -202,6 +202,7 @@ public class Villager : NetworkBehaviour, ISelectable
         anim.SetFloat("Death anim", deathValue);
         alive = false;
         TownCenter.TC.RemoveVillager(this);
+        this.transform.SetParent(TownCenter.TC.deadVillagerParent.transform);
         if (target != null) target.ReturnTargetPosition(this);
         if (!isServer) return;
         hub.villagers.Remove(this);
