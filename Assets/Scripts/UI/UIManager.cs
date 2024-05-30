@@ -88,12 +88,6 @@ public class UIManager : MonoBehaviour
         {
             switch (resourceType)
             {
-                case "numSheep":
-                    simVars.startingSheep = intValue;
-                    break;
-                case "numGoat":
-                    simVars.startingGoats = intValue;
-                    break;
                 case "berryRespawn":
                     simVars.berryRespawnTime = intValue;
                     break;
@@ -105,9 +99,6 @@ public class UIManager : MonoBehaviour
                     break;
                 case "berryFood":
                     simVars.foodPerBerry = intValue;
-                    break;
-                case "numWolves":
-                    simVars.startingWolves = intValue;
                     break;
                 case "woodTree":
                     simVars.woodPerTree = intValue;

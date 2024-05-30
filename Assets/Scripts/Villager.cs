@@ -400,8 +400,6 @@ public class Villager : NetworkBehaviour, ISelectable
         vitalityThreshold = SimVars.VARS.vitalityPerFood + distanceHome / agent.speed;
     }
 
-    
-
     public void ReturnToHub()
     {
         GetClosestHub();
@@ -423,6 +421,7 @@ public class Villager : NetworkBehaviour, ISelectable
         hammer.SetActive(job == VillagerJob.Builder);
         bow.SetActive(job == VillagerJob.Hunter);
         quiver.SetActive(job == VillagerJob.Hunter);
+        name = "Villager (" + job + ")";
 		JobColor(job);
     }
 

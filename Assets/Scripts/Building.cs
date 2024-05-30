@@ -16,7 +16,7 @@ public class Building : Targetable, ISelectable
     public int stage;
     public BuildingType buildingType;
     public GameObject cartPrefab;
-    public GameObject cartInspectorParent;
+    public GameObject cartParent;
     public Storage storageParent;
 
     [SyncVar(hook = nameof(ProgressHook))]
@@ -38,7 +38,7 @@ public class Building : Targetable, ISelectable
                     BuildingGenerator.AddOutpost(this);
                     // cart for outpost
                     RandomNavmeshPoint.RandomPointFromCenterSphere(transform.position, 1, out Vector3 point, 5, 1, 1000);
-                    GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity, cartInspectorParent.transform);
+                    GameObject cart = Instantiate(cartPrefab, point, Quaternion.identity, cartParent.transform);
                     Storage storage = GetComponent<Storage>();
                     storage.enabled = true;
                     storage.Initialize();

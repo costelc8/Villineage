@@ -23,18 +23,13 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int builderWeight = 1;
 
     [Header("Villager Variables")]
+    [SyncVar] public int startingVillagers = 4;
     [SyncVar] public float villagerSpawnTime = 60f;
     [SyncVar] public int villagerCarryCapacity = 10;
     [SyncVar(hook = nameof(VillagerMoveSpeedHook))] public float villagerMoveSpeed = 4f;
     [SyncVar] public float villagerWorkSpeed = 1f;
     [SyncVar] public float villagerHungerRate = 1f;
     [SyncVar] public float vitalityPerFood = 10f;
-
-    [Header("Starting Variables")]
-    [SyncVar] public int startingVillagers = 4;
-    [SyncVar] public int startingSheep = 4;
-    [SyncVar] public int startingGoats = 6;
-    [SyncVar] public int startingWolves = 2;
 
     [Header("Resource Variables")]
     [Range(0f, 1f)]

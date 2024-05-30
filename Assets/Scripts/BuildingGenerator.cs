@@ -18,16 +18,21 @@ public class BuildingGenerator : MonoBehaviour
     private static List<Building> houses = new List<Building>();
     private static List<Building> outposts = new List<Building>();
     private static List<Storage> hubs = new List<Storage>();
-    private GameObject buildingInspectorParent;
-    private GameObject cartInspectorParent;
-  
+    private GameObject buildingParent;
+    private GameObject houseParent;
+    private GameObject outpostParent;
+    private GameObject cartParent;
 
     // Start is called before the first frame update
     private void Awake()
     {
         spacingSizeSmall = housePrefab.GetComponent<BoxCollider>().size / 2 + new Vector3(spacing, spacing, spacing);
-        buildingInspectorParent = new GameObject("Buildings");
-        cartInspectorParent = new GameObject("Carts");
+        buildingParent = new GameObject("Buildings");
+        houseParent = new GameObject("Houses");
+        houseParent.transform.parent = buildingParent.transform;
+        outpostParent = new GameObject("Outposts");
+        outpostParent.transform.parent = buildingParent.transform;
+        cartParent = new GameObject("Carts");
     }
 
     // Update is called once per frame
@@ -48,6 +53,7 @@ public class BuildingGenerator : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
         int buildCost = 0;
         int priority = 0;
+        GameObject parent = null;
 
         switch (buildingType)
         {
@@ -56,21 +62,23 @@ public class BuildingGenerator : MonoBehaviour
                 buildCost = SimVars.VARS.houseBuildCost;
                 gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSizeSmall, out point, 6f, 1f, starveRange / 2);
                 priority = 1;
+                parent = houseParent;
                 break;
             case BuildingType.Outpost:
                 buildingPrefab = outpostPrefab;
                 buildCost = SimVars.VARS.outpostBuildCost;
                 gotPoint = RandomNavmeshPoint.RandomPointFromCenterBox(center, spacingSizeSmall, out point, 6f, 1f, starveRange / 4);
                 priority = 100;
+                parent = outpostParent;
                 break;
         }
 
         if (buildingPrefab != null && gotPoint) 
         {
             // Make the building
-            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, buildingInspectorParent.transform).GetComponent<Building>();
+            Building building = Instantiate(buildingPrefab, point, Quaternion.identity * rotation, parent.transform).GetComponent<Building>();
             building.storageParent = storage;
-            building.cartInspectorParent = cartInspectorParent;
+            building.cartParent = cartParent;
             building.requiredWood = buildCost;
             building.buildingType = buildingType;
             building.currentWood = 0;

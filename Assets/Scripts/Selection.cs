@@ -197,7 +197,7 @@ public class Selection : MonoBehaviour
         DeselectAll();
         foreach (ISelectable selectable in selectables)
         {
-            if (selectable is Villager)
+            if (selectable is Villager villager && villager.alive)
             {
                 selected.Add(selectable);
                 selectedVillagers.Add(selectable);
@@ -266,7 +266,7 @@ public class Selection : MonoBehaviour
         DeselectAll();
         foreach (ISelectable selectable in selectables)
         {
-            if (selectable is Villager villager && villager.job == job)
+            if (selectable is Villager villager && villager.job == job && villager.alive)
             {
                 selected.Add(selectable);
                 selectedVillagers.Add(selectable);

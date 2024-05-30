@@ -18,7 +18,6 @@ public class SimulationManager : NetworkManager
 
     public override void Awake()
     {
-        Application.targetFrameRate = 60;
         simVars.Initialize();
         townCenter.Initialize();
         terrainGenerator.Initialize();
@@ -32,9 +31,9 @@ public class SimulationManager : NetworkManager
         resourceGenerator.GeneratePerlinTrees();
         resourceGenerator.GeneratePerlinBerries();
         resourceGenerator.GeneratePerlinAnimals();
-        resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 6f * SimVars.VARS.terrainScale, 9f * SimVars.VARS.terrainScale);
-        resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 12f * SimVars.VARS.terrainScale, 18f * SimVars.VARS.terrainScale);
-        resourceGenerator.GenerateWolves(townCenter.transform.position, SimVars.VARS.startingWolves, 18f * SimVars.VARS.terrainScale, 24f * SimVars.VARS.terrainScale);
+        //resourceGenerator.GenerateSheep(townCenter.transform.position, SimVars.VARS.startingSheep, 6f * SimVars.VARS.terrainScale, 9f * SimVars.VARS.terrainScale);
+        //resourceGenerator.GenerateGoats(townCenter.transform.position, SimVars.VARS.startingGoats, 12f * SimVars.VARS.terrainScale, 18f * SimVars.VARS.terrainScale);
+        //resourceGenerator.GenerateWolves(townCenter.transform.position, SimVars.VARS.startingWolves, 18f * SimVars.VARS.terrainScale, 24f * SimVars.VARS.terrainScale);
         townCenter.SpawnVillagers(SimVars.VARS.startingVillagers);
         if (SimVars.VARS.logSim) simLogs.StartLogging();
     }

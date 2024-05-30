@@ -30,8 +30,8 @@ public class RoadPainter : MonoBehaviour
         lastPosition = transform.position;
         position = lastPosition;
         drawing = false;
-
     }
+
     // Update is called once per frame
     private void Update()
     {
@@ -39,17 +39,15 @@ public class RoadPainter : MonoBehaviour
         {
             // moving
             drawing = true;
-            InvokeRepeating("DrawPath", 0, isCart ? 1f / 3f : 1f);
+            InvokeRepeating(nameof(DrawPath), 0, isCart ? 1f / 3f : 1f);
         } 
         else if (agent.speed == 0 && drawing)
         {
             // stopped
-            CancelInvoke("DrawPath");
+            CancelInvoke(nameof(DrawPath));
             drawing = false;
         }
-
     }
-
 
     void DrawPath()
     {
