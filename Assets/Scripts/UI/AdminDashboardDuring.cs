@@ -23,7 +23,8 @@ public class AdminDashboardDuring : MonoBehaviour
     public TMP_InputField BuilderW;
 
     // TimeScale, Seed, LogSim
-    public TMP_InputField timeScale;
+    public Slider timeScale;
+    public TextMeshProUGUI timeScaleDisplay;
 
     void Start()
     {
@@ -43,7 +44,10 @@ public class AdminDashboardDuring : MonoBehaviour
         BuilderW.onEndEdit.AddListener((value) => AddJob("BuilderW", value));
 
         // TimeScale
-        timeScale.onEndEdit.AddListener(AddTimeScale);
+        timeScale.value = simVars.timeScale;
+        timeScale.wholeNumbers = true;
+        timeScaleDisplay.text = "TimeScale: " + simVars.timeScale.ToString();
+        timeScale.onValueChanged.AddListener(AddTimeScale);
         
         // Separate so hunger rate can be a float
         hungerRate.onEndEdit.AddListener(AddHunger);
@@ -105,12 +109,11 @@ public class AdminDashboardDuring : MonoBehaviour
         }
     }
 
-    public void AddTimeScale(string value)
+    public void AddTimeScale(float value)
     {
-        if (int.TryParse(value, out int intValue))
-        {
-            simVars.timeScale = intValue;
-        }
+        int intValue = Mathf.RoundToInt(value);
+        simVars.timeScale = value;
+        timeScaleDisplay.text =  "TimeScale: " + intValue.ToString();
     }
     
     public void AddHunger(string value)

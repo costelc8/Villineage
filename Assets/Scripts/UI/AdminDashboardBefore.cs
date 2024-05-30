@@ -41,7 +41,8 @@ public class AdminDashboardBefore : MonoBehaviour
     public TMP_InputField villagerSpawnC;
 
     // TimeScale, Seed, LogSim
-    public TMP_InputField timeScale;
+    public Slider timeScale;
+    public TextMeshProUGUI timeScaleDisplay;
     public TMP_InputField seed;
     public Toggle logSim;
 
@@ -52,8 +53,8 @@ public class AdminDashboardBefore : MonoBehaviour
         forestDensityDisplay.text = "Forest Density: " + simVars.forestDensity.ToString();
         perlinForestSlider.value = simVars.perlinForestThreshold;
         perlinDisplay.text = "Perlin Forest: " + simVars.perlinForestThreshold.ToString();
-        forestDenSlider.onValueChanged.AddListener((value) => AddSliderResources("forestSlider", value));
-        perlinForestSlider.onValueChanged.AddListener((value) => AddSliderResources("perlinSlider", value));
+        forestDenSlider.onValueChanged.AddListener((value) => AddSliderVariables("forestSlider", value));
+        perlinForestSlider.onValueChanged.AddListener((value) => AddSliderVariables("perlinSlider", value));
         berryRespawn.onEndEdit.AddListener((value) => AddResources("berryRespawn", value));
         sheepFood.onEndEdit.AddListener((value) => AddResources("sheepFood", value));
         goatFood.onEndEdit.AddListener((value) => AddResources("goatFood", value));
@@ -81,15 +82,18 @@ public class AdminDashboardBefore : MonoBehaviour
         villagerSpawnC.onEndEdit.AddListener((value) => AddBuilding("villagerSpawnC", value));
 
         // TimeScale, seed
-        timeScale.onEndEdit.AddListener((value) => AddTandS("timeScale", value));
-        seed.onEndEdit.AddListener((value) => AddTandS("seed", value));
+        timeScale.value = simVars.timeScale;
+        timeScale.wholeNumbers = true;
+        timeScaleDisplay.text = "TimeScale: " + simVars.timeScale.ToString();
+        timeScale.onValueChanged.AddListener((value) => AddSliderVariables("timeScale", value));
+        seed.onEndEdit.AddListener((value) => AddSeed("seed", value));
         logSim.onValueChanged.AddListener(AddToggle);
         
         // Separate so hunger rate can be a float
         hungerRate.onEndEdit.AddListener(AddHunger);
     }
 
-    public void AddSliderResources(string resourceType, float value)
+    public void AddSliderVariables(string resourceType, float value)
     {
         switch(resourceType)
         {
@@ -102,6 +106,11 @@ public class AdminDashboardBefore : MonoBehaviour
                 float roundedValueperlin = Mathf.Round(value * 10) / 10f;
                 simVars.perlinForestThreshold = roundedValueperlin;
                 perlinDisplay.text = "Forest Density: " + value.ToString("F1");
+                break;
+            case "timeScale":
+                int intValue = Mathf.RoundToInt(value);
+                simVars.timeScale = value;
+                timeScaleDisplay.text =  "TimeScale: " + intValue.ToString();
                 break;
             default:
                 Debug.LogWarning("Something suspicious has happened");
@@ -219,15 +228,12 @@ public class AdminDashboardBefore : MonoBehaviour
         }
     }
 
-    public void AddTandS(string otherType, string value)
+    public void AddSeed(string otherType, string value)
     {
         if (int.TryParse(value, out int intValue))
         {
             switch (otherType)
             {
-                case "timeScale":
-                    simVars.timeScale = intValue;
-                    break;
                 case "seed":
                     simVars.seed = intValue;
                     break;
