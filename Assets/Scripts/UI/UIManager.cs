@@ -8,13 +8,16 @@ public class UIManager : MonoBehaviour
     public SimVars simVars;
 
     // Resource Variables
-    public TMP_InputField sheep;
-    public TMP_InputField goat;
+    public Slider forestDenSlider;
+    public TextMeshProUGUI forestDensityDisplay;
+    public TextMeshProUGUI perlinDisplay;
+
+    public Slider perlinForestSlider;
     public TMP_InputField berryRespawn;
     public TMP_InputField sheepFood;
     public TMP_InputField goatFood;
     public TMP_InputField berryFood;
-    public TMP_InputField wolves;
+    public TMP_InputField forestSpace;
     public TMP_InputField woodTree;
 
     // Villager Variables
@@ -45,13 +48,17 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // Resource Text Entry
-        sheep.onEndEdit.AddListener((value) => AddResources("numSheep", value));
-        goat.onEndEdit.AddListener((value) => AddResources("numGoat", value));
+        forestDenSlider.value = simVars.forestDensity;
+        forestDensityDisplay.text = "Forest Density: " + simVars.forestDensity.ToString();
+        perlinForestSlider.value = simVars.perlinForestThreshold;
+        perlinDisplay.text = "Perlin Forest: " + simVars.perlinForestThreshold.ToString();
+        forestDenSlider.onValueChanged.AddListener((value) => AddSliderResources("forestSlider", value));
+        perlinForestSlider.onValueChanged.AddListener((value) => AddSliderResources("perlinSlider", value));
         berryRespawn.onEndEdit.AddListener((value) => AddResources("berryRespawn", value));
         sheepFood.onEndEdit.AddListener((value) => AddResources("sheepFood", value));
         goatFood.onEndEdit.AddListener((value) => AddResources("goatFood", value));
         berryFood.onEndEdit.AddListener((value) => AddResources("berryFood", value));
-        wolves.onEndEdit.AddListener((value) => AddResources("numWolves", value));
+        forestSpace.onEndEdit.AddListener((value) => AddResources("forestSpace", value));
         woodTree.onEndEdit.AddListener((value) => AddResources("woodTree", value));
 
         // Villager Text entry
@@ -82,6 +89,27 @@ public class UIManager : MonoBehaviour
         hungerRate.onEndEdit.AddListener(AddHunger);
     }
 
+    public void AddSliderResources(string resourceType, float value)
+    {
+        switch(resourceType)
+        {
+            case "forestSlider":
+                float roundedValue = Mathf.Round(value * 10) / 10f;
+                simVars.forestDensity = roundedValue;
+                forestDensityDisplay.text = "Forest Density: " + value.ToString("F1");
+                break;
+            case "perlinSlider":
+                float roundedValueperlin = Mathf.Round(value * 10) / 10f;
+                simVars.perlinForestThreshold = roundedValueperlin;
+                perlinDisplay.text = "Forest Density: " + value.ToString("F1");
+                break;
+            default:
+                Debug.LogWarning("Something suspicious has happened");
+                break;
+        }
+    }
+
+
     public void AddResources(string resourceType, string value)
     {
         if (int.TryParse(value, out int intValue))
@@ -103,14 +131,13 @@ public class UIManager : MonoBehaviour
                 case "woodTree":
                     simVars.woodPerTree = intValue;
                     break;
+                case "forestSpace":
+                    simVars.forestSpacing = intValue;
+                    break;
                 default:
                     Debug.LogWarning("Something suspicious has happened");
                     break;
             }
-        }
-        else
-        {
-            Debug.LogWarning("Invalid input");
         }
     }
 
@@ -143,10 +170,6 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-        else
-        {
-            Debug.LogWarning("Invalid input");
-        }
     }
 
     public void AddJob(string jobType, string value)
@@ -172,10 +195,6 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-        else
-        {
-            Debug.LogWarning("Invalid input");
-        }
     }
 
     public void AddBuilding(string buildingType, string value)
@@ -198,10 +217,6 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-        else
-        {
-            Debug.LogWarning("Invalid input");
-        }
     }
 
     public void AddTandS(string otherType, string value)
@@ -221,10 +236,6 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-        else
-        {
-            Debug.LogWarning("Invalid input");
-        }
     }
 
     public void AddToggle(bool isOn)
@@ -237,10 +248,6 @@ public class UIManager : MonoBehaviour
         if (float.TryParse(value, out float floatValue))
         {
             simVars.villagerHungerRate = floatValue;
-        }
-        else
-        {
-            Debug.LogWarning("Invalid input");
         }
     }
 }
