@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Mirror;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class AdminDashboardBefore : MonoBehaviour
 {
     public SimVars simVars;
 
