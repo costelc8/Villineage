@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TMPro;
 using Unity.AI.Navigation;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -53,6 +54,7 @@ public class ResourceGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!NetworkServer.active) return;
         if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Z))
         {
             ResourceSourceType resource = ResourceSourceType.None;
@@ -312,6 +314,7 @@ public class ResourceGenerator : MonoBehaviour
                 GameObject sheep = Instantiate(sheepPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), sheepParent.transform);
                 sheep.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
                 sheep.GetComponent<Resource>().quantity = SimVars.VARS.foodPerSheep;
+                sheep.GetComponent<NavMeshAgent>().enabled = true;
                 NetworkServer.Spawn(sheep);
                 animals.Add(sheep.GetComponent<Animal>());
                 sheep.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(91, 100);
@@ -328,6 +331,7 @@ public class ResourceGenerator : MonoBehaviour
                 GameObject goat = Instantiate(goatPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), goatParent.transform);
                 goat.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
                 goat.GetComponent<Resource>().quantity = SimVars.VARS.foodPerGoat;
+                goat.GetComponent<NavMeshAgent>().enabled = true;
                 NetworkServer.Spawn(goat);
                 animals.Add(goat.GetComponent<Animal>());
                 goat.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(81, 90);
@@ -343,6 +347,7 @@ public class ResourceGenerator : MonoBehaviour
             {
                 GameObject wolf = Instantiate(wolfPrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0), wolfParent.transform);
                 wolf.GetComponent<Animal>().wanderOrigin = (origin == Vector3.zero) ? center : origin;
+                wolf.GetComponent<NavMeshAgent>().enabled = true;
                 NetworkServer.Spawn(wolf);
                 animals.Add(wolf.GetComponent<Animal>());
                 wolf.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(71, 80);

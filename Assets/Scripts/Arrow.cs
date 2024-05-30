@@ -1,6 +1,7 @@
+using Mirror;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : NetworkBehaviour
 {
     public Villager hunter;
     public Animal target;
@@ -9,6 +10,7 @@ public class Arrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isServer) return;
         if (timer >= 1) return;
         timer += Time.deltaTime * 2;
         Vector3 position = Vector3.Lerp(hunter.transform.position, target.transform.position, timer);

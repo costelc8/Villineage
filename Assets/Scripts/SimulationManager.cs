@@ -15,6 +15,7 @@ public class SimulationManager : NetworkManager
     public ResourceGenerator resourceGenerator;
     public TownCenter townCenter;
     public SimLogs simLogs;
+    public Clock clock;
 
     public override void Awake()
     {
@@ -22,6 +23,7 @@ public class SimulationManager : NetworkManager
         townCenter.Initialize();
         terrainGenerator.Initialize();
         resourceGenerator.Initialize();
+        if (clock != null) clock.Initialize();
     }
 
     public void StartSimulation()

@@ -952,6 +952,7 @@ GameObject:
   - component: {fileID: 1822660257}
   - component: {fileID: 1822660256}
   - component: {fileID: 1822660258}
+  - component: {fileID: 1822660259}
   m_Layer: 5
   m_Name: ClockText
   m_TagString: Untagged
@@ -1008,7 +1009,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1087,6 +1088,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5b4e8600f1aa543831a4ab0caeec58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  time: 0
+--- !u!114 &1822660259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822660254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3798223893
+  _assetId: 0
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &1874911279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1249,7 @@ MonoBehaviour:
   resourceGenerator: {fileID: 1194879065}
   townCenter: {fileID: 1519554151}
   simLogs: {fileID: 1874911285}
+  clock: {fileID: 1822660258}
 --- !u!114 &1874911285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1465,7 +1488,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 1
+  timeScale: 10
   logSim: 0
   seed: 0
   lumberjackWeight: 1

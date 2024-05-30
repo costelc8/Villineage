@@ -178,6 +178,7 @@ public class Animal : Resource
 
     private void OnTriggerStay(Collider other)
     {
+        if (!isServer) return;
         if (type == AnimalType.Hostile && state != AnimalState.Dead)
         {
             Villager villager = other.GetComponent<Villager>();

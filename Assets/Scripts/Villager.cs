@@ -24,6 +24,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public float maxVitality = 100f;  // The highest their hunger value can be (full)
     public float vitalityThreshold;
     public float huntingRange = 10f;
+    [SyncVar]
     public string causeOfDeath;
 
     [Header("Jobs")]
@@ -365,7 +366,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 towards.y = 0;
                 transform.rotation = Quaternion.LookRotation(towards);
             }
-            if (job == VillagerJob.Hunter && target.movingTarget)
+            if (isServer && job == VillagerJob.Hunter && target.movingTarget)
             {
                 anim.SetBool("Archer", true);
             }

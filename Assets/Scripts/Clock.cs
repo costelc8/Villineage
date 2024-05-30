@@ -1,27 +1,44 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Clock : MonoBehaviour
+public class Clock : NetworkBehaviour
 {
     private TextMeshProUGUI timeTextMesh;
+    public float totalTime = 0f;
+    [SyncVar(hook = nameof(TimeHook))]
+    public int time;
 
     // Start is called before the first frame update
-    void Start()
+    public void Initialize()
     {
         timeTextMesh = GetComponent<TextMeshProUGUI>();
+        totalTime = 0f;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        int time = (int)Time.timeSinceLevelLoad;
-        int hours = time / 3600;
-        time %= 3600;
-        int minutes = time / 60;
-        time %= 60;
-        int seconds = time;
+        if (!isServer) return;
+        totalTime += Time.deltaTime;
+        time = (int)totalTime;
+    }
+
+    public void TimeHook(int oldValue, int newValue)
+    {
+        UpdateTime();
+    }
+
+    private void UpdateTime()
+    {
+        int t = time;
+        int hours = t / 3600;
+        t %= 3600;
+        int minutes = t / 60;
+        t %= 60;
+        int seconds = t;
         timeTextMesh.text = string.Format("{0:00}:{1:00}:{2:00}", hours, minutes, seconds);
     }
 }
