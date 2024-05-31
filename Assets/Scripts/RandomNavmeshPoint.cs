@@ -84,11 +84,14 @@ public class RandomNavmeshPoint
         Debug.DrawRay(randomPoint, Vector3.down * depth, Color.red, 1f * Time.timeScale);
         if (Physics.Raycast(randomPoint, Vector3.down, out RaycastHit hitInfo, depth, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore))
         {
-            if (NavMesh.SamplePosition(hitInfo.point, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
-            {
-                point = hit.position;
-                return true;
-            }
+            point = hitInfo.point;
+            return true;
+            // NavMesh.SamplePosition sucks, not using it anymore lol
+            //if (NavMesh.SamplePosition(hitInfo.point + Vector3.up, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            //{
+            //    point = hit.position;
+            //    return true;
+            //}
         }
         point = Vector3.zero;
         return false;

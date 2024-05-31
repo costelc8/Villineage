@@ -45,7 +45,7 @@ public class Resource : Targetable, ISelectable
     {
         if (newQuantity < oldQuantity && oldQuantity == maxQuantity)
         {
-            priority *= 1.5f;
+            priority += 1;
         }
         if (stage0 != null && stage1 != null)
         {

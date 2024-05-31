@@ -1539,6 +1539,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  unassignedVillagers: []
   enforceMaxVillagers: 1
   maxAssignedVillagers: 6
   assignedVillagers: 0
@@ -1553,7 +1554,7 @@ MonoBehaviour:
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 1
   maxWanderCooldown: 10
-  maxHealth: 4
+  maxHealth: 3
   health: 0
   wanderCooldown: 0
   state: 0

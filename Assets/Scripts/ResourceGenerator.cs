@@ -28,7 +28,6 @@ public class ResourceGenerator : MonoBehaviour
     private static List<Targetable> animals = new List<Targetable>();
     public Vector3 previousMousePos;
     public float animalRespawnTimer;
-    private float spawnRange;
 
     public bool generateForest;
     public bool destroyTrees;
@@ -112,10 +111,10 @@ public class ResourceGenerator : MonoBehaviour
             destroyBerries = false;
             ClearAllBerries();
         }
-        animalRespawnTimer += Time.deltaTime;
-        if (animalRespawnTimer > 20f)
+        animalRespawnTimer += Time.deltaTime * (1 + BuildingGenerator.GetHubs().Count) * 0.5f;
+        if (animalRespawnTimer > 60f)
         {
-            animalRespawnTimer -= 20f;
+            animalRespawnTimer -= 60f;
             if (animals.Count < Mathf.Pow(2, SimVars.VARS.terrainScale + 1))
             {
                 Vector3 position = Vector3.zero;

@@ -83,9 +83,9 @@ public class Selection : MonoBehaviour
         }
         //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         //{
-            if (Input.GetKeyDown(KeyCode.Alpha1)) SelectAllVillagers(VillagerJob.Lumberjack);
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SelectAllVillagers(VillagerJob.Hunter);
             if (Input.GetKeyDown(KeyCode.Alpha2)) SelectAllVillagers(VillagerJob.Gatherer);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) SelectAllVillagers(VillagerJob.Hunter);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) SelectAllVillagers(VillagerJob.Lumberjack);
             if (Input.GetKeyDown(KeyCode.Alpha4)) SelectAllVillagers(VillagerJob.Builder);
             if (Input.GetKeyDown(KeyCode.Alpha5)) SelectAllVillagers();
             if (Input.GetKeyDown(KeyCode.Alpha6)) SelectAllCarts();

@@ -17,10 +17,10 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int seed = 0;
 
     [Header("Job Weights")]
-    [SyncVar] public int lumberjackWeight = 1;
-    [SyncVar] public int gathererWeight = 1;
-    [SyncVar] public int hunterWeight = 1;
-    [SyncVar] public int builderWeight = 1;
+    [SyncVar] public int lumberjackWeight = 10;
+    [SyncVar] public int gathererWeight = 10;
+    [SyncVar] public int hunterWeight = 10;
+    [SyncVar] public int builderWeight = 10;
 
     [Header("Villager Variables")]
     [SyncVar] public int startingVillagers = 4;

@@ -8,7 +8,7 @@ public class Targetable : NetworkBehaviour
 {
     [Header("Targetable Settings")]
     private List<TargetPosition> targetPositions = new List<TargetPosition>();
-    private List<Villager> unassignedVillagers = new List<Villager>();
+    public List<Villager> unassignedVillagers = new List<Villager>();
     public bool enforceMaxVillagers;
     public int maxAssignedVillagers;
     public int assignedVillagers;
@@ -79,6 +79,7 @@ public class Targetable : NetworkBehaviour
         assignedVillagers++;
         if (targetPositions.Count == 0)
         {
+            if (this is Animal && unassignedVillagers.Count == 0) priority += 1f;
             unassignedVillagers.Add(villager);
             return transform.position;
         }

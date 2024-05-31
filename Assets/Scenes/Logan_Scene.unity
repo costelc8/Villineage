@@ -874,6 +874,7 @@ MonoBehaviour:
   villagers: []
   buildingGenerator: {fileID: 0}
   villagerParent: {fileID: 0}
+  deadVillagerParent: {fileID: 0}
   spawning: 0
   timer: 0
   jobWeights:
@@ -1091,6 +1092,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  totalTime: 0
   time: 0
 --- !u!114 &1822660259
 MonoBehaviour:
@@ -1488,13 +1490,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  timeScale: 10
+  timeScale: 2
   logSim: 0
   seed: 0
-  lumberjackWeight: 1
-  gathererWeight: 1
-  hunterWeight: 1
-  builderWeight: 1
+  lumberjackWeight: 10
+  gathererWeight: 10
+  hunterWeight: 10
+  builderWeight: 10
   startingVillagers: 4
   villagerSpawnTime: 60
   villagerCarryCapacity: 10

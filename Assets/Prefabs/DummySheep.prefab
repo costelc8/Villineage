@@ -1467,7 +1467,7 @@ MonoBehaviour:
   enforceMaxVillagers: 1
   maxAssignedVillagers: 6
   assignedVillagers: 0
-  priority: 1
+  priority: 2
   movingTarget: 1
   quantity: 0
   maxQuantity: 0

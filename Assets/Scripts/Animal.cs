@@ -79,7 +79,7 @@ public class Animal : Resource
                 {
                     attackCooldown = 1f;
 					anim.SetBool("Attack",true);
-                    if (targetVillager.TakeDamage(Random.Range(20f, 40f))) priority += 100f;
+                    if (targetVillager.TakeDamage(50f)) priority += 100f;
                     if (!targetVillager.alive) targetVillager = null;
                 }
                 else anim.SetBool("Attack",false);
@@ -97,20 +97,7 @@ public class Animal : Resource
         }
     }
 
-    public void Damage(int damage)
-    {
-        if (health > 0)
-        {
-            health--;
-            if (health <= 0)
-            {
-                health = 0;
-                Die();
-            }
-        }
-    }
-
-    public override bool Progress(Villager villager)
+    public void Damage(Villager villager, int damage)
     {
         if (health > 0)
         {
@@ -130,10 +117,24 @@ public class Animal : Resource
                 wanderCooldown = 5f;
                 ChangeState(AnimalState.Running);
             }
-            return false;
         }
-        else return base.Progress(villager);
     }
+
+    //public override bool Progress(Villager villager)
+    //{
+    //    if (health > 0)
+    //    {
+    //        health--;
+    //        if (health <= 0)
+    //        {
+    //            health = 0;
+    //            Die();
+    //        }
+            
+    //        return false;
+    //    }
+    //    else return base.Progress(villager);
+    //}
 
     private void ChangeSpeed(bool run)
     {
@@ -148,7 +149,7 @@ public class Animal : Resource
         movingTarget = false;
         agent.enabled = false;
         if (obstacle != null) obstacle.enabled = true;
-        priority *= 10f;
+        priority += 10f;
         ChangeState(AnimalState.Dead);
         if (type == AnimalType.Hostile)
         {
@@ -161,7 +162,7 @@ public class Animal : Resource
     private void OnTriggerEnter(Collider other)
     {
         if (!isServer) return;
-        if (type == AnimalType.Hostile)
+        if (type == AnimalType.Hostile && state != AnimalState.Dead)
         {
             Villager villager = other.GetComponent<Villager>();
             if (villager != null && villager.alive)

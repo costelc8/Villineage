@@ -21,7 +21,7 @@ public class Arrow : NetworkBehaviour
         transform.Rotate(new Vector3(-90, 0, 0), Space.Self);
         if (timer >= 1)
         {
-            target.Damage(1);
+            target.Damage(hunter, 1);
             Destroy(gameObject);
         }
     }

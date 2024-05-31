@@ -29,6 +29,7 @@ public class TownCenter : NetworkBehaviour
         else Destroy(this);
         buildingGenerator = GetComponent<BuildingGenerator>();
         storage = GetComponent<Storage>();
+        storage.Initialize();
         BuildingGenerator.AddHub(storage);
         villagerParent = new GameObject("Villagers");
         deadVillagerParent = new GameObject("Dead");
@@ -123,6 +124,7 @@ public class TownCenter : NetworkBehaviour
         VillagerJob job = GetMostNeededJob();
         // Debug.Log("Changing from " + villager.job + "(" + neededJobs[(int)villager.job] + ") to " + job + "(" + neededJobs[(int)job] + ")");
         if (job != VillagerJob.Nitwit) ChangeVillagerJob(villager, job);
+        CalculateNeededJobs();
     }
 
     public void ChangeVillagerJob(Villager villager, VillagerJob job)
@@ -194,20 +196,16 @@ public class TownCenter : NetworkBehaviour
         
         bool treesExist = ResourceGenerator.GetTrees().Count > 0;
         bool berriesExist = ResourceGenerator.GetBerries().Count > 0;
-        bool animalsExist = ResourceGenerator.GetAnimals().Count > 0;
-        if (animalsExist)
+        bool animalsExist = false;
+        foreach (var animal in ResourceGenerator.GetAnimals())
         {
-            animalsExist = false;
-            foreach (var animal in ResourceGenerator.GetAnimals())
-            {
-                if (animal.priority > 0) animalsExist = true;
-            }
+            if (animal.priority > 0) animalsExist = true;
         }
         bool buildingsExist = BuildingGenerator.GetPendingBuildings().Count > 0;
         foodWeight *= (1 + (berriesExist ? 0 : 1) + (animalsExist ? 0 : 1));
-        jobWeights[(int)VillagerJob.Lumberjack] = treesExist ? SimVars.VARS.lumberjackWeight * woodWeight : 0;
-        jobWeights[(int)VillagerJob.Gatherer] = berriesExist ? SimVars.VARS.gathererWeight * foodWeight : 0;
         jobWeights[(int)VillagerJob.Hunter] = animalsExist ? SimVars.VARS.hunterWeight * foodWeight : 0;
+        jobWeights[(int)VillagerJob.Gatherer] = berriesExist ? SimVars.VARS.gathererWeight * foodWeight : 0;
+        jobWeights[(int)VillagerJob.Lumberjack] = treesExist ? SimVars.VARS.lumberjackWeight * woodWeight : 0;
         jobWeights[(int)VillagerJob.Builder] = buildingsExist ? SimVars.VARS.builderWeight * averageWeight : 0;
     }
 
@@ -243,7 +241,7 @@ public class TownCenter : NetworkBehaviour
         if (spawning)
         {
             timer += Time.deltaTime;
-            if (timer > SimVars.VARS.villagerSpawnTime / BuildingGenerator.GetHubs().Count)
+            if (timer > SimVars.VARS.villagerSpawnTime * 2 / (1 + BuildingGenerator.GetHubs().Count))
             {
                 spawning = false;
                 timer = 0.0f;
@@ -265,11 +263,10 @@ public enum ResourceType
 public enum VillagerJob
 {
     Nitwit,
-    Builder,
-    Lumberjack,
     Hunter,
     Gatherer,
-    Farmer,
+    Lumberjack,
+    Builder,
     MAX_VALUE,
 }
 
@@ -288,6 +285,5 @@ public enum ResourceSourceType
     Sheep,
     Goat,
     Wolf,
-    Farm,
     MAX_VALUE,
 }
