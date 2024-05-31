@@ -7,7 +7,7 @@ public class RoadPainter : MonoBehaviour
 {
     [Tooltip("How much % of the terrain color becomes path per path draw")]
     [Range(0f, 1f)]
-    public float pathAmount = 0.05f;
+    public float pathAmount = 0.1f;
     public bool isCart;
     private Terrain terrain;
     private TerrainData terrainData;
@@ -39,7 +39,7 @@ public class RoadPainter : MonoBehaviour
         {
             // moving
             drawing = true;
-            InvokeRepeating(nameof(DrawPath), 0, isCart ? 1f / 3f : 1f);
+            InvokeRepeating(nameof(DrawPath), 0, SimVars.VARS.villagerMoveSpeed / agent.speed);
         } 
         else if (agent.speed == 0 && drawing)
         {
@@ -61,14 +61,10 @@ public class RoadPainter : MonoBehaviour
         {
             float[,,] currentMap = terrainData.GetAlphamaps(x, y, 1, 1);
             float grass = currentMap[0, 0, 0];
-            if (grass > 0f)
-            {
-                // not fully sand
-                grass -= pathAmount;
-                map[0, 0, 0] = grass;
-                map[0, 0, 1] = 1 - grass;
-                terrainData.SetAlphamaps((int)position.x, (int)position.z, map);
-            }
+            grass = Mathf.Lerp(grass, 0, pathAmount);
+            map[0, 0, 0] = grass;
+            map[0, 0, 1] = 1 - grass;
+            terrainData.SetAlphamaps((int)position.x, (int)position.z, map);
         }
         lastPosition = position;
     }

@@ -26,6 +26,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public float huntingRange = 10f;
     [SyncVar]
     public string causeOfDeath;
+    public bool damaged;
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
@@ -131,6 +132,7 @@ public class Villager : NetworkBehaviour, ISelectable
                 else if (state == VillagerState.Returning) // If returning, deposit resources
                 {
                     hub.Deposit(this);
+                    damaged = false;
                     if (job == VillagerJob.Builder)
                     {
                         hub.Request(this, ResourceType.Wood);
@@ -173,7 +175,6 @@ public class Villager : NetworkBehaviour, ISelectable
             {
                 vitality = 0;
                 Die();
-                causeOfDeath = "Starvation";
             }
         }
     }
@@ -181,11 +182,11 @@ public class Villager : NetworkBehaviour, ISelectable
     public bool TakeDamage(float damage)
     {
         vitality -= damage;
+        damaged = true;
         if (vitality <= 0)
         {
             vitality = 0;
             Die();
-            causeOfDeath = "Wild Animal";
             return true;
         }
         return false;
@@ -201,8 +202,11 @@ public class Villager : NetworkBehaviour, ISelectable
         float deathValue = UnityEngine.Random.Range(-1f, 1f);
         anim.SetFloat("Death anim", deathValue);
         alive = false;
+        if (damaged) causeOfDeath = "Wild Animal";
+        else causeOfDeath = "Starvation";
+        name += " [" + causeOfDeath + "]";
         TownCenter.TC.RemoveVillager(this);
-        this.transform.SetParent(TownCenter.TC.deadVillagerParent.transform);
+        transform.SetParent(TownCenter.TC.deadVillagerParent.transform);
         if (target != null) target.ReturnTargetPosition(this);
         if (!isServer) return;
         hub.villagers.Remove(this);
@@ -211,7 +215,7 @@ public class Villager : NetworkBehaviour, ISelectable
 
     public void AliveHook(bool oldValue, bool newValue)
     {
-        if (!alive) Die();
+        if (!alive && !isServer) Die();
     }
 
     public void FindNewDestination()

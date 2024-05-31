@@ -196,11 +196,7 @@ public class TownCenter : NetworkBehaviour
         
         bool treesExist = ResourceGenerator.GetTrees().Count > 0;
         bool berriesExist = ResourceGenerator.GetBerries().Count > 0;
-        bool animalsExist = false;
-        foreach (var animal in ResourceGenerator.GetAnimals())
-        {
-            if (animal.priority > 0) animalsExist = true;
-        }
+        bool animalsExist = ResourceGenerator.GetAnimals().Count > 0;
         bool buildingsExist = BuildingGenerator.GetPendingBuildings().Count > 0;
         foodWeight *= (1 + (berriesExist ? 0 : 1) + (animalsExist ? 0 : 1));
         jobWeights[(int)VillagerJob.Hunter] = animalsExist ? SimVars.VARS.hunterWeight * foodWeight : 0;

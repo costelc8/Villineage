@@ -3867,6 +3867,7 @@ MonoBehaviour:
   vitalityThreshold: 0
   huntingRange: 10
   causeOfDeath: 
+  damaged: 0
   job: 0
   totalResources: 0
   target: {fileID: 0}
@@ -4010,7 +4011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc6bcab1760109489acfad0f020114c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathAmount: 0.05
+  pathAmount: 0.1
   isCart: 0
 --- !u!1 &2045088464112562668
 GameObject:
