@@ -27,6 +27,7 @@ public class Villager : NetworkBehaviour, ISelectable
     [SyncVar]
     public string causeOfDeath;
     public bool damaged;
+    public float despawnTimer = 0f;
 
     [Header("Jobs")]
     [SyncVar(hook = nameof(JobHook))]
@@ -86,6 +87,15 @@ public class Villager : NetworkBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
+        if (isServer && !alive && SimVars.VARS.clearBodies)
+        {
+            despawnTimer += Time.deltaTime;
+            if (despawnTimer >= SimVars.VARS.despawnTime)
+            {
+                if (isServer) Destroy(gameObject);
+            }
+        }
+
         if (!isServer || !alive) return;
 
         if (state == VillagerState.Pending) // If no job/target is assigned

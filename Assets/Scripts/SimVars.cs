@@ -30,6 +30,8 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float villagerWorkSpeed = 1f;
     [SyncVar] public float villagerHungerRate = 1f;
     [SyncVar] public float vitalityPerFood = 10f;
+    [SyncVar] public bool clearBodies = true;
+    [SyncVar] public float despawnTime = 30f;
 
     [Header("Resource Variables")]
     [SyncVar] public int woodPerTree = 60;

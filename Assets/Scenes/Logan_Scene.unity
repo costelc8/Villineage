@@ -1502,6 +1502,8 @@ MonoBehaviour:
   villagerWorkSpeed: 1
   villagerHungerRate: 1
   vitalityPerFood: 10
+  clearBodies: 1
+  despawnTime: 30
   woodPerTree: 60
   foodPerBerry: 60
   foodPerSheep: 60
