@@ -32,16 +32,17 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public float vitalityPerFood = 10f;
 
     [Header("Resource Variables")]
-    [Range(0f, 1f)]
-    [SyncVar] public float forestDensity = 1f;
-    [SyncVar] public int forestSpacing = 4;
-    [Range(0f, 1f)]
-    [SyncVar] public float perlinForestThreshold = 0.4f;
     [SyncVar] public int woodPerTree = 60;
     [SyncVar] public int foodPerBerry = 60;
     [SyncVar] public int foodPerSheep = 60;
     [SyncVar] public int foodPerGoat = 60;
+
+    [SyncVar] public int forestSpacing = 4;
     [SyncVar] public float berryRespawnTime = 600f;
+    [Range(0f, 1f)]
+    [SyncVar] public float resourceDensity = 1f;
+    [Range(0f, 1f)]
+    [SyncVar] public float perlinThreshold = 0.4f;
 
     [Header("Building Variables")]
     [SyncVar] public int houseBuildCost = 60;

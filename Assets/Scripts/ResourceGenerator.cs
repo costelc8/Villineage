@@ -158,7 +158,6 @@ public class ResourceGenerator : MonoBehaviour
 
         // Clamp the input values to their allowed ranges
         int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
-        float density = Mathf.Clamp01(SimVars.VARS.forestDensity);
         float variation = (spacing / 2f) - 1f;
         int size = SimVars.VARS.terrainSize;
         Vector2 center = new Vector2(size / 2, size / 2);
@@ -168,9 +167,9 @@ public class ResourceGenerator : MonoBehaviour
         {
             for (int y = spacing; y < size; y += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, y), center) > Random.Range(32f, 48f))
+                if (SimVars.VARS.resourceDensity > Random.value && Vector2.Distance(new Vector2(x, y), center) > Random.Range(32f, 48f))
                 {
-                    if (perlin[x, y] < SimVars.VARS.perlinForestThreshold + Random.Range(-0.1f, 0.1f))
+                    if (perlin[x, y] < SimVars.VARS.perlinThreshold + Random.Range(-0.1f, 0.1f))
                     {
                         // Calculate random offset/variation, so the trees aren't just aligned on a perfect grid
                         Vector3 treePos = new Vector3(x + Random.Range(-1f, 1f) * variation, 0, y + Random.Range(-1f, 1f) * variation);
@@ -199,19 +198,18 @@ public class ResourceGenerator : MonoBehaviour
 
         // Clamp the input values to their allowed ranges
         int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
-        float density = Mathf.Clamp01(SimVars.VARS.forestDensity);
         int size = SimVars.VARS.terrainSize;
         Vector2 center = new Vector2(size / 2, size / 2);
         float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());
         int numGroves = 0;
-        float upperThreshold = SimVars.VARS.perlinForestThreshold + 0.1f;
+        float upperThreshold = SimVars.VARS.perlinThreshold + 0.1f;
         for (int x = spacing * 2; x < size - spacing; x += spacing)
         {
             for (int z = spacing * 2; z < size - spacing; z += spacing)
             {
-                if (density > Random.value && Vector2.Distance(new Vector2(x, z), center) > Random.Range(16f, 24f))
+                if (SimVars.VARS.resourceDensity > Random.value && Vector2.Distance(new Vector2(x, z), center) > Random.Range(16f, 24f))
                 {
-                    if (perlin[x, z] > SimVars.VARS.perlinForestThreshold && perlin[x, z] < upperThreshold && Random.value <= 0.01f)
+                    if (perlin[x, z] > SimVars.VARS.perlinThreshold && perlin[x, z] < upperThreshold && Random.value <= 0.01f)
                     {
                         GenerateBerries(new Vector3(x, 10, z), Random.Range(4, 9)); // Generate a cluster of 4-8 berry bushes
                         numGroves++;
@@ -240,7 +238,7 @@ public class ResourceGenerator : MonoBehaviour
         int sheepPacks = 0;
         int goatPacks = 0;
         int wolfPacks = 0;
-        float lowerThreshold = SimVars.VARS.perlinForestThreshold + 0.1f;
+        float lowerThreshold = SimVars.VARS.perlinThreshold + 0.1f;
         for (int d = 1; d * spacing * 2 < size; d++)
         {
             int count = 6 * d;
@@ -249,7 +247,7 @@ public class ResourceGenerator : MonoBehaviour
             {
                 int x = Mathf.RoundToInt(center.x + (Mathf.Cos(interval * r) * spacing * d));
                 int z = Mathf.RoundToInt(center.y + (Mathf.Sin(interval * r) * spacing * d));
-                if (perlin[x, z] > lowerThreshold)
+                if (SimVars.VARS.resourceDensity > Random.value && perlin[x, z] > lowerThreshold)
                 {
                     if (d >= 1 && Random.value * sheepPacks < 1f)
                     {

@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,7 @@ public class Selection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!NetworkServer.active) return;
         if (mouseMode == MouseMode.Selecting)
         {
             if (Input.GetMouseButtonDown(0))

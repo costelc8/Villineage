@@ -5,255 +5,136 @@ using TMPro;
 
 public class AdminDashboardBefore : MonoBehaviour
 {
-    public SimVars simVars;
-
-    // Resource Variables
-    public Slider forestDenSlider;
-    public TextMeshProUGUI forestDensityDisplay;
-    public TextMeshProUGUI perlinDisplay;
-
-    public Slider perlinForestSlider;
-    public TMP_InputField berryRespawn;
-    public TMP_InputField sheepFood;
-    public TMP_InputField goatFood;
-    public TMP_InputField berryFood;
-    public TMP_InputField forestSpace;
-    public TMP_InputField woodTree;
-
-    // Villager Variables
-    public TMP_InputField startVillagers;
-    public TMP_InputField spawnT;
-    public TMP_InputField vitalityPerF;
-    public TMP_InputField carryCap;
-    public TMP_InputField moveS;
-    public TMP_InputField workS;
-    public TMP_InputField hungerRate;
-
-    // Job Weights
-    public TMP_InputField GathererW;
-    public TMP_InputField LumberW;
-    public TMP_InputField HunterW;
-    public TMP_InputField BuilderW;
-
-    // Building Costs
-    public TMP_InputField houseC;
-    public TMP_InputField outpostC;
-    public TMP_InputField villagerSpawnC;
-
     // TimeScale, Seed, LogSim
-    public Slider timeScale;
-    public TextMeshProUGUI timeScaleDisplay;
+    public TMP_InputField timeScale;
+    public Slider timeScaleSlider;
     public TMP_InputField seed;
     public Toggle logSim;
 
+    // Job Weights
+    public TMP_InputField hunterWeight;
+    public TMP_InputField gathererWeight;
+    public TMP_InputField lumberjackWeight;
+    public TMP_InputField builderWeight;
+
+    // Villager Variables
+    public TMP_InputField startingVillagers;
+    public TMP_InputField moveSpeed;
+    public TMP_InputField workSpeed;
+    public TMP_InputField carryCapacity;
+    public TMP_InputField hungerRate;
+    public TMP_InputField vitalityPerFood;
+    public TMP_InputField spawnTime;
+    public TMP_InputField spawnCost;
+
+    // Building Costs
+    public TMP_InputField houseCost;
+    public TMP_InputField outpostCost;
+
+    // Resouce Quantity
+    public TMP_InputField sheepFood;
+    public TMP_InputField goatFood;
+    public TMP_InputField berryFood;
+    public TMP_InputField treeWood;
+
+    // Resource Generation
+    public TMP_InputField berryRespawnTime;
+    public TMP_InputField forestSpacing;
+    public TMP_InputField resourceDensity;
+    public Slider resourceDensitySlider;
+    public TMP_InputField perlinThreshold;
+    public Slider perlinThresholdSlider;
+
     void Start()
     {
-        // Resource Text Entry
-        forestDenSlider.value = simVars.forestDensity;
-        forestDensityDisplay.text = "Forest Density: " + simVars.forestDensity.ToString();
-        perlinForestSlider.value = simVars.perlinForestThreshold;
-        perlinDisplay.text = "Perlin Forest: " + simVars.perlinForestThreshold.ToString();
-        forestDenSlider.onValueChanged.AddListener((value) => AddSliderVariables("forestSlider", value));
-        perlinForestSlider.onValueChanged.AddListener((value) => AddSliderVariables("perlinSlider", value));
-        berryRespawn.onEndEdit.AddListener((value) => AddResources("berryRespawn", value));
-        sheepFood.onEndEdit.AddListener((value) => AddResources("sheepFood", value));
-        goatFood.onEndEdit.AddListener((value) => AddResources("goatFood", value));
-        berryFood.onEndEdit.AddListener((value) => AddResources("berryFood", value));
-        forestSpace.onEndEdit.AddListener((value) => AddResources("forestSpace", value));
-        woodTree.onEndEdit.AddListener((value) => AddResources("woodTree", value));
+        // TimeScale, Seed, LogSim
+        timeScale.text = SimVars.VARS.timeScale.ToString();
+        timeScale.onEndEdit.AddListener((value) => SetTimescale(int.Parse(value)));
+        timeScaleSlider.value = SimVars.VARS.timeScale;
+        timeScaleSlider.onValueChanged.AddListener((value) => SetTimescale((int)value));
+        seed.text = SimVars.VARS.seed.ToString();
+        seed.onEndEdit.AddListener((value) => SimVars.VARS.seed = int.Parse(value));
+        logSim.isOn = SimVars.VARS.logSim;
+        logSim.onValueChanged.AddListener((value) => SimVars.VARS.logSim = value);
 
-        // Villager Text entry
-        startVillagers.onEndEdit.AddListener((value) => AddVillagers("startVillagers", value));
-        spawnT.onEndEdit.AddListener((value) => AddVillagers("spawnT", value));
-        vitalityPerF.onEndEdit.AddListener((value) => AddVillagers("vitality", value));
-        carryCap.onEndEdit.AddListener((value) => AddVillagers("carryCap", value));
-        moveS.onEndEdit.AddListener((value) => AddVillagers("moveS", value));
-        workS.onEndEdit.AddListener((value) => AddVillagers("workS", value));
-        
-        // Job Weights Text Entry
-        GathererW.onEndEdit.AddListener((value) => AddJob("GathererW", value));
-        LumberW.onEndEdit.AddListener((value) => AddJob("LumberW", value));
-        HunterW.onEndEdit.AddListener((value) => AddJob("HunterW", value));
-        BuilderW.onEndEdit.AddListener((value) => AddJob("BuilderW", value));
+        // Job Weights
+        hunterWeight.text = SimVars.VARS.hunterWeight.ToString();
+        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = int.Parse(value));
+        gathererWeight.text = SimVars.VARS.gathererWeight.ToString();
+        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = int.Parse(value));
+        lumberjackWeight.text = SimVars.VARS.lumberjackWeight.ToString();
+        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = int.Parse(value));
+        builderWeight.text = SimVars.VARS.builderWeight.ToString();
+        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = int.Parse(value));
 
-        // Building Text Entry
-        houseC.onEndEdit.AddListener((value) => AddBuilding("houseC", value));
-        outpostC.onEndEdit.AddListener((value) => AddBuilding("outpostC", value));
-        villagerSpawnC.onEndEdit.AddListener((value) => AddBuilding("villagerSpawnC", value));
+        // Villagers
+        startingVillagers.text = SimVars.VARS.startingVillagers.ToString();
+        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = int.Parse(value));
+        moveSpeed.text = SimVars.VARS.villagerMoveSpeed.ToString();
+        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = float.Parse(value));
+        workSpeed.text = SimVars.VARS.villagerWorkSpeed.ToString();
+        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = float.Parse(value));
+        carryCapacity.text = SimVars.VARS.villagerCarryCapacity.ToString();
+        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = int.Parse(value));
+        hungerRate.text = SimVars.VARS.villagerHungerRate.ToString();
+        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = float.Parse(value));
+        vitalityPerFood.text = SimVars.VARS.vitalityPerFood.ToString();
+        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = float.Parse(value));
+        spawnTime.text = SimVars.VARS.villagerSpawnTime.ToString();
+        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = float.Parse(value));
+        spawnCost.text = SimVars.VARS.villagerSpawnCost.ToString();
+        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = int.Parse(value));
 
-        // TimeScale, seed
-        timeScale.value = simVars.timeScale;
-        timeScale.wholeNumbers = true;
-        timeScaleDisplay.text = "TimeScale: " + simVars.timeScale.ToString();
-        timeScale.onValueChanged.AddListener((value) => AddSliderVariables("timeScale", value));
-        seed.onEndEdit.AddListener((value) => AddSeed("seed", value));
-        logSim.onValueChanged.AddListener(AddToggle);
-        
-        // Separate so hunger rate can be a float
-        hungerRate.onEndEdit.AddListener(AddHunger);
+        // Buildings
+        houseCost.text = SimVars.VARS.houseBuildCost.ToString();
+        houseCost.onEndEdit.AddListener((value) => SimVars.VARS.houseBuildCost = int.Parse(value));
+        outpostCost.text = SimVars.VARS.outpostBuildCost.ToString();
+        outpostCost.onEndEdit.AddListener((value) => SimVars.VARS.outpostBuildCost = int.Parse(value));
+
+        // Resource Quantities
+        sheepFood.text = SimVars.VARS.foodPerSheep.ToString();
+        sheepFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerSheep = int.Parse(value));
+        goatFood.text = SimVars.VARS.foodPerGoat.ToString();
+        goatFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerGoat = int.Parse(value));
+        berryFood.text = SimVars.VARS.foodPerBerry.ToString();
+        berryFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerBerry = int.Parse(value));
+        treeWood.text = SimVars.VARS.woodPerTree.ToString();
+        treeWood.onEndEdit.AddListener((value) => SimVars.VARS.woodPerTree = int.Parse(value));
+
+        berryRespawnTime.text = SimVars.VARS.berryRespawnTime.ToString();
+        berryRespawnTime.onEndEdit.AddListener((value) => SimVars.VARS.berryRespawnTime = float.Parse(value));
+        forestSpacing.text = SimVars.VARS.forestSpacing.ToString();
+        forestSpacing.onEndEdit.AddListener((value) => SimVars.VARS.forestSpacing = int.Parse(value));
+
+        resourceDensity.text = SimVars.VARS.resourceDensity.ToString();
+        resourceDensity.onEndEdit.AddListener((value) => SetResourceDensity(float.Parse(value)));
+        resourceDensitySlider.value = SimVars.VARS.resourceDensity;
+        resourceDensitySlider.onValueChanged.AddListener((value) => SetResourceDensity(value));
+
+        perlinThreshold.text = SimVars.VARS.perlinThreshold.ToString();
+        perlinThreshold.onEndEdit.AddListener((value) => SetPerlinThreshold(float.Parse(value)));
+        perlinThresholdSlider.value = SimVars.VARS.perlinThreshold;
+        perlinThresholdSlider.onValueChanged.AddListener((value) => SetPerlinThreshold(value));
     }
 
-    public void AddSliderVariables(string resourceType, float value)
+    private void SetTimescale(int value)
     {
-        switch(resourceType)
-        {
-            case "forestSlider":
-                float roundedValue = Mathf.Round(value * 10) / 10f;
-                simVars.forestDensity = roundedValue;
-                forestDensityDisplay.text = "Forest Density: " + value.ToString("F1");
-                break;
-            case "perlinSlider":
-                float roundedValueperlin = Mathf.Round(value * 10) / 10f;
-                simVars.perlinForestThreshold = roundedValueperlin;
-                perlinDisplay.text = "Forest Density: " + value.ToString("F1");
-                break;
-            case "timeScale":
-                int intValue = Mathf.RoundToInt(value);
-                simVars.timeScale = value;
-                timeScaleDisplay.text =  "TimeScale: " + intValue.ToString();
-                break;
-            default:
-                Debug.LogWarning("Something suspicious has happened");
-                break;
-        }
+        SimVars.VARS.timeScale = Mathf.Clamp(value, 1, 10);
+        timeScale.text = SimVars.VARS.timeScale.ToString();
+        timeScaleSlider.value = SimVars.VARS.timeScale;
     }
 
-
-    public void AddResources(string resourceType, string value)
+    private void SetResourceDensity(float value)
     {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (resourceType)
-            {
-                case "berryRespawn":
-                    simVars.berryRespawnTime = intValue;
-                    break;
-                case "sheepFood":
-                    simVars.foodPerSheep = intValue;
-                    break;
-                case "goatFood":
-                    simVars.foodPerGoat = intValue;
-                    break;
-                case "berryFood":
-                    simVars.foodPerBerry = intValue;
-                    break;
-                case "woodTree":
-                    simVars.woodPerTree = intValue;
-                    break;
-                case "forestSpace":
-                    simVars.forestSpacing = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
+        SimVars.VARS.resourceDensity = Mathf.Round(Mathf.Clamp01(value) * 10f) / 10f;
+        resourceDensity.text = SimVars.VARS.resourceDensity.ToString("F1");
+        resourceDensitySlider.value = SimVars.VARS.resourceDensity;
     }
 
-    public void AddVillagers(string villagerType, string value)
+    private void SetPerlinThreshold(float value)
     {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (villagerType)
-            {
-                case "startVillagers":
-                    simVars.startingVillagers = intValue;
-                    break;
-                case "spawnT":
-                    simVars.villagerSpawnTime = intValue;
-                    break;
-                case "vitality":
-                    simVars.vitalityPerFood = intValue;
-                    break;
-                case "carryCap":
-                    simVars.villagerCarryCapacity = intValue;
-                    break;
-                case "moveS":
-                    simVars.villagerMoveSpeed = intValue;
-                    break;
-                case "workS":
-                    simVars.villagerWorkSpeed = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
-    }
-
-    public void AddJob(string jobType, string value)
-    {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (jobType)
-            {
-                case "GathererW":
-                    simVars.gathererWeight = intValue;
-                    break;
-                case "LumberW":
-                    simVars.lumberjackWeight = intValue;
-                    break;
-                case "HunterW":
-                    simVars.hunterWeight = intValue;
-                    break;
-                case "BuilderW":
-                    simVars.builderWeight = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
-    }
-
-    public void AddBuilding(string buildingType, string value)
-    {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (buildingType)
-            {
-                case "houseC":
-                    simVars.houseBuildCost = intValue;
-                    break;
-                case "outpostC":
-                    simVars.outpostBuildCost = intValue;
-                    break;
-                case "villagerSpawnC":
-                    simVars.villagerSpawnCost = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
-    }
-
-    public void AddSeed(string otherType, string value)
-    {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (otherType)
-            {
-                case "seed":
-                    simVars.seed = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
-    }
-
-    public void AddToggle(bool isOn)
-    {
-        simVars.logSim = isOn;
-    }
-    
-    public void AddHunger(string value)
-    {
-        if (float.TryParse(value, out float floatValue))
-        {
-            simVars.villagerHungerRate = floatValue;
-        }
+        SimVars.VARS.perlinThreshold = Mathf.Round(Mathf.Clamp01(value) * 10f) / 10f;
+        perlinThreshold.text = SimVars.VARS.perlinThreshold.ToString("F1");
+        perlinThresholdSlider.value = SimVars.VARS.perlinThreshold;
     }
 }

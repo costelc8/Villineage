@@ -50,7 +50,7 @@ Canvas:
   m_GameObject: {fileID: 994800828789304436}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -59,7 +59,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -129,10 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   villager: {fileID: 0}
-  job: 0
   jobTextMesh: {fileID: 3365541096054429958}
   inventoryTextMesh: {fileID: 1429109996020429562}
   hungerTextMesh: {fileID: 6420970788218051115}
+  causeOfDeathTextMesh: {fileID: 0}
 --- !u!1 &3365126918783013738
 GameObject:
   m_ObjectHideFlags: 0
