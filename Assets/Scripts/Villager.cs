@@ -87,17 +87,16 @@ public class Villager : NetworkBehaviour, ISelectable
     // Update is called once per frame
     void Update()
     {
-        if (isServer && !alive && SimVars.VARS.clearBodies)
+        if (!isServer) return;
+        if (!alive)
         {
-            despawnTimer += Time.deltaTime;
-            if (despawnTimer >= SimVars.VARS.despawnTime)
+            if (SimVars.VARS.clearBodies)
             {
-                if (isServer) Destroy(gameObject);
+                despawnTimer += Time.deltaTime;
+                if (despawnTimer >= 300f) Destroy(gameObject);
             }
+            return;
         }
-
-        if (!isServer || !alive) return;
-
         if (state == VillagerState.Pending) // If no job/target is assigned
         {
             FindNewDestination();
