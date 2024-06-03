@@ -40,6 +40,11 @@ public class SimulationManager : NetworkManager
         if (SimVars.VARS.logSim) simLogs.StartLogging();
     }
 
+    public void SetNetworkAddress(string networkAddress)
+    {
+        this.networkAddress = networkAddress;
+    }
+
     public override void OnStartServer()
     {
         base.OnStartServer();
