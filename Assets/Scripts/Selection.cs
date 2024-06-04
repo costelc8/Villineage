@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,8 @@ public class Selection : MonoBehaviour
 
     public MouseMode mouseMode;
     public Villager spotlightedVillager;
+    public Camera villagerCam;
+    public RawImage villagerCamDisplay;
     public VillagerDisplay spotlightedVillagerDisplay;
     private List<GameObject> villagerButtons = new List<GameObject>();
     public bool leftDashboardOpen;
@@ -145,7 +148,9 @@ public class Selection : MonoBehaviour
         foreach (GameObject button in villagerButtons) Destroy(button);
         villagerButtons.Clear();
         manyVillagerPanel.SetActive(false);
+        spotlightedVillager = null;
         spotlightedVillagerDisplay.villager = null;
+        villagerCamDisplay.enabled = false;
         rightDashboardOpen = false;
     }
 
@@ -249,9 +254,9 @@ public class Selection : MonoBehaviour
                 case VillagerJob.Lumberjack: button.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f); break;
                 case VillagerJob.Builder: button.GetComponent<Image>().color = new Color(0.5f, 1f, 1f); break;
             }
-            int index = i;
-            button.GetComponent<Button>().onClick.AddListener(() => SpotlightVillager(index));
+            button.GetComponent<Button>().onClick.AddListener(() => SpotlightVillager(villager));
             i++;
+            button.GetComponentInChildren<TextMeshProUGUI>().text = i.ToString();
         }
     }
 
@@ -260,12 +265,21 @@ public class Selection : MonoBehaviour
         if (spotlightedVillager != null) spotlightedVillager.RemoveHUD();
         spotlightedVillager = villager;
         spotlightedVillagerDisplay.villager = villager;
+        villagerCam.transform.parent = villager.transform;
+        villagerCam.transform.SetLocalPositionAndRotation(new Vector3(0f, 2.5f, 2f), Quaternion.Euler(45f, 180f, 0f));
+        villagerCamDisplay.enabled = true;
         spotlightedVillager.DisplayHUD();
     }
 
-    private void SpotlightVillager(int index)
+    public void FocusCamOnVillager()
     {
-        if (index < selectedVillagers.Count) SpotlightVillager((Villager)selectedVillagers[index]);
+        Debug.Log("Hi");
+        if (spotlightedVillager != null)
+        {
+            Debug.Log("Hello");
+            Camera.main.transform.parent.parent.parent = spotlightedVillager.transform;
+            Camera.main.transform.parent.parent.localPosition = Vector3.zero;
+        }
     }
 
     public void SelectAllVillagers()

@@ -28,6 +28,7 @@ public class CameraControl : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         transform.Translate(new Vector3(horizontal, 0f, vertical).normalized * (Time.deltaTime * movementSpeed * zoomDistance / 5f));
+        if (horizontal != 0 || vertical != 0) transform.parent = transform.root;
 
         // Camera Rotation
         if (Input.GetMouseButtonDown(1)) Cursor.lockState = CursorLockMode.Locked;
@@ -44,17 +45,29 @@ public class CameraControl : MonoBehaviour
             float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -10f, 10f);
             float mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y"), -10f, 10f);
             transform.Translate(new Vector3(mouseX, 0f, mouseY) * (movementSpeed * zoomDistance / -100f));
+            transform.parent = transform.root;
         }
 
         // Camera Zoom
         if (Input.mouseScrollDelta.y != 0f)
         {
-            zoomDistance = Mathf.Pow(10, Mathf.Log10(zoomDistance) - (Input.mouseScrollDelta.y * zoomSpeed / 100f));
+            float zoomLog = Mathf.Log10(zoomDistance) - (Input.mouseScrollDelta.y * zoomSpeed / 100f);
+            zoomDistance = Mathf.Pow(10, zoomLog);
             zoomDistance = Mathf.Clamp(zoomDistance, minZoomDistance, maxZoomDistance);
             Camera.main.transform.localPosition = new Vector3(0f, 0f, -zoomDistance);
+            Camera.main.transform.parent.localRotation = Quaternion.Euler(30f * Mathf.Clamp(zoomLog, 1f, 2f), 0f, 0f);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Vector3 tcPos = TownCenter.TC.transform.position;
+            tcPos.y = 0;
+            transform.position = tcPos;
+        }
+
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, 0, SimVars.VARS.terrainSize);
+        pos.y = 5;
         pos.z = Mathf.Clamp(pos.z, 0, SimVars.VARS.terrainSize);
         transform.position = pos;
     }
