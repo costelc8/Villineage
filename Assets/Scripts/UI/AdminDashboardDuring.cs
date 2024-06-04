@@ -69,7 +69,8 @@ public class AdminDashboardDuring : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             panel.SetActive(!panel.activeSelf);
-            Selection.Selector.mouseMode = panel.activeSelf ? MouseMode.None : MouseMode.Selecting;
+            Selection.Selector.leftDashboardOpen = panel.activeSelf;
+            //Selection.Selector.mouseMode = panel.activeSelf ? MouseMode.None : MouseMode.Selecting;
         }
     }
 

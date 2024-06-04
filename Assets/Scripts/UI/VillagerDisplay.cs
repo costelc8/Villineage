@@ -14,13 +14,6 @@ public class VillagerDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Update()
     {
-        // Check if the Villager script is assigned
-        // if (villager == null)
-        // {
-        //     Debug.LogWarning("Villager reference is not assigned.");
-        //     return;
-        // }
-
         // Display job
         DisplayJob();
 
@@ -36,78 +29,37 @@ public class VillagerDisplay : MonoBehaviour
 
     void DisplayJob()
     {
-        // Check if the TextMeshPro component is assigned
-        if (jobTextMesh == null)
-        {
-            Debug.LogWarning("Job TextMeshPro reference is not assigned.");
-            return;
-        }
-
-        // Check the job of the villager and display it
-        //switch (villager.Job())
-        //{
-        //    case VillagerJob.Nitwit:
-        //        jobTextMesh.text = "Job: Nitwit";
-        //        break;
-        //    case VillagerJob.Gatherer:
-        //        jobTextMesh.text = "Job: Gatherer";
-        //        break;
-        //    case VillagerJob.Lumberjack:
-        //        jobTextMesh.text = "Job: Lumberjack";
-        //        break;
-        //    case VillagerJob.Builder:
-        //        jobTextMesh.text = "Job: Builder";
-        //        break;
-        //    default:
-        //        jobTextMesh.text = "Job: Unknown";
-        //        break;
-        //}
-        jobTextMesh.text = "Job: " + villager.job;
+        // Display the job of the villager
+        if (villager == null) jobTextMesh.text = "";
+        else jobTextMesh.text = "Job: " + villager.job;
     }
 
     void DisplayInventory()
     {
-        // Check if the TextMeshPro component is assigned
-        if (inventoryTextMesh == null)
-        {
-            Debug.LogWarning("Inventory TextMeshPro reference is not assigned.");
-            return;
-        }
-
         // Display the resources of the villager
-        string resourcesText = "Resources: ";
-        for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+        if (villager == null) inventoryTextMesh.text = "";
+        else
         {
-            if (villager.inventory[i] > 0) resourcesText += (ResourceType)i + ": " + villager.inventory[i];
+            string resourcesText = "Resources: ";
+            for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++)
+            {
+                if (villager.inventory[i] > 0) resourcesText += villager.inventory[i] + " " + (ResourceType)i;
+            }
+            inventoryTextMesh.text = resourcesText;
         }
-        //foreach (var resource in villager.resources)
-        //{
-        //    resourcesText += resource.Key.ToString() + ": " + resource.Value + "\n";
-        //}
-        inventoryTextMesh.text = resourcesText;
     }
 
     void DisplayHunger()
     {
-        // Check if the TextMeshPro component is assigned
-        if (hungerTextMesh == null)
-        {
-            Debug.LogWarning("Hunger TextMeshPro reference is not assigned.");
-            return;
-        }
-
         // Display the hunger of the villager
-        hungerTextMesh.text = "Vitality: " + ((int)villager.vitality).ToString();
+        if (villager == null) hungerTextMesh.text = "";
+        else hungerTextMesh.text = "Vitality: " + ((int)villager.vitality).ToString();
     }
 
     void DisplayCauseOfDeath()
     {
-        if (hungerTextMesh == null)
-        {
-            Debug.LogWarning("CauseOfDeath TextMeshPro reference is not assigned.");
-            return;
-        }
-
-        if (villager.causeOfDeath != "") causeOfDeathTextMesh.text = "Cause of Death: " + villager.causeOfDeath;
+        // Display the villager's cause of death
+        if (villager == null || villager.causeOfDeath == "") causeOfDeathTextMesh.text = "";
+        else causeOfDeathTextMesh.text = "Cause of Death: " + villager.causeOfDeath;
     }
 }

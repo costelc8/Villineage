@@ -13,7 +13,6 @@ public class Villager : NetworkBehaviour, ISelectable
     private Animator anim;  // Animates the villager
     public List<Storage> hubs;  // The different outposts/alternatives to town center
     public Storage hub; // Current parent hub
-    public bool selected;  // Have they been selected?
 	public Outline outlineS;
     public GameObject arrowPrefab;
 
@@ -457,20 +456,24 @@ public class Villager : NetworkBehaviour, ISelectable
 		}
 	}
 
-    // When selected, display ui
     public void OnSelect()
     {
-        selected = true;
-		outlineS.enabled = selected;
+		outlineS.enabled = true;
+    }
+
+    public void OnDeselect()
+    {
+		outlineS.enabled = false;
+    }
+
+    public void DisplayHUD()
+    {
         GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.villagerHUD, 1f);
         HUD.GetComponent<VillagerDisplay>().villager = this;
     }
 
-    // When deselected, stop displaying ui
-    public void OnDeselect()
+    public void RemoveHUD()
     {
-        selected = false;
-		outlineS.enabled = selected;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 
@@ -482,6 +485,7 @@ public class Villager : NetworkBehaviour, ISelectable
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
 }
+
 public enum VillagerState
 {
     Pending,

@@ -11,6 +11,8 @@ public class Selection : MonoBehaviour
 
     public GameObject selectionBox;
     public ManyResourceDisplay manyResourceDisplay;
+    public GameObject manyVillagerPanel;
+    public GameObject villagerButtonPrefab;
 
     private Vector2 selectionStart;
     private Vector2 selectionEnd;
@@ -23,6 +25,14 @@ public class Selection : MonoBehaviour
     public List<ISelectable> selectedCarts = new List<ISelectable>();
 
     public MouseMode mouseMode;
+    public Villager spotlightedVillager;
+    public VillagerDisplay spotlightedVillagerDisplay;
+    private List<GameObject> villagerButtons = new List<GameObject>();
+    public bool leftDashboardOpen;
+    public bool rightDashboardOpen;
+
+    private const float leftPanelBound = 500f / 1600f;
+    private const float rightPanelBound = 1050f / 1600f;
 
     private void Awake()
     {
@@ -52,6 +62,18 @@ public class Selection : MonoBehaviour
         selectedCarts.Remove(selectable);
     }
 
+    private bool MouseInRange()
+    {
+        return Input.mousePosition.x > (leftDashboardOpen ? Screen.width * leftPanelBound : 0)
+            && Input.mousePosition.x < (rightDashboardOpen ? Screen.width * rightPanelBound : Screen.width);
+    }
+
+    private Vector2 ScreenToCanvasSpace(Vector2 position)
+    {
+        position *= 1600f / Screen.width;
+        return position;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -60,27 +82,33 @@ public class Selection : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                // On mouse down, track selection start position, and enable selection box
-                selectionStart = Input.mousePosition;
-                selectionBox.SetActive(true);
+                if (MouseInRange())
+                {
+                    // On mouse down, track selection start position, and enable selection box
+                    selectionStart = Input.mousePosition;
+                    selectionBox.SetActive(true);
+                }
             }
             if (Input.GetMouseButton(0))
             {
                 // On mouse hold, move and resize selection box accordingly
                 selectionEnd = Input.mousePosition;
-                selectionBox.GetComponent<RectTransform>().anchoredPosition = (selectionStart + selectionEnd) / 2f;
-                selectionBox.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(selectionEnd.x - selectionStart.x), Mathf.Abs(selectionEnd.y - selectionStart.y));
+                selectionBox.GetComponent<RectTransform>().anchoredPosition = ScreenToCanvasSpace((selectionStart + selectionEnd) / 2f);
+                selectionBox.GetComponent<RectTransform>().sizeDelta = ScreenToCanvasSpace(new Vector2(Mathf.Abs(selectionEnd.x - selectionStart.x), Mathf.Abs(selectionEnd.y - selectionStart.y)));
             }
             if (Input.GetMouseButtonUp(0))
             {
                 // On mouse up, track selection end position and disable selection box
                 selectionEnd = Input.mousePosition;
                 selectionBox.SetActive(false);
-
-                // Clear the previously selected units, then make new selection
-                DeselectAll();
-                if (selectionStart == selectionEnd) SelectSingle(Input.mousePosition);
-                else SelectMany();
+                
+                if (MouseInRange())
+                {
+                    // Clear the previously selected units, then make new selection
+                    DeselectAll();
+                    if (selectionStart == selectionEnd) SelectSingle(Input.mousePosition);
+                    else SelectMany();
+                }
             }
         }
         //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
@@ -113,6 +141,12 @@ public class Selection : MonoBehaviour
         selectedStorages.Clear();
         selectedBuildings.Clear();
         selectedCarts.Clear();
+        if (spotlightedVillager != null) spotlightedVillager.RemoveHUD();
+        foreach (GameObject button in villagerButtons) Destroy(button);
+        villagerButtons.Clear();
+        manyVillagerPanel.SetActive(false);
+        spotlightedVillagerDisplay.villager = null;
+        rightDashboardOpen = false;
     }
 
     // Single-click selection, perform raycast
@@ -130,6 +164,7 @@ public class Selection : MonoBehaviour
                 {
                     selected.Add(selectable);
                     selectable.OnSelect();
+                    if (selectable is Villager villager) SpotlightVillager(villager);
                     foundSelectable = true;
                 }
             }
@@ -191,7 +226,46 @@ public class Selection : MonoBehaviour
             }
         }
         if (selectedResources.Count == 1) selectedResources[0].OnSelect();
+        if (selectedVillagers.Count == 1) SpotlightVillager((Villager)selectedVillagers[0]);
+        else if (selectedVillagers.Count > 1) DisplayVillagerPanel();
         //SelectSingle((selectionStart + selectionEnd) / 2);
+    }
+
+    private void DisplayVillagerPanel()
+    {
+        int i = 0;
+        manyVillagerPanel.SetActive(true);
+        rightDashboardOpen = true;
+        foreach (Villager villager in selectedVillagers.Cast<Villager>())
+        {
+            if (i >= 50) break;
+            GameObject button = Instantiate(villagerButtonPrefab, manyVillagerPanel.transform);
+            villagerButtons.Add(button);
+            button.GetComponent<RectTransform>().anchoredPosition = new Vector3(10 + (50 * (i % 10)), -(10 + (50 * (i / 10))));
+            switch (villager.job)
+            {
+                case VillagerJob.Hunter: button.GetComponent<Image>().color = new Color(1f, 0.5f, 0.5f); break;
+                case VillagerJob.Gatherer: button.GetComponent<Image>().color = new Color(1f, 1f, 0.5f); break;
+                case VillagerJob.Lumberjack: button.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f); break;
+                case VillagerJob.Builder: button.GetComponent<Image>().color = new Color(0.5f, 1f, 1f); break;
+            }
+            int index = i;
+            button.GetComponent<Button>().onClick.AddListener(() => SpotlightVillager(index));
+            i++;
+        }
+    }
+
+    private void SpotlightVillager(Villager villager)
+    {
+        if (spotlightedVillager != null) spotlightedVillager.RemoveHUD();
+        spotlightedVillager = villager;
+        spotlightedVillagerDisplay.villager = villager;
+        spotlightedVillager.DisplayHUD();
+    }
+
+    private void SpotlightVillager(int index)
+    {
+        if (index < selectedVillagers.Count) SpotlightVillager((Villager)selectedVillagers[index]);
     }
 
     public void SelectAllVillagers()
@@ -206,6 +280,7 @@ public class Selection : MonoBehaviour
                 selectable.OnSelect();
             }
         }
+        if (selectedVillagers.Count > 0) DisplayVillagerPanel();
     }
 
     public void SelectAllResources()
@@ -275,6 +350,7 @@ public class Selection : MonoBehaviour
                 selectable.OnSelect();
             }
         }
+        if (selectedVillagers.Count > 0) DisplayVillagerPanel();
     }
 
     public void SelectAllVillagers(int job)
@@ -290,6 +366,7 @@ public class Selection : MonoBehaviour
                 selectable.OnSelect();
             }
         }
+        if (selectedVillagers.Count > 0) DisplayVillagerPanel();
     }
 
     public void SelectEverything()
@@ -323,6 +400,7 @@ public class Selection : MonoBehaviour
                 selectable.OnSelect();
             }
         }
+        if (selectedVillagers.Count > 0) DisplayVillagerPanel();
     }
 }
 
