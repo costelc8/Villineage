@@ -96,12 +96,12 @@ public class Selection : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha9)) SelectAllResources();
             if (Input.GetKeyDown(KeyCode.Alpha0)) SelectEverything();
         //}
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            selectionBox.SetActive(false);
-            DeselectAll();
-            mouseMode = MouseMode.Selecting;
-        }
+        //if (Input.GetKey(KeyCode.Escape))
+        //{
+        //    selectionBox.SetActive(false);
+        //    DeselectAll();
+        //    mouseMode = MouseMode.Selecting;
+        //}
     }
 
     private void DeselectAll()
@@ -269,6 +269,21 @@ public class Selection : MonoBehaviour
         foreach (ISelectable selectable in selectables)
         {
             if (selectable is Villager villager && villager.job == job && villager.alive)
+            {
+                selected.Add(selectable);
+                selectedVillagers.Add(selectable);
+                selectable.OnSelect();
+            }
+        }
+    }
+
+    public void SelectAllVillagers(int job)
+    {
+        DeselectAll();
+        if (job >= (int)VillagerJob.MAX_VALUE) return;
+        foreach (ISelectable selectable in selectables)
+        {
+            if (selectable is Villager villager && villager.job == (VillagerJob)job && villager.alive)
             {
                 selected.Add(selectable);
                 selectedVillagers.Add(selectable);

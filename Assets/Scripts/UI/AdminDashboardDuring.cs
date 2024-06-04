@@ -5,122 +5,78 @@ using TMPro;
 
 public class AdminDashboardDuring : MonoBehaviour
 {
-    public SimVars simVars;
+    public GameObject panel;
 
-    // Villager Variables
-    public TMP_InputField startVillagers;
-    public TMP_InputField spawnT;
-    public TMP_InputField vitalityPerF;
-    public TMP_InputField carryCap;
-    public TMP_InputField moveS;
-    public TMP_InputField workS;
-    public TMP_InputField hungerRate;
+    // Timescale
+    public TMP_InputField timeScale;
+    public Slider timeScaleSlider;
 
     // Job Weights
-    public TMP_InputField GathererW;
-    public TMP_InputField LumberW;
-    public TMP_InputField HunterW;
-    public TMP_InputField BuilderW;
+    public TMP_InputField hunterWeight;
+    public TMP_InputField gathererWeight;
+    public TMP_InputField lumberjackWeight;
+    public TMP_InputField builderWeight;
 
-    // TimeScale, Seed, LogSim
-    public Slider timeScale;
-    public TextMeshProUGUI timeScaleDisplay;
+    // Villager Variables
+    public TMP_InputField startingVillagers;
+    public TMP_InputField moveSpeed;
+    public TMP_InputField workSpeed;
+    public TMP_InputField carryCapacity;
+    public TMP_InputField hungerRate;
+    public TMP_InputField vitalityPerFood;
+    public TMP_InputField spawnTime;
+    public TMP_InputField spawnCost;
 
     void Start()
     {
+        // Timescale
+        timeScale.text = SimVars.VARS.timeScale.ToString();
+        timeScale.onEndEdit.AddListener((value) => SetTimescale(int.Parse(value)));
+        timeScaleSlider.value = SimVars.VARS.timeScale;
+        timeScaleSlider.onValueChanged.AddListener((value) => SetTimescale((int)value));
 
-        // Villager Text entry
-        startVillagers.onEndEdit.AddListener((value) => AddVillagers("startVillagers", value));
-        spawnT.onEndEdit.AddListener((value) => AddVillagers("spawnT", value));
-        vitalityPerF.onEndEdit.AddListener((value) => AddVillagers("vitality", value));
-        carryCap.onEndEdit.AddListener((value) => AddVillagers("carryCap", value));
-        moveS.onEndEdit.AddListener((value) => AddVillagers("moveS", value));
-        workS.onEndEdit.AddListener((value) => AddVillagers("workS", value));
-        
-        // Job Weights Text Entry
-        GathererW.onEndEdit.AddListener((value) => AddJob("GathererW", value));
-        LumberW.onEndEdit.AddListener((value) => AddJob("LumberW", value));
-        HunterW.onEndEdit.AddListener((value) => AddJob("HunterW", value));
-        BuilderW.onEndEdit.AddListener((value) => AddJob("BuilderW", value));
+        // Job Weights
+        hunterWeight.text = SimVars.VARS.hunterWeight.ToString();
+        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = int.Parse(value));
+        gathererWeight.text = SimVars.VARS.gathererWeight.ToString();
+        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = int.Parse(value));
+        lumberjackWeight.text = SimVars.VARS.lumberjackWeight.ToString();
+        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = int.Parse(value));
+        builderWeight.text = SimVars.VARS.builderWeight.ToString();
+        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = int.Parse(value));
 
-        // TimeScale
-        timeScale.value = simVars.timeScale;
-        timeScale.wholeNumbers = true;
-        timeScaleDisplay.text = "TimeScale: " + simVars.timeScale.ToString();
-        timeScale.onValueChanged.AddListener(AddTimeScale);
-        
-        // Separate so hunger rate can be a float
-        hungerRate.onEndEdit.AddListener(AddHunger);
+        // Villagers
+        startingVillagers.text = SimVars.VARS.startingVillagers.ToString();
+        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = int.Parse(value));
+        moveSpeed.text = SimVars.VARS.villagerMoveSpeed.ToString();
+        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = float.Parse(value));
+        workSpeed.text = SimVars.VARS.villagerWorkSpeed.ToString();
+        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = float.Parse(value));
+        carryCapacity.text = SimVars.VARS.villagerCarryCapacity.ToString();
+        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = int.Parse(value));
+        hungerRate.text = SimVars.VARS.villagerHungerRate.ToString();
+        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = float.Parse(value));
+        vitalityPerFood.text = SimVars.VARS.vitalityPerFood.ToString();
+        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = float.Parse(value));
+        spawnTime.text = SimVars.VARS.villagerSpawnTime.ToString();
+        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = float.Parse(value));
+        spawnCost.text = SimVars.VARS.villagerSpawnCost.ToString();
+        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = int.Parse(value));
     }
 
-    public void AddVillagers(string villagerType, string value)
+    private void Update()
     {
-        if (int.TryParse(value, out int intValue))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            switch (villagerType)
-            {
-                case "startVillagers":
-                    simVars.startingVillagers = intValue;
-                    break;
-                case "spawnT":
-                    simVars.villagerSpawnTime = intValue;
-                    break;
-                case "vitality":
-                    simVars.vitalityPerFood = intValue;
-                    break;
-                case "carryCap":
-                    simVars.villagerCarryCapacity = intValue;
-                    break;
-                case "moveS":
-                    simVars.villagerMoveSpeed = intValue;
-                    break;
-                case "workS":
-                    simVars.villagerWorkSpeed = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
+            panel.SetActive(!panel.activeSelf);
+            Selection.Selector.mouseMode = panel.activeSelf ? MouseMode.None : MouseMode.Selecting;
         }
     }
 
-    public void AddJob(string jobType, string value)
+    private void SetTimescale(int value)
     {
-        if (int.TryParse(value, out int intValue))
-        {
-            switch (jobType)
-            {
-                case "GathererW":
-                    simVars.gathererWeight = intValue;
-                    break;
-                case "LumberW":
-                    simVars.lumberjackWeight = intValue;
-                    break;
-                case "HunterW":
-                    simVars.hunterWeight = intValue;
-                    break;
-                case "BuilderW":
-                    simVars.builderWeight = intValue;
-                    break;
-                default:
-                    Debug.LogWarning("Something suspicious has happened");
-                    break;
-            }
-        }
-    }
-
-    public void AddTimeScale(float value)
-    {
-        int intValue = Mathf.RoundToInt(value);
-        simVars.timeScale = value;
-        timeScaleDisplay.text =  "TimeScale: " + intValue.ToString();
-    }
-    
-    public void AddHunger(string value)
-    {
-        if (float.TryParse(value, out float floatValue))
-        {
-            simVars.villagerHungerRate = floatValue;
-        }
+        SimVars.VARS.timeScale = Mathf.Clamp(value, 1, 10);
+        timeScale.text = SimVars.VARS.timeScale.ToString();
+        timeScaleSlider.value = SimVars.VARS.timeScale;
     }
 }
