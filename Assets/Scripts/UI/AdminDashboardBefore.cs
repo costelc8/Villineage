@@ -59,59 +59,59 @@ public class AdminDashboardBefore : MonoBehaviour
 
         // Job Weights
         hunterWeight.text = SimVars.VARS.hunterWeight.ToString();
-        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = int.Parse(value));
+        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = Mathf.Max(0, int.Parse(value)));
         gathererWeight.text = SimVars.VARS.gathererWeight.ToString();
-        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = int.Parse(value));
+        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = Mathf.Max(0, int.Parse(value)));
         lumberjackWeight.text = SimVars.VARS.lumberjackWeight.ToString();
-        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = int.Parse(value));
+        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = Mathf.Max(0, int.Parse(value)));
         builderWeight.text = SimVars.VARS.builderWeight.ToString();
-        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = int.Parse(value));
+        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = Mathf.Max(0, int.Parse(value)));
 
         // Villagers
         startingVillagers.text = SimVars.VARS.startingVillagers.ToString();
-        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = int.Parse(value));
+        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = Mathf.Max(1, int.Parse(value)));
         moveSpeed.text = SimVars.VARS.villagerMoveSpeed.ToString();
-        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = float.Parse(value));
+        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = Mathf.Max(0, float.Parse(value)));
         workSpeed.text = SimVars.VARS.villagerWorkSpeed.ToString();
-        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = float.Parse(value));
+        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = Mathf.Max(0, float.Parse(value)));
         carryCapacity.text = SimVars.VARS.villagerCarryCapacity.ToString();
-        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = int.Parse(value));
+        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = Mathf.Max(1, int.Parse(value)));
         hungerRate.text = SimVars.VARS.villagerHungerRate.ToString();
-        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = float.Parse(value));
+        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = Mathf.Max(0, float.Parse(value)));
         vitalityPerFood.text = SimVars.VARS.vitalityPerFood.ToString();
-        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = float.Parse(value));
+        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = Mathf.Max(0, float.Parse(value)));
         spawnTime.text = SimVars.VARS.villagerSpawnTime.ToString();
-        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = float.Parse(value));
+        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = Mathf.Max(0, float.Parse(value)));
         spawnCost.text = SimVars.VARS.villagerSpawnCost.ToString();
-        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = int.Parse(value));
+        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = Mathf.Max(0, int.Parse(value)));
 
         // Buildings
         houseCost.text = SimVars.VARS.houseBuildCost.ToString();
-        houseCost.onEndEdit.AddListener((value) => SimVars.VARS.houseBuildCost = int.Parse(value));
+        houseCost.onEndEdit.AddListener((value) => SimVars.VARS.houseBuildCost = Mathf.Max(0, int.Parse(value)));
         outpostCost.text = SimVars.VARS.outpostBuildCost.ToString();
-        outpostCost.onEndEdit.AddListener((value) => SimVars.VARS.outpostBuildCost = int.Parse(value));
+        outpostCost.onEndEdit.AddListener((value) => SimVars.VARS.outpostBuildCost = Mathf.Max(0, int.Parse(value)));
 
         // Resource Quantities
         sheepFood.text = SimVars.VARS.foodPerSheep.ToString();
-        sheepFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerSheep = int.Parse(value));
+        sheepFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerSheep = Mathf.Max(1, int.Parse(value)));
         goatFood.text = SimVars.VARS.foodPerGoat.ToString();
-        goatFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerGoat = int.Parse(value));
+        goatFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerGoat = Mathf.Max(1, int.Parse(value)));
         berryFood.text = SimVars.VARS.foodPerBerry.ToString();
-        berryFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerBerry = int.Parse(value));
+        berryFood.onEndEdit.AddListener((value) => SimVars.VARS.foodPerBerry = Mathf.Max(1, int.Parse(value)));
         treeWood.text = SimVars.VARS.woodPerTree.ToString();
-        treeWood.onEndEdit.AddListener((value) => SimVars.VARS.woodPerTree = int.Parse(value));
+        treeWood.onEndEdit.AddListener((value) => SimVars.VARS.woodPerTree = Mathf.Max(1, int.Parse(value)));
 
         berryRespawnTime.text = SimVars.VARS.berryRespawnTime.ToString();
-        berryRespawnTime.onEndEdit.AddListener((value) => SimVars.VARS.berryRespawnTime = float.Parse(value));
-        forestSpacing.text = SimVars.VARS.forestSpacing.ToString();
-        forestSpacing.onEndEdit.AddListener((value) => SimVars.VARS.forestSpacing = int.Parse(value));
+        berryRespawnTime.onEndEdit.AddListener((value) => SimVars.VARS.berryRespawnTime = Mathf.Max(0, float.Parse(value)));
+        forestSpacing.text = SimVars.VARS.resourceSpacing.ToString();
+        forestSpacing.onEndEdit.AddListener((value) => SimVars.VARS.resourceSpacing = Mathf.Clamp(int.Parse(value), 4, 8));
 
-        resourceDensity.text = SimVars.VARS.resourceDensity.ToString();
+        resourceDensity.text = SimVars.VARS.resourceDensity.ToString("F1");
         resourceDensity.onEndEdit.AddListener((value) => SetResourceDensity(float.Parse(value)));
         resourceDensitySlider.value = SimVars.VARS.resourceDensity;
         resourceDensitySlider.onValueChanged.AddListener((value) => SetResourceDensity(value));
 
-        perlinThreshold.text = SimVars.VARS.perlinThreshold.ToString();
+        perlinThreshold.text = SimVars.VARS.perlinThreshold.ToString("F1");
         perlinThreshold.onEndEdit.AddListener((value) => SetPerlinThreshold(float.Parse(value)));
         perlinThresholdSlider.value = SimVars.VARS.perlinThreshold;
         perlinThresholdSlider.onValueChanged.AddListener((value) => SetPerlinThreshold(value));
@@ -119,7 +119,7 @@ public class AdminDashboardBefore : MonoBehaviour
 
     private void SetTimescale(int value)
     {
-        SimVars.VARS.timeScale = Mathf.Clamp(value, 1, 10);
+        SimVars.VARS.timeScale = Mathf.Clamp(value, 0, 10);
         timeScale.text = SimVars.VARS.timeScale.ToString();
         timeScaleSlider.value = SimVars.VARS.timeScale;
     }

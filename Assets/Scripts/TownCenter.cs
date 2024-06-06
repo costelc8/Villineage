@@ -52,7 +52,9 @@ public class TownCenter : NetworkBehaviour
 
     public void CenterCamera()
     {
-        Camera.main.transform.parent.parent.position = transform.position;
+        Vector3 pos = transform.position;
+        pos.y = SimVars.VARS.terrainDepth / 2;
+        Camera.main.transform.parent.parent.position = pos;
     }
 
     public void SpawnVillagers(int villagerCount)

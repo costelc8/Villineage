@@ -157,7 +157,7 @@ public class ResourceGenerator : MonoBehaviour
         Random.InitState(SimVars.VARS.GetSeed()); // Seed Random's state
 
         // Clamp the input values to their allowed ranges
-        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
+        int spacing = Mathf.Max(1, SimVars.VARS.resourceSpacing);
         float variation = (spacing / 2f) - 1f;
         int size = SimVars.VARS.terrainSize;
         Vector2 center = new Vector2(size / 2, size / 2);
@@ -197,7 +197,7 @@ public class ResourceGenerator : MonoBehaviour
         Random.InitState(SimVars.VARS.GetSeed()); // Seed Random's state
 
         // Clamp the input values to their allowed ranges
-        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing);
+        int spacing = Mathf.Max(1, SimVars.VARS.resourceSpacing);
         int size = SimVars.VARS.terrainSize;
         Vector2 center = new Vector2(size / 2, size / 2);
         float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());
@@ -231,7 +231,7 @@ public class ResourceGenerator : MonoBehaviour
         Random.InitState(SimVars.VARS.GetSeed()); // Seed Random's state
 
         // Clamp the input values to their allowed ranges
-        int spacing = Mathf.Max(1, SimVars.VARS.forestSpacing) * 8;
+        int spacing = Mathf.Max(1, SimVars.VARS.resourceSpacing) * 8;
         int size = SimVars.VARS.terrainSize;
         Vector2 center = new Vector2(size / 2, size / 2);
         float[,] perlin = PerlinGenerator.GeneratePerlin(size, size, 2, SimVars.VARS.GetSeed());

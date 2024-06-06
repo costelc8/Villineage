@@ -37,31 +37,31 @@ public class AdminDashboardDuring : MonoBehaviour
 
         // Job Weights
         hunterWeight.text = SimVars.VARS.hunterWeight.ToString();
-        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = int.Parse(value));
+        hunterWeight.onEndEdit.AddListener((value) => SimVars.VARS.hunterWeight = Mathf.Max(0, int.Parse(value)));
         gathererWeight.text = SimVars.VARS.gathererWeight.ToString();
-        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = int.Parse(value));
+        gathererWeight.onEndEdit.AddListener((value) => SimVars.VARS.gathererWeight = Mathf.Max(0, int.Parse(value)));
         lumberjackWeight.text = SimVars.VARS.lumberjackWeight.ToString();
-        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = int.Parse(value));
+        lumberjackWeight.onEndEdit.AddListener((value) => SimVars.VARS.lumberjackWeight = Mathf.Max(0, int.Parse(value)));
         builderWeight.text = SimVars.VARS.builderWeight.ToString();
-        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = int.Parse(value));
+        builderWeight.onEndEdit.AddListener((value) => SimVars.VARS.builderWeight = Mathf.Max(0, int.Parse(value)));
 
         // Villagers
         startingVillagers.text = SimVars.VARS.startingVillagers.ToString();
-        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = int.Parse(value));
+        startingVillagers.onEndEdit.AddListener((value) => SimVars.VARS.startingVillagers = Mathf.Max(0, int.Parse(value)));
         moveSpeed.text = SimVars.VARS.villagerMoveSpeed.ToString();
-        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = float.Parse(value));
+        moveSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerMoveSpeed = Mathf.Max(0, float.Parse(value)));
         workSpeed.text = SimVars.VARS.villagerWorkSpeed.ToString();
-        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = float.Parse(value));
+        workSpeed.onEndEdit.AddListener((value) => SimVars.VARS.villagerWorkSpeed = Mathf.Max(0, float.Parse(value)));
         carryCapacity.text = SimVars.VARS.villagerCarryCapacity.ToString();
-        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = int.Parse(value));
+        carryCapacity.onEndEdit.AddListener((value) => SimVars.VARS.villagerCarryCapacity = Mathf.Max(1, int.Parse(value)));
         hungerRate.text = SimVars.VARS.villagerHungerRate.ToString();
-        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = float.Parse(value));
+        hungerRate.onEndEdit.AddListener((value) => SimVars.VARS.villagerHungerRate = Mathf.Max(0, float.Parse(value)));
         vitalityPerFood.text = SimVars.VARS.vitalityPerFood.ToString();
-        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = float.Parse(value));
+        vitalityPerFood.onEndEdit.AddListener((value) => SimVars.VARS.vitalityPerFood = Mathf.Max(0, float.Parse(value)));
         spawnTime.text = SimVars.VARS.villagerSpawnTime.ToString();
-        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = float.Parse(value));
+        spawnTime.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnTime = Mathf.Max(0, float.Parse(value)));
         spawnCost.text = SimVars.VARS.villagerSpawnCost.ToString();
-        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = int.Parse(value));
+        spawnCost.onEndEdit.AddListener((value) => SimVars.VARS.villagerSpawnCost = Mathf.Max(0, int.Parse(value)));
     }
 
     private void Update()
@@ -76,7 +76,7 @@ public class AdminDashboardDuring : MonoBehaviour
 
     private void SetTimescale(int value)
     {
-        SimVars.VARS.timeScale = Mathf.Clamp(value, 1, 10);
+        SimVars.VARS.timeScale = Mathf.Clamp(value, 0, 10);
         timeScale.text = SimVars.VARS.timeScale.ToString();
         timeScaleSlider.value = SimVars.VARS.timeScale;
     }

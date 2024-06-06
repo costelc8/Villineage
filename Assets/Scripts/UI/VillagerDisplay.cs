@@ -60,6 +60,6 @@ public class VillagerDisplay : MonoBehaviour
     {
         // Display the villager's cause of death
         if (villager == null || villager.causeOfDeath == "") causeOfDeathTextMesh.text = "";
-        else causeOfDeathTextMesh.text = "Cause of Death: " + villager.causeOfDeath;
+        else causeOfDeathTextMesh.text = "Died From " + villager.causeOfDeath;
     }
 }

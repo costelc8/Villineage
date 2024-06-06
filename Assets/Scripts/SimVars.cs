@@ -38,7 +38,7 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int foodPerSheep = 60;
     [SyncVar] public int foodPerGoat = 60;
 
-    [SyncVar] public int forestSpacing = 4;
+    [SyncVar] public int resourceSpacing = 4;
     [SyncVar] public float berryRespawnTime = 600f;
     [Range(0f, 1f)]
     [SyncVar] public float resourceDensity = 1f;

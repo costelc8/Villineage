@@ -254,7 +254,10 @@ public class Selection : MonoBehaviour
                 case VillagerJob.Lumberjack: button.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f); break;
                 case VillagerJob.Builder: button.GetComponent<Image>().color = new Color(0.5f, 1f, 1f); break;
             }
-            button.GetComponent<Button>().onClick.AddListener(() => SpotlightVillager(villager));
+            button.GetComponent<Button>().onClick.AddListener(() => {
+                SpotlightVillager(villager);
+                button.GetComponent<UnityEngine.UI.Outline>().enabled = true;
+            });
             i++;
             button.GetComponentInChildren<TextMeshProUGUI>().text = i.ToString();
         }
@@ -269,16 +272,17 @@ public class Selection : MonoBehaviour
         villagerCam.transform.SetLocalPositionAndRotation(new Vector3(0f, 2.5f, 2f), Quaternion.Euler(45f, 180f, 0f));
         villagerCamDisplay.enabled = true;
         spotlightedVillager.DisplayHUD();
+        foreach (GameObject button in villagerButtons)
+        {
+            button.GetComponent<UnityEngine.UI.Outline>().enabled = false;
+        }
     }
 
     public void FocusCamOnVillager()
     {
-        Debug.Log("Hi");
         if (spotlightedVillager != null)
         {
-            Debug.Log("Hello");
-            Camera.main.transform.parent.parent.parent = spotlightedVillager.transform;
-            Camera.main.transform.parent.parent.localPosition = Vector3.zero;
+            CameraControl.focusedVillager = spotlightedVillager;
         }
     }
 
