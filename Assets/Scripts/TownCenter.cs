@@ -95,8 +95,11 @@ public class TownCenter : NetworkBehaviour
         int nameNum = (int) UnityEngine.Random.Range(0, nameCount - 1);
         string result = villagerNames[nameNum];
         nameSuffix[nameNum]++;
-        result += " ";
-        result += nameSuffix[nameNum].ToString();
+        if (nameSuffix[nameNum] > 1)
+        {
+            result += " ";
+            result += nameSuffix[nameNum].ToString();
+        }
         return result;
     }
 
