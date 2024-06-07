@@ -13,7 +13,7 @@ public class Villager : NetworkBehaviour, ISelectable
     private Animator anim;  // Animates the villager
     public List<Storage> hubs;  // The different outposts/alternatives to town center
     public Storage hub; // Current parent hub
-	public Outline outlineS;
+	public Outline outline;
     public GameObject arrowPrefab;
 
     [Header("Stats")]
@@ -60,7 +60,7 @@ public class Villager : NetworkBehaviour, ISelectable
         anim = GetComponentInChildren<Animator>();
         vitality = maxVitality;
         progressCooldown = 1;
-		outlineS = gameObject.GetComponent<Outline>();
+		outline = gameObject.GetComponent<Outline>();
     }
 
     public void Start()
@@ -441,29 +441,24 @@ public class Villager : NetworkBehaviour, ISelectable
 
 	// change villager outline color
 	public void JobColor(VillagerJob job) {
-		//this.job = job;
-        if(job == VillagerJob.Lumberjack) {
-			outlineS.OutlineColor = Color.green;
-		}
-        if(job == VillagerJob.Builder) {
-			outlineS.OutlineColor = Color.cyan;
-		}
-        if(job == VillagerJob.Hunter) {
-			outlineS.OutlineColor = Color.red;
-		}
-		if(job == VillagerJob.Gatherer) {
-			outlineS.OutlineColor = Color.yellow;
-		}
-	}
+        outline.OutlineColor = job switch
+        {
+            VillagerJob.Hunter => Color.red,
+            VillagerJob.Gatherer => Color.yellow,
+            VillagerJob.Lumberjack => Color.green,
+            VillagerJob.Builder => Color.cyan,
+            _ => Color.white,
+        };
+    }
 
     public void OnSelect()
     {
-		outlineS.enabled = true;
+		outline.enabled = true;
     }
 
     public void OnDeselect()
     {
-		outlineS.enabled = false;
+		outline.enabled = false;
     }
 
     public void DisplayHUD()
