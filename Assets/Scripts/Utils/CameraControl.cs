@@ -28,7 +28,7 @@ public class CameraControl : MonoBehaviour
         // Camera Movement
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        transform.Translate(new Vector3(horizontal, 0f, vertical).normalized * (Time.deltaTime * movementSpeed * zoomDistance / 5f));
+        transform.Translate(new Vector3(horizontal, 0f, vertical).normalized * (Time.unscaledDeltaTime * movementSpeed * zoomDistance / 5f));
         if (horizontal != 0 || vertical != 0) focusedVillager = null;
 
         // Camera Rotation
