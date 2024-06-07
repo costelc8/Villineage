@@ -31,7 +31,7 @@ public class VillagerDisplay : MonoBehaviour
     {
         // Display the job of the villager
         if (villager == null) jobTextMesh.text = "";
-        else jobTextMesh.text = "Job: " + villager.job;
+        else jobTextMesh.text = villager.villagerName + " the " + villager.job;
     }
 
     void DisplayInventory()

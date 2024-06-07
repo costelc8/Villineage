@@ -20,12 +20,18 @@ public class UnitHUD : MonoBehaviour
         else Destroy(this);
     }
 
+    private Vector2 ScreenToCanvasSpace(Vector2 position)
+    {
+        position *= 1600f / Screen.width;
+        return position;
+    }
+
     // Update is called once per frame
     void LateUpdate()
     {
         foreach (var unit in unitHUDs.Keys)
         {
-            unitHUDs[unit].GetComponent<RectTransform>().anchoredPosition = Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0f, hudOffsets[unit], 0f));
+            unitHUDs[unit].GetComponent<RectTransform>().anchoredPosition = ScreenToCanvasSpace(Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0f, hudOffsets[unit], 0f)));
         }
     }
 

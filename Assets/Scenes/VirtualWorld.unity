@@ -913,6 +913,53 @@ MonoBehaviour:
   - 0
   neededJobs: 00000000000000000000000000000000
   currentJobs: 00000000000000000000000000000000
+  villagerNames:
+  - John
+  - Billy
+  - Catherine
+  - David
+  - Timothy
+  - Emily
+  - Logan
+  - Connor
+  - Kaila
+  - Abby
+  - Ryan
+  - Brendan
+  - Johny
+  - Trish
+  - Natalie
+  - Chris
+  - Nicole
+  - Elvis
+  - John
+  - Ringo
+  - Rick
+  - Daphnie
+  - Rusty
+  - Eve
+  - him
+  - Vlad
+  - them
+  - Peter
+  - Mary
+  - Henry
+  - Mike
+  - Mac
+  - Dale
+  - Daisy
+  - Ajane
+  - Lilliana
+  - Trogdor
+  - Brock
+  - Jeff
+  - Johny
+  - Ash
+  - Ashley
+  - Tobias
+  - Tang
+  nameCount: 44
+  nameSuffix: 
 --- !u!208 &1519554152
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1517,7 +1564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1600, y: 900}
   m_ScreenMatchMode: 0
