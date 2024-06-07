@@ -23,6 +23,15 @@ public class TownCenter : NetworkBehaviour
     public int[] neededJobs;
     public int[] currentJobs;
 
+    // Current count: 44
+    public string[] villagerNames =
+        {"John", "Billy", "Catherine", "David", "Timothy", "Emily", "Logan", "Connor", "Kaila", "Abby", "Ryan",
+         "Brendan", "Johny", "Trish", "Natalie", "Chris", "Nicole", "Elvis", "John", "Ringo", "Rick", "Daphnie",
+         "Rusty", "Eve", "him", "Vlad", "them", "Peter", "Mary", "Henry", "Mike", "Mac", "Dale", "Daisy",
+         "Ajane", "Lilliana", "Trogdor", "Brock", "Jeff", "Johny", "Ash", "Ashley", "Tobias", "Tang"};
+    public int nameCount = 44;
+    public int[] nameSuffix;
+
     public void Initialize()
     {
         if (TC == null || TC == this) TC = this;
@@ -36,6 +45,7 @@ public class TownCenter : NetworkBehaviour
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
+        nameSuffix = new int[nameCount];
     }
 
     public void PlaceOnGround()
@@ -80,12 +90,23 @@ public class TownCenter : NetworkBehaviour
         }
     }
 
+    private string GenerateName()
+    {
+        int nameNum = (int) UnityEngine.Random.Range(0, nameCount - 1);
+        string result = villagerNames[nameNum];
+        nameSuffix[nameNum]++;
+        result += " ";
+        result += nameSuffix[nameNum].ToString();
+        return result;
+    }
+
     public void SpawnVillager(Vector3 centerPosition, bool assignJob = false)
     {
         //print("Spawning Villager");
         if (RandomNavmeshPoint.RandomPointFromCenterCapsule(centerPosition, 0.5f, 2f, out Vector3 position, 4f, 1f, 1000f))
         {
             Villager villager = Instantiate(villagerPrefab, position, Quaternion.identity, villagerParent.transform).GetComponent<Villager>();
+            villager.villagerName = GenerateName();
             NetworkServer.Spawn(villager.gameObject);
             villagers.Add(villager);
             villager.GetComponent<NavMeshAgent>().enabled = true;

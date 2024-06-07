@@ -23,6 +23,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public float maxVitality = 100f;  // The highest their hunger value can be (full)
     public float vitalityThreshold;
     public float huntingRange = 10f;
+    public string villagerName;
     [SyncVar]
     public string causeOfDeath;
     public bool damaged;
