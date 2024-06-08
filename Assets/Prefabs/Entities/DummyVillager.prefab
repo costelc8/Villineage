@@ -3858,13 +3858,14 @@ MonoBehaviour:
   syncInterval: 0
   hubs: []
   hub: {fileID: 0}
-  outlineS: {fileID: 7560133297312245150}
+  outline: {fileID: 0}
   arrowPrefab: {fileID: 2417734275838737936, guid: a02a04b46176f234684a307ce1554950, type: 3}
   alive: 1
   vitality: 0
   maxVitality: 100
   vitalityThreshold: 0
   huntingRange: 10
+  villagerName: 
   causeOfDeath: 
   damaged: 0
   despawnTimer: 0

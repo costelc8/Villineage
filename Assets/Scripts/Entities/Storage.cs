@@ -10,6 +10,7 @@ public class Storage : Targetable, ISelectable
     public int[] neededResources;
     public int[] requestedResources;
     public bool hasHouseInProgress = false;
+    public Outline outline;
 
     public void Start()
     {
@@ -21,6 +22,7 @@ public class Storage : Targetable, ISelectable
     {
         neededResources = new int[(int)ResourceType.MAX_VALUE];
         requestedResources = new int[(int)ResourceType.MAX_VALUE];
+        outline = gameObject.GetComponent<Outline>();
     }
 
     public override void OnStartServer()
@@ -36,12 +38,14 @@ public class Storage : Targetable, ISelectable
         {
             GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.storageHUD, 4f);
             HUD.GetComponent<StorageDisplay>().storage = this;
+            outline.enabled = true;
         }
     }
 
     public void OnDeselect()
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+        outline.enabled = false;
     }
 
     public void Deposit(Villager villager)

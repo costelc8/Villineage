@@ -1,6 +1,7 @@
 using Mirror;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -23,13 +24,7 @@ public class TownCenter : NetworkBehaviour
     public int[] neededJobs;
     public int[] currentJobs;
 
-    // Current count: 44
-    public string[] villagerNames =
-        {"John", "Billy", "Catherine", "David", "Timothy", "Emily", "Logan", "Connor", "Kaila", "Abby", "Ryan",
-         "Brendan", "Johny", "Trish", "Natalie", "Chris", "Nicole", "Elvis", "John", "Ringo", "Rick", "Daphnie",
-         "Rusty", "Eve", "him", "Vlad", "them", "Peter", "Mary", "Henry", "Mike", "Mac", "Dale", "Daisy",
-         "Ajane", "Lilliana", "Trogdor", "Brock", "Jeff", "Johny", "Ash", "Ashley", "Tobias", "Tang"};
-    public int nameCount = 44;
+    public string[] villagerNames;
     public int[] nameSuffix;
 
     public void Initialize()
@@ -45,7 +40,13 @@ public class TownCenter : NetworkBehaviour
         jobWeights = new float[(int)VillagerJob.MAX_VALUE];
         neededJobs = new int[(int)VillagerJob.MAX_VALUE];
         currentJobs = new int[(int)VillagerJob.MAX_VALUE];
-        nameSuffix = new int[nameCount];
+        villagerNames = new string[] {
+            "John", "Billy", "Catherine", "David", "Timothy", "Emily", "Logan", "Connor", "Kaila", "Abby", "Ryan",
+            "Brendan", "Johny", "Trish", "Natalie", "Chris", "Nicole", "Elvis", "John", "Ringo", "Rick", "Daphnie",
+            "Rusty", "Eve", "him", "Vlad", "them", "Peter", "Mary", "Henry", "Mike", "Mac", "Dale", "Daisy",
+            "Ajane", "Lilliana", "Trogdor", "Brock", "Jeff", "Johny", "Ash", "Ashley", "Tobias", "Tang",
+            "Pine", "Colin", "Jamie", "Kai", "Grace", "Ella" };
+        nameSuffix = new int[villagerNames.Count()];
     }
 
     public void PlaceOnGround()
@@ -92,7 +93,7 @@ public class TownCenter : NetworkBehaviour
 
     private string GenerateName()
     {
-        int nameNum = (int) UnityEngine.Random.Range(0, nameCount - 1);
+        int nameNum = Random.Range(0, villagerNames.Count());
         string result = villagerNames[nameNum];
         nameSuffix[nameNum]++;
         if (nameSuffix[nameNum] > 1)

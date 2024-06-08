@@ -24,7 +24,7 @@ public class Animal : Resource
     private float deathTimer;
     private Villager targetVillager;
 
-    private void Awake()
+    protected override void Awake()
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -33,6 +33,7 @@ public class Animal : Resource
         wanderCooldown = Random.Range(1f, maxWanderCooldown);
         health = maxHealth;
         isAnimal = true;
+        base.Awake();
     }
 
     // Update is called once per frame

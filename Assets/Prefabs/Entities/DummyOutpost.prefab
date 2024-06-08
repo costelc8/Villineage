@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4004122076398770796}
   - component: {fileID: -710846269306318931}
   - component: {fileID: 3519245682674730020}
+  - component: {fileID: 5695058392821161032}
   m_Layer: 0
   m_Name: DummyOutpost
   m_TagString: Building
@@ -91,6 +92,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  unassignedVillagers: []
   enforceMaxVillagers: 0
   maxAssignedVillagers: 0
   assignedVillagers: 0
@@ -102,8 +104,9 @@ MonoBehaviour:
   stage: 0
   buildingType: 0
   cartPrefab: {fileID: 7346878771156752706, guid: bcf35f08f10546e4fa0bd82bafd90bee, type: 3}
-  cartInspectorParent: {fileID: 0}
+  cartParent: {fileID: 0}
   storageParent: {fileID: 0}
+  outline: {fileID: 0}
   buildProgress: 0
 --- !u!114 &-710846269306318931
 MonoBehaviour:
@@ -137,6 +140,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  unassignedVillagers: []
   enforceMaxVillagers: 0
   maxAssignedVillagers: 0
   assignedVillagers: 0
@@ -146,6 +150,25 @@ MonoBehaviour:
   neededResources: 
   requestedResources: 
   hasHouseInProgress: 0
+  outline: {fileID: 0}
+--- !u!114 &5695058392821161032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665341597343912254}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &430455909299506176
 PrefabInstance:
   m_ObjectHideFlags: 0

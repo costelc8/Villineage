@@ -1345,6 +1345,7 @@ GameObject:
   - component: {fileID: 99225567558475682}
   - component: {fileID: 8047246721949191282}
   - component: {fileID: 5228293451435221680}
+  - component: {fileID: -706185238880149772}
   m_Layer: 0
   m_Name: DummySheep
   m_TagString: Untagged
@@ -1476,6 +1477,7 @@ MonoBehaviour:
   resourceType: 1
   respawning: 0
   isAnimal: 0
+  outline: {fileID: 0}
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 4
   maxWanderCooldown: 10
@@ -1535,6 +1537,24 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &-706185238880149772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947801369939053811}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3636797946457442442
 GameObject:
   m_ObjectHideFlags: 0

@@ -1029,6 +1029,7 @@ GameObject:
   - component: {fileID: -4511540496497673229}
   - component: {fileID: 3961304320394080271}
   - component: {fileID: 455456768697730848}
+  - component: {fileID: 7462774405648308101}
   m_Layer: 0
   m_Name: DummyGoat
   m_TagString: Untagged
@@ -1160,6 +1161,7 @@ MonoBehaviour:
   resourceType: 1
   respawning: 0
   isAnimal: 0
+  outline: {fileID: 0}
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 2
   maxWanderCooldown: 10
@@ -1219,6 +1221,24 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &7462774405648308101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2200828977413073489}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2433137499725707128
 GameObject:
   m_ObjectHideFlags: 0

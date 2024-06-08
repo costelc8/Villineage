@@ -1,12 +1,14 @@
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Cart : NetworkBehaviour, ISelectable
 {
     private NavMeshAgent agent;
     private Animator anim;
     public Storage hub;
+    public Outline outline;
 
     public bool selected;  // Have they been selected?
 
@@ -18,6 +20,7 @@ public class Cart : NetworkBehaviour, ISelectable
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         target = TownCenter.TC.GetComponent<Storage>();
+        outline = gameObject.GetComponent<Outline>();
     }
 
     public void Start()
@@ -68,6 +71,7 @@ public class Cart : NetworkBehaviour, ISelectable
         selected = true;
         GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.cartHUD, 2f);
         HUD.GetComponent<CartDisplay>().cart = this;
+        outline.enabled = true;
     }
 
     // When deselected, stop displaying ui
@@ -75,6 +79,7 @@ public class Cart : NetworkBehaviour, ISelectable
     {
         selected = false;
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+        outline.enabled = false;
     }
 
     public void OnDestroy()

@@ -18,9 +18,15 @@ public class Building : Targetable, ISelectable
     public GameObject cartPrefab;
     public GameObject cartParent;
     public Storage storageParent;
+    public Outline outline;
 
     [SyncVar(hook = nameof(ProgressHook))]
     public int buildProgress;
+
+    private void Awake()
+    {
+        outline = gameObject.GetComponent<Outline>();
+    }
 
     public override bool Progress(Villager villager)
     {
@@ -104,11 +110,13 @@ public class Building : Targetable, ISelectable
         {
             GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.buildingHUD, 4f);
             HUD.GetComponent<BuildingDisplay>().building = this;
+            outline.enabled = true;
         }
     }
 
     public void OnDeselect()
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
+        outline.enabled = false;
     }
 }

@@ -1458,6 +1458,7 @@ GameObject:
   - component: {fileID: 8692178964065737442}
   - component: {fileID: 8547893999083506189}
   - component: {fileID: 5754346861946068264}
+  - component: {fileID: 3997524541711296342}
   m_Layer: 0
   m_Name: DummyWolf
   m_TagString: Untagged
@@ -1551,6 +1552,7 @@ MonoBehaviour:
   resourceType: 1
   respawning: 0
   isAnimal: 0
+  outline: {fileID: 0}
   wanderOrigin: {x: 250, y: 0, z: 250}
   originTetherStrength: 1
   maxWanderCooldown: 10
@@ -1652,6 +1654,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3997524541711296342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4633771708107926460}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4792245753585930887
 GameObject:
   m_ObjectHideFlags: 0

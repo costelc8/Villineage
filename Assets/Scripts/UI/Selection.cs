@@ -137,7 +137,11 @@ public class Selection : MonoBehaviour
 
     private void DeselectAll()
     {
-        foreach (ISelectable selectable in selected) selectable.OnDeselect();
+        foreach (ISelectable selectable in selected)
+        {
+            selectable.OnDeselect();
+            if (selectable is Resource resource) resource.RemoveHUD();
+        }
         selected.Clear();
         selectedVillagers.Clear();
         selectedResources.Clear();
@@ -170,6 +174,7 @@ public class Selection : MonoBehaviour
                     selected.Add(selectable);
                     selectable.OnSelect();
                     if (selectable is Villager villager) SpotlightVillager(villager);
+                    if (selectable is Resource resource) resource.DisplayHUD();
                     foundSelectable = true;
                 }
             }
@@ -212,7 +217,11 @@ public class Selection : MonoBehaviour
                     selectedVillagers.Add(selectable);
                     selectable.OnSelect();
                 }
-                else if (selectable is Resource) selectedResources.Add(selectable);
+                else if (selectable is Resource)
+                {
+                    selectedResources.Add(selectable);
+                    selectable.OnSelect();
+                }
                 else if (selectable is Storage)
                 {
                     selectedStorages.Add(selectable);
@@ -230,7 +239,7 @@ public class Selection : MonoBehaviour
                 }
             }
         }
-        if (selectedResources.Count == 1) selectedResources[0].OnSelect();
+        if (selectedResources.Count == 1) ((Resource)selectedResources[0]).DisplayHUD();
         if (selectedVillagers.Count == 1) SpotlightVillager((Villager)selectedVillagers[0]);
         else if (selectedVillagers.Count > 1) DisplayVillagerPanel();
         //SelectSingle((selectionStart + selectionEnd) / 2);
@@ -310,6 +319,7 @@ public class Selection : MonoBehaviour
             {
                 selected.Add(selectable);
                 selectedResources.Add(selectable);
+                selectable.OnSelect();
             }
         }
     }
@@ -401,6 +411,7 @@ public class Selection : MonoBehaviour
             if (selectable is Resource)
             {
                 selectedResources.Add(selectable);
+                selectable.OnSelect();
             }
             if (selectable is Storage)
             {

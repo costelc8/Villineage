@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Resource : Targetable, ISelectable
 {
@@ -15,11 +16,16 @@ public class Resource : Targetable, ISelectable
     public ResourceType resourceType;
     public bool respawning;
     public bool isAnimal = false;
+    public Outline outline;
 
-    void Awake()
+    protected virtual void Awake()
     {
-        stage0 = transform.GetChild(0).gameObject;
-        stage1 = transform.GetChild(1).gameObject;
+        if (!isAnimal)
+        {
+            stage0 = transform.GetChild(0).gameObject;
+            stage1 = transform.GetChild(1).gameObject;
+        }
+        outline = gameObject.GetComponent<Outline>();
     }
 
     // Decrement durability of the resource by the amount of progress made on it.
@@ -86,12 +92,22 @@ public class Resource : Targetable, ISelectable
 
     public void OnSelect()
     {
-        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.resourceHUD, 1f);
-        HUD.GetComponent<ResourceDisplay>().resource = this;
+        outline.enabled = true;
     }
 
     // When deselected, stop displaying ui
     public void OnDeselect()
+    {
+        outline.enabled = false;
+    }
+
+    public void DisplayHUD()
+    {
+        GameObject HUD = UnitHUD.HUD.AddUnitHUD(gameObject, UnitHUD.HUD.resourceHUD, 1f);
+        HUD.GetComponent<ResourceDisplay>().resource = this;
+    }
+
+    public void RemoveHUD()
     {
         UnitHUD.HUD.RemoveUnitHUD(gameObject);
     }
