@@ -16,7 +16,7 @@ public class Storage : Targetable, ISelectable
     public void Awake()
     {
         Selection.Selector.AddSelectable(this);
-        outline = gameObject.GetComponent<Outline>();
+        outline = GetComponent<Outline>();
     }
 
     public void Start()
