@@ -80,7 +80,7 @@ public class Selection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!NetworkServer.active) return;
+        if (!(NetworkServer.active || NetworkClient.active)) return;
         if (mouseMode == MouseMode.Selecting)
         {
             if (Input.GetMouseButtonDown(0))
@@ -114,8 +114,8 @@ public class Selection : MonoBehaviour
                 }
             }
         }
-        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-        //{
+        if (!leftDashboardOpen)
+        {
             if (Input.GetKeyDown(KeyCode.Alpha1)) SelectAllVillagers(VillagerJob.Hunter);
             if (Input.GetKeyDown(KeyCode.Alpha2)) SelectAllVillagers(VillagerJob.Gatherer);
             if (Input.GetKeyDown(KeyCode.Alpha3)) SelectAllVillagers(VillagerJob.Lumberjack);
@@ -126,7 +126,7 @@ public class Selection : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha8)) SelectAllBuildings();
             if (Input.GetKeyDown(KeyCode.Alpha9)) SelectAllResources();
             if (Input.GetKeyDown(KeyCode.Alpha0)) SelectEverything();
-        //}
+        }
         //if (Input.GetKey(KeyCode.Escape))
         //{
         //    selectionBox.SetActive(false);

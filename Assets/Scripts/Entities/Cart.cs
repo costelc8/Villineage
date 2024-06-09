@@ -21,11 +21,11 @@ public class Cart : NetworkBehaviour, ISelectable
         anim = GetComponentInChildren<Animator>();
         target = TownCenter.TC.GetComponent<Storage>();
         outline = gameObject.GetComponent<Outline>();
+        Selection.Selector.AddSelectable(this);
     }
 
     public void Start()
     {
-        Selection.Selector.AddSelectable(this);
         if (isServer)
         {
             // If this is the server, initialize the agents.
@@ -34,6 +34,8 @@ public class Cart : NetworkBehaviour, ISelectable
 
             agent.speed = SimVars.VARS.villagerMoveSpeed * 3;
             agent.acceleration = SimVars.VARS.villagerMoveSpeed * 12;
+            agent.angularSpeed = 90 * SimVars.VARS.villagerMoveSpeed;
+            anim.speed = SimVars.VARS.villagerMoveSpeed / 4;
         }
     }
 

@@ -11,10 +11,16 @@ public class Storage : Targetable, ISelectable
     public int[] requestedResources;
     public bool hasHouseInProgress = false;
     public Outline outline;
+    public GameObject cart;
+
+    public void Awake()
+    {
+        Selection.Selector.AddSelectable(this);
+        outline = gameObject.GetComponent<Outline>();
+    }
 
     public void Start()
     {
-        Selection.Selector.AddSelectable(this);
         Initialize();
     }
 
@@ -22,7 +28,6 @@ public class Storage : Targetable, ISelectable
     {
         neededResources = new int[(int)ResourceType.MAX_VALUE];
         requestedResources = new int[(int)ResourceType.MAX_VALUE];
-        outline = gameObject.GetComponent<Outline>();
     }
 
     public override void OnStartServer()

@@ -23,6 +23,7 @@ public class Villager : NetworkBehaviour, ISelectable
     public float maxVitality = 100f;  // The highest their hunger value can be (full)
     public float vitalityThreshold;
     public float huntingRange = 10f;
+    [SyncVar]
     public string villagerName;
     [SyncVar]
     public string causeOfDeath;
@@ -75,6 +76,7 @@ public class Villager : NetworkBehaviour, ISelectable
             for (int i = 0; i < (int)ResourceType.MAX_VALUE; i++) inventory.Add(0);
             agent.speed = SimVars.VARS.villagerMoveSpeed;
             agent.acceleration = SimVars.VARS.villagerMoveSpeed * 4;
+            agent.angularSpeed = 90 * SimVars.VARS.villagerMoveSpeed;
 
             // set default hub to town center
             // if they're reparented to an outpost later, can change this
@@ -360,6 +362,7 @@ public class Villager : NetworkBehaviour, ISelectable
             anim.SetBool("Working", false);
             anim.SetBool("Archer", false);
             anim.SetFloat("Walking", 1);
+            anim.speed = SimVars.VARS.villagerMoveSpeed / 4;
             if (state == VillagerState.Returning)
             {
                 if (job == VillagerJob.Lumberjack) backWood.SetActive(true);
@@ -380,15 +383,10 @@ public class Villager : NetworkBehaviour, ISelectable
                 towards.y = 0;
                 transform.rotation = Quaternion.LookRotation(towards);
             }
-            if (isServer && job == VillagerJob.Hunter && target.movingTarget)
-            {
-                anim.SetBool("Archer", true);
-            }
-            else
-            {
-                anim.SetBool("Working", true);
-            }
+            if (isServer && job == VillagerJob.Hunter && target.movingTarget) anim.SetBool("Archer", true);
+            else anim.SetBool("Working", true);
             anim.SetFloat("Walking", 0);
+            anim.speed = SimVars.VARS.villagerWorkSpeed;
         }
     }
 

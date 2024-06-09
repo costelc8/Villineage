@@ -203,7 +203,7 @@ public class Animal : Resource
 
     private void ChangeState(AnimalState state)
     {
-        if (this.state == state) return;
+        //if (this.state == state) return;
         this.state = state;
         if (type != AnimalType.Hostile)
         {

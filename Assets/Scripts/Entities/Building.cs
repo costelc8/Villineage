@@ -50,6 +50,7 @@ public class Building : Targetable, ISelectable
                     storage.Initialize();
                     cart.GetComponent<NavMeshAgent>().avoidancePriority = Random.Range(0, 20);
                     cart.GetComponent<Cart>().hub = storage;
+                    storage.cart = cart;
                     NetworkServer.Spawn(cart);
                     break;
             }
@@ -76,6 +77,11 @@ public class Building : Targetable, ISelectable
     private void ProgressHook(int oldProgress, int newProgress)
     {
         if (oldProgress == 0) priority *= 1.5f;
+        if (newProgress == requiredWood)
+        {
+            Storage storage = GetComponent<Storage>();
+            if (storage != null) storage.enabled = true;
+        }
         UpdateStage();
     }
 

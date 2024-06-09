@@ -17,9 +17,9 @@ public class SimVars : NetworkBehaviour
     [SyncVar] public int seed = 0;
 
     [Header("Job Weights")]
-    [SyncVar] public int lumberjackWeight = 10;
-    [SyncVar] public int gathererWeight = 10;
     [SyncVar] public int hunterWeight = 10;
+    [SyncVar] public int gathererWeight = 10;
+    [SyncVar] public int lumberjackWeight = 10;
     [SyncVar] public int builderWeight = 10;
 
     [Header("Villager Variables")]
@@ -97,8 +97,56 @@ public class SimVars : NetworkBehaviour
             if (agent != null)
             {
                 agent.speed = newSpeed;
-                agent.acceleration = newSpeed;
+                agent.acceleration = newSpeed * 2;
+                agent.angularSpeed = 90 * newSpeed;
             }
+        }
+        foreach(Storage s in BuildingGenerator.GetHubs())
+        {
+            if (s.cart != null)
+            {
+                NavMeshAgent agent = s.cart.GetComponent<NavMeshAgent>();
+                if (agent != null)
+                {
+                    agent.speed = newSpeed * 3;
+                    agent.acceleration = newSpeed * 12;
+                    agent.angularSpeed = 90 * newSpeed;
+                }
+                Animator anim = s.cart.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.speed = villagerMoveSpeed / 4;
+                }
+            }
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetFloatVariable(string variableName, float value)
+    {
+        switch (variableName)
+        {
+            case nameof(timeScale): timeScale = value; break;
+            case nameof(villagerMoveSpeed): villagerMoveSpeed = value; break;
+            case nameof(villagerWorkSpeed): villagerWorkSpeed = value; break;
+            case nameof(villagerHungerRate): villagerHungerRate = value; break;
+            case nameof(vitalityPerFood): vitalityPerFood = value; break;
+            case nameof(villagerSpawnTime): villagerSpawnTime = value; break;
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetIntVariable(string variableName, int value)
+    {
+        switch (variableName)
+        {
+            case nameof(hunterWeight): hunterWeight = value; break;
+            case nameof(gathererWeight): gathererWeight = value; break;
+            case nameof(lumberjackWeight): lumberjackWeight = value; break;
+            case nameof(builderWeight): builderWeight = value; break;
+            case nameof(startingVillagers): startingVillagers = value; break;
+            case nameof(villagerCarryCapacity): villagerCarryCapacity = value; break;
+            case nameof(villagerSpawnCost): villagerSpawnCost = value; break;
         }
     }
 }
