@@ -959,7 +959,6 @@ MonoBehaviour:
   - Ashley
   - Tobias
   - Tang
-  nameCount: 44
   nameSuffix: 
 --- !u!208 &1519554152
 NavMeshObstacle:
@@ -1020,6 +1019,7 @@ MonoBehaviour:
   requestedResources: 0000000000000000
   hasHouseInProgress: 0
   outline: {fileID: 0}
+  cart: {fileID: 0}
 --- !u!114 &1519554155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1689,9 +1689,9 @@ MonoBehaviour:
   timeScale: 1
   logSim: 0
   seed: 0
-  lumberjackWeight: 10
-  gathererWeight: 10
   hunterWeight: 10
+  gathererWeight: 10
+  lumberjackWeight: 10
   builderWeight: 10
   startingVillagers: 4
   villagerSpawnTime: 60
@@ -1942,14 +1942,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 648108630}
-    - target: {fileID: 1916892998771781050, guid: 060cee1bb9e476b4698a250bab2ddd8e, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1916892998771781050, guid: 060cee1bb9e476b4698a250bab2ddd8e, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7069548877003094995, guid: 060cee1bb9e476b4698a250bab2ddd8e, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
