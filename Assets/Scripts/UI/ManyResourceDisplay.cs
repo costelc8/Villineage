@@ -25,7 +25,7 @@ public class ManyResourceDisplay : MonoBehaviour
         {
             resourceText.text = "Total Resources: " + totalQuantity;
             position /= totalResources;
-            GetComponent<RectTransform>().anchoredPosition = Camera.main.WorldToScreenPoint(position);
+            GetComponent<RectTransform>().anchoredPosition = Selection.Selector.ScreenToCanvasSpace(Camera.main.WorldToScreenPoint(position));
         }
         else resourceText.text = "";
     }

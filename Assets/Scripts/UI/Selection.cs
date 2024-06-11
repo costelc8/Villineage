@@ -27,7 +27,7 @@ public class Selection : MonoBehaviour
 
     public MouseMode mouseMode;
     public Villager spotlightedVillager;
-    public Camera villagerCam;
+    public VillagerCam villagerCam;
     public RawImage villagerCamDisplay;
     public VillagerDisplay spotlightedVillagerDisplay;
     private List<GameObject> villagerButtons = new List<GameObject>();
@@ -71,7 +71,7 @@ public class Selection : MonoBehaviour
             && Input.mousePosition.x < (rightDashboardOpen ? Screen.width * rightPanelBound : Screen.width);
     }
 
-    private Vector2 ScreenToCanvasSpace(Vector2 position)
+    public Vector2 ScreenToCanvasSpace(Vector2 position)
     {
         position *= 1600f / Screen.width;
         return position;
@@ -264,8 +264,11 @@ public class Selection : MonoBehaviour
                 case VillagerJob.Builder: button.GetComponent<Image>().color = new Color(0.5f, 1f, 1f); break;
             }
             button.GetComponent<Button>().onClick.AddListener(() => {
-                SpotlightVillager(villager);
-                button.GetComponent<UnityEngine.UI.Outline>().enabled = true;
+                if (villager != null)
+                {
+                    SpotlightVillager(villager);
+                    button.GetComponent<UnityEngine.UI.Outline>().enabled = true;
+                }
             });
             i++;
             button.GetComponentInChildren<TextMeshProUGUI>().text = i.ToString();
@@ -277,8 +280,9 @@ public class Selection : MonoBehaviour
         if (spotlightedVillager != null) spotlightedVillager.RemoveHUD();
         spotlightedVillager = villager;
         spotlightedVillagerDisplay.villager = villager;
-        villagerCam.transform.parent = villager.transform;
-        villagerCam.transform.SetLocalPositionAndRotation(new Vector3(0f, 2.5f, 2f), Quaternion.Euler(45f, 180f, 0f));
+        villagerCam.villager = villager;
+        villagerCam.transform.position = villager.transform.position;
+        villagerCam.transform.rotation = villager.transform.rotation;
         villagerCamDisplay.enabled = true;
         spotlightedVillager.DisplayHUD();
         foreach (GameObject button in villagerButtons)

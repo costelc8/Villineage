@@ -203,6 +203,52 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4093270226055055176, guid: 7559e9b58c6f78041bda44d569c18fa5, type: 3}
   m_PrefabInstance: {fileID: 7398346062632172245}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &653252747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 653252749}
+  - component: {fileID: 653252748}
+  m_Layer: 0
+  m_Name: VillagerCameraAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &653252748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653252747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33642ef8797c5544b968face4bd32f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  villager: {fileID: 0}
+--- !u!4 &653252749
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653252747}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 256, y: 4, z: 256}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1525179477}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &675008341 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4430159322908305240, guid: 6519efcf409a48040968d6ffdbf440bf, type: 3}
@@ -805,7 +851,7 @@ MonoBehaviour:
   villagerButtonPrefab: {fileID: 4297062469134250036, guid: 101a5137c574f104eb70b409183b8008, type: 3}
   mouseMode: 0
   spotlightedVillager: {fileID: 0}
-  villagerCam: {fileID: 1525179476}
+  villagerCam: {fileID: 653252748}
   villagerCamDisplay: {fileID: 6265049962010329051}
   spotlightedVillagerDisplay: {fileID: 675008341}
   leftDashboardOpen: 0
@@ -1115,11 +1161,11 @@ Transform:
   m_GameObject: {fileID: 1525179474}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.92387956, z: -0.38268343, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 653252749}
   m_LocalEulerAnglesHint: {x: 45, y: 180, z: 0}
 --- !u!114 &1693549058 stripped
 MonoBehaviour:
@@ -2573,4 +2619,4 @@ SceneRoots:
   - {fileID: 1194879064}
   - {fileID: 1874911280}
   - {fileID: 2127958821}
-  - {fileID: 1525179477}
+  - {fileID: 653252749}

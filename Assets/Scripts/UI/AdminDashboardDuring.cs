@@ -27,6 +27,8 @@ public class AdminDashboardDuring : MonoBehaviour
     public TMP_InputField spawnTime;
     public TMP_InputField spawnCost;
 
+    public TextMeshProUGUI totalVillagers;
+
     void Start()
     {
         SetAllInputs();
@@ -82,6 +84,7 @@ public class AdminDashboardDuring : MonoBehaviour
             if (panel.activeSelf) SetAllInputs();
             //Selection.Selector.mouseMode = panel.activeSelf ? MouseMode.None : MouseMode.Selecting;
         }
+        totalVillagers.text = "Total Villagers: " + TownCenter.TC.villagers.Count;
     }
 
     private void SetTimescale(int value)
